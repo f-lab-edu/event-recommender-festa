@@ -29,7 +29,7 @@
 <br>
 
 ## WIKI
- - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki)
+ - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
  
 <br>
 <br>
