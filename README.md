@@ -8,6 +8,7 @@
 - Spring Boot
 - Java 8
 - MySQL
+- Mybatis
 - Maven
 - Naver cloud platform 
 - intellij IDEA
