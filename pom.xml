@@ -12,7 +12,7 @@
     <artifactId>festa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>festa</name>
-    <description>Demo project for Spring Boot</description>
+    <description>festa project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -23,6 +23,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
