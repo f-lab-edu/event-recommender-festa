@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Log4j2
-public class HostJoinController {
-
+public class HostController {
 
 }
