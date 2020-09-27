@@ -14,6 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+/*
+ * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
+ *
+ * @Controller : 해당클래스가 Controller로 정의되도록 설정
+ *
+ *               요청받은 URL이 DispatcherServlet에 할당된 것이라면 해당 패턴에 맞는
+ *               Controller(@Controller를 스캔)로 전달한다. (URL의 정보는 모두 @RequestMapping이 가지고 있기
+ *               때문에 맵핑이 가능)
+ *               요청의 프로세스가 모두 완료되면 Controller는 view의 이름과 Model을
+ *               DispatcherServlet으로 return 하며, DispatcherServlet은 받은 model data를
+ *               기반으로 View에 연결한다.
+ */
 @RestController
 @RequestMapping("/member")
 @Log4j2
@@ -22,10 +34,28 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    /**
+     * 사용자 회원가입 기능
+     * @param memberDTO
+     * @return ResponseEntity
+     */
     @PostMapping(value = "/signUpAsMember")
-    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) {
+    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) throws Exception {
         memberService.insertMemberInfo(memberDTO);
+
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    /**
+     * 사용자 중복 아이디 체크
+     * @param memberDTO
+     * @throws Exception
+     */
+    public void idIsDuplicated(MemberDTO memberDTO) throws Exception {
+        int count = memberService.idIsDuplicated(memberDTO);
+        if(count > 0) {
+            throw new IllegalStateException("아이디가 존재합니다.");
+        }
     }
 }

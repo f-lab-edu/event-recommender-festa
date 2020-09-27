@@ -1,12 +1,14 @@
 package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
-import org.mybatis.spring.annotation.MapperScan;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@MapperScan
+@Mapper
 @Repository
 public interface MemberDAO {
 
-    int insertMemberInfo(MemberDTO memberDTO);
+    int insertMemberInfo(MemberDTO memberDTO) throws Exception;
+
+    int idIsDuplicated(MemberDTO memberDTO) throws Exception;
 }

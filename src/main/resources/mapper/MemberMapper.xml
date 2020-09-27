@@ -6,4 +6,9 @@
         insert into member_test(username, password, email, confirmEmail)
             values (#{username}, #{password}, #{email}, #{confirmEmail})
     </insert>
+
+    <select id="idIsDuplicated" resultType="int">
+        select count(*) from member_test
+        where username = #{username}
+    </select>
 </mapper>
