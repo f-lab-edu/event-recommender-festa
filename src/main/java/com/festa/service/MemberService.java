@@ -11,11 +11,11 @@ public class MemberService {
     @Autowired
     private MemberDAO memberDAO;
 
-    public void insertMemberInfo(MemberDTO memberDTO) throws Exception {
+    public void insertMemberInfo(MemberDTO memberDTO) {
         memberDAO.insertMemberInfo(memberDTO);
     }
 
-    public int idIsDuplicated(MemberDTO memberDTO) throws Exception {
-        return memberDAO.idIsDuplicated(memberDTO);
+    public int idIsDuplicated(String id) {
+        return memberDAO.idIsDuplicated(id);
     }
 }

@@ -52,14 +52,16 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
-        <!--[logback이 아닌 log4j2를 사용한 이유]
+        <!--
+        [logback이 아닌 log4j2를 사용한 이유]
 
         1. log4j2는 멀티쓰레드 환경에서 비동기 로거이기 때문에
         logback 보다 처리량이 10배 정도 높다.
 
-        2. java8의 lambda를 지원하기 때문에 원하는 로그레벨에 대해서만
+        2. java 8의 lambda를 지원하기 때문에 원하는 로그레벨에 대해서만
         메세지를 남길 수 있어 코드가 깔끔해지는 장점이 있기에
-        logback이 아닌 log4j2를 사용함.-->
+        logback이 아닌 log4j2를 사용함.
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>

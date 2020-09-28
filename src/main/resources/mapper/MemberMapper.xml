@@ -7,8 +7,9 @@
             values (#{username}, #{password}, #{email}, #{confirmEmail})
     </insert>
 
+    <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
     <select id="idIsDuplicated" resultType="int">
-        select count(*) from member_test
-        where username = #{username}
+        select EXISTS (select username from member_test
+                       where username = #{username}) as isDuplicated
     </select>
 </mapper>

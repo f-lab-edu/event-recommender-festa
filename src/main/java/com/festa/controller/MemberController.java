@@ -6,11 +6,9 @@ import com.sun.istack.internal.NotNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -40,7 +38,7 @@ public class MemberController {
      * @return ResponseEntity
      */
     @PostMapping(value = "/signUpAsMember")
-    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) throws Exception {
+    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
@@ -49,13 +47,19 @@ public class MemberController {
 
     /**
      * 사용자 중복 아이디 체크
-     * @param memberDTO
-     * @throws Exception
+     * @param id
+     * @return HttpStatus
      */
-    public void idIsDuplicated(MemberDTO memberDTO) throws Exception {
-        int count = memberService.idIsDuplicated(memberDTO);
-        if(count > 0) {
-            throw new IllegalStateException("아이디가 존재합니다.");
+
+    @GetMapping("idIsDuplicated/{id}")
+    public HttpStatus idIsDuplicated(@PathVariable @NotNull String id) {
+        int isDuplicated = memberService.idIsDuplicated(id);
+
+        //1을 리턴 받았다면 true이므로 id가 존재한다.
+        if(isDuplicated == 1) {
+            return HttpStatus.CONFLICT;
+        } else {
+            return HttpStatus.OK;
         }
     }
 }

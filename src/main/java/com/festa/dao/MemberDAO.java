@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberDAO {
 
-    int insertMemberInfo(MemberDTO memberDTO) throws Exception;
+    int insertMemberInfo(MemberDTO memberDTO);
 
-    int idIsDuplicated(MemberDTO memberDTO) throws Exception;
+    int idIsDuplicated(String id);
 }
