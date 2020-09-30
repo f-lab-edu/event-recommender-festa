@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.festa.dao.HostDAO">
+
+    <insert id="insertHostInfo" parameterType="com.festa.dto.HostDTO">
+        insert into host_test(hostName, hostPassword, hostEmail, hostEmailConfirm,
+                              hostPhoneNo, hostAddress, isHost)
+            values (#{hostName}, #{hostPassword}, #{hostEmail}, #{hostEmailConfirm},
+                    #{hostPhoneNo}, #{hostAddress}, #{isHost})
+    </insert>
+
+    <select id="idIsDuplicated" resultType="int">
+        select EXISTS (select hostName from host_test
+                       where hostName = #{hostname}) as isDuplicated
+    </select>
+</mapper>
