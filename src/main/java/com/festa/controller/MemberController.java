@@ -8,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.net.URI;
 
@@ -25,7 +31,7 @@ import java.net.URI;
  *               기반으로 View에 연결한다.
  */
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @Log4j2
 public class MemberController {
 
@@ -37,7 +43,7 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity
      */
-    @PostMapping(value = "/signUpAsMember")
+    @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
@@ -50,8 +56,7 @@ public class MemberController {
      * @param id
      * @return HttpStatus
      */
-
-    @GetMapping("idIsDuplicated/{id}")
+    @GetMapping("/{id}/duplicate")
     public HttpStatus idIsDuplicated(@PathVariable @NotNull String id) {
         int isDuplicated = memberService.idIsDuplicated(id);
 

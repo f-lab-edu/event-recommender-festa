@@ -47,6 +47,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!--
+        hateoas 는 REST API 기반으로, 호출한 URI와 관련된 REST API 정보를 담아서 응답을 보내준다.
+        그럼으로써 클라이언트는 단일 고정 URL만 알아도 되고 hateoas 가 하이퍼미디어 링크를 통해
+        상황에 맞는 적절한 리소스를 동적으로 이동시켜주기 때문에 해당 의존성을 사용함
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
@@ -84,13 +90,12 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
