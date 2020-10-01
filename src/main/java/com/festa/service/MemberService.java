@@ -15,7 +15,11 @@ public class MemberService {
         memberDAO.insertMemberInfo(memberDTO);
     }
 
-    public int idIsDuplicated(String id) {
+    public boolean idIsDuplicated(String id) {
         return memberDAO.idIsDuplicated(id);
+    }
+
+    public MemberDTO loginAsMembers(String username, int password) {
+        return memberDAO.loginAsMembers(username, password);
     }
 }

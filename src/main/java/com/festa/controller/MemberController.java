@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import java.net.URI;
+import javax.servlet.http.HttpSession;
+
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -58,13 +59,34 @@ public class MemberController {
      */
     @GetMapping("/{id}/duplicate")
     public HttpStatus idIsDuplicated(@PathVariable @NotNull String id) {
-        int isDuplicated = memberService.idIsDuplicated(id);
+        boolean isDuplicated = memberService.idIsDuplicated(id);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(isDuplicated == 1) {
+        if(!isDuplicated) {
             return HttpStatus.CONFLICT;
         } else {
             return HttpStatus.OK;
         }
+    }
+
+    /**
+     * 사용자 로그인 기능
+     * @param httpSession
+     * @param memberDTO
+     * @return ResponseEntity
+     */
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @NotNull MemberDTO memberDTO) {
+        String username = memberDTO.getUsername();
+        int password = memberDTO.getPassword();
+
+        MemberDTO members = memberService.loginAsMembers(username, password);
+
+        //로그인에 실패했을 때 httpSession에 저장하지 않고 401 status code를 return한다.
+        if(members == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("미가입 회원입니다.");
+        }
+        httpSession.setAttribute("username", username);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
