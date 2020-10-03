@@ -19,7 +19,7 @@ public class MemberService {
         return memberDAO.idIsDuplicated(id);
     }
 
-    public MemberDTO loginAsMembers(String username, int password) {
+    public MemberDTO loginAsMembers(String username, String password) {
         return memberDAO.loginAsMembers(username, password);
     }
 }

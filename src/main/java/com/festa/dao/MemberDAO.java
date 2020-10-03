@@ -12,5 +12,5 @@ public interface MemberDAO {
 
     boolean idIsDuplicated(String id);
 
-    MemberDTO loginAsMembers(String username, int password);
+    MemberDTO loginAsMembers(String username, String password);
 }

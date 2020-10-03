@@ -78,7 +78,7 @@ public class MemberController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @NotNull MemberDTO memberDTO) {
         String username = memberDTO.getUsername();
-        int password = memberDTO.getPassword();
+        String password = memberDTO.getPassword();
 
         MemberDTO members = memberService.loginAsMembers(username, password);
 
