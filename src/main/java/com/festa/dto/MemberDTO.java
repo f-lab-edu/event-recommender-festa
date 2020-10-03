@@ -14,8 +14,11 @@ import lombok.Value;
 public class MemberDTO {
 
     String username;
-    int password;
+    String password;
     String email;
     String confirmEmail;
+    int phoneNo;
+    String address;
+    String userLevel; //주최자 여부
 
 }
