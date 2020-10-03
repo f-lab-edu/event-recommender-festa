@@ -19,6 +19,15 @@ public class MemberDTO {
     String confirmEmail;
     int phoneNo;
     String address;
-    String userLevel; //주최자 여부
 
+    //정해진 값(Y/N)에 다른 값이 들어오는 것을 막기 위해 enum으로 관리
+    UserLevel userLevel;
+
+    public enum UserLevel {
+        //주최자
+        Y,
+
+        //일반사용자
+        N
+    }
 }
