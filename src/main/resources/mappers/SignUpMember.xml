@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.festa.dao.MemberDAO">
+<mapper namespace="com.festa.dao.AccountsDAO">
 
-    <insert id="signUpMember" parameterType="com.festa.dto.MemberDTO">
-        INSERT INTO member
-        (id, username, password, email)
+    <insert id="signUp" parameterType="com.festa.dto.SignUpDTO">
+        INSERT INTO
+            USERINFO
+                (username,
+                password,
+                email,
+                phoneNo,
+                address,
+                userLevel
+                )
         VALUES
-        (#{id}, #{username}, #{password}, #{email})
+            (#{username},
+            #{password},
+            #{email},
+            #{phoneNo},
+            #{address},
+            #{userLevel})
     </insert>
 
-    <select id="checkMemberID" parameterType="String">
+    <select id="validateID" parameterType="String">
         SELECT email
-        FROM member
+        FROM USERINFO
         WHERE
         email = #{email}
     </select>

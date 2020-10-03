@@ -1,28 +1,32 @@
 package com.festa.service;
 
-import com.festa.dao.MemberDAO;
-import com.festa.dto.MemberDTO;
+import com.festa.dao.AccountsDAO;
+import com.festa.dto.SignUpDTO;
+import com.festa.exception.DuplicatedIDException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class MemberService {
+public class AccountsService {
 
     @Autowired
-    private MemberDAO memberDAO;
+    private AccountsDAO accountsDAO;
 
     /**
      * 회원 가입
      *
      * id를 이용하여 중복 확인 후 이상이 없을 경우 회원 가입.
-     * @param memberDTO
+     * @param signUpDTO
      */
-    public void signUpMember(MemberDTO memberDTO) {
-        checkMemberID(memberDTO.getEmail());
+    public void signUp(SignUpDTO signUpDTO) {
+        // ID 중복 확인
+        validateID(signUpDTO.getEmail());
+
         // 비밀번호 암호화 설정 추가할것.
-        int signUpFlag = memberDAO.signUpMember(memberDTO);
+
+        int signUpFlag = accountsDAO.signUp(signUpDTO);
 
         if (signUpFlag <= 0) {
             throw new IllegalStateException("회원가입에 실패하였습니다.");
@@ -36,10 +40,10 @@ public class MemberService {
      * IllegalStateException : 부적합한 때 메서드가 사용되었음.
      * @param email
      */
-    public void checkMemberID(String email) {
-        List<MemberDTO> checkMemberID = memberDAO.checkMemberID(email);
+    public void validateID(String email) {
+        List<SignUpDTO> checkMemberID = accountsDAO.validateID(email);
         if (!checkMemberID.isEmpty()) {
-            throw new IllegalStateException("이미 등록된 이메일입니다.");
+            throw new DuplicatedIDException("이미 등록된 이메일입니다.");
         }
     }
 }

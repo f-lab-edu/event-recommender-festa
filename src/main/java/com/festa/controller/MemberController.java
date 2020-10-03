@@ -1,32 +1,38 @@
 package com.festa.controller;
 
-import com.festa.dto.MemberDTO;
-import com.festa.service.MemberService;
+import com.festa.dto.SignUpDTO;
+import com.festa.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Controller
+/*
+Controller : View 반환
+            Controller -> View -> DispatcherServlet -> Response
+RestController : Controller + ResponseBody
+            JSON/XML 타입의 HTTP 응답을 할 수 있다.
+            RestController -> HTTPResponse
+ */
+@RestController
+@RequestMapping("/members")
 public class MemberController {
 
     @Autowired
-    private MemberService memberService;
+    private AccountsService accountsService;
 
     /**
-     * 회원가입 메서드
-     *
-     * HttpStatus
-     * CREATED : 201 생성 요청 성공공
-     * @param memberDTO
-     * @return
+     * 일반 사용자 회원가입
+     * @param signUpDTO
+     * @return HttpStatus
      */
-    @PostMapping(value = "/signUpMember")
-    public HttpStatus signUpMember(@RequestBody @Valid MemberDTO memberDTO){
-        memberService.signUpMember(memberDTO);
+    @PostMapping(value = "/signUp")
+    public HttpStatus signUpMember(@RequestBody @Valid SignUpDTO signUpDTO){
+        accountsService.signUp(signUpDTO);
         return HttpStatus.CREATED;
     }
 }
