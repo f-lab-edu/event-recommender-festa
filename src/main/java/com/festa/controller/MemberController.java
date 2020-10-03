@@ -1,5 +1,9 @@
 package com.festa.controller;
 
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import com.sun.istack.internal.NotNull;
@@ -55,17 +59,17 @@ public class MemberController {
     /**
      * 사용자 중복 아이디 체크
      * @param id
-     * @return HttpStatus
+     * @return ResponseEntity
      */
     @GetMapping("/{id}/duplicate")
-    public HttpStatus idIsDuplicated(@PathVariable @NotNull String id) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @NotNull String id) {
         boolean isDuplicated = memberService.idIsDuplicated(id);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
         if(!isDuplicated) {
-            return HttpStatus.CONFLICT;
+            return RESPONSE_ENTITY_CONFLICT;
         } else {
-            return HttpStatus.OK;
+            return RESPONSE_ENTITY_OK;
         }
     }
 
@@ -82,11 +86,11 @@ public class MemberController {
 
         MemberDTO members = memberService.loginAsMembers(username, password);
 
-        //로그인에 실패했을 때 httpSession에 저장하지 않고 401 status code를 return한다.
+        //로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
         if(members == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("미가입 회원입니다.");
+            return RESPONSE_ENTITY_BAD_REQUEST;
         }
         httpSession.setAttribute("username", username);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return RESPONSE_ENTITY_OK;
     }
 }
