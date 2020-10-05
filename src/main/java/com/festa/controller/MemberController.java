@@ -2,8 +2,9 @@ package com.festa.controller;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
+import com.festa.common.SessionUtils;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import com.sun.istack.internal.NotNull;
@@ -88,9 +89,10 @@ public class MemberController {
 
         //로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
         if(members == null) {
-            return RESPONSE_ENTITY_BAD_REQUEST;
+            return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        httpSession.setAttribute("username", username);
+        SessionUtils.setUserNameSession(httpSession, username);
+
         return RESPONSE_ENTITY_OK;
     }
 }
