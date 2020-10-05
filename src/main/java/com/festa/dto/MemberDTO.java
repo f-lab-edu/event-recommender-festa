@@ -3,6 +3,8 @@ package com.festa.dto;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.validation.constraints.*;
+
 /* @Value 어노테이션을 이용하게 되면 필드에 자동으로 private final 이 붙게 되고
  * @Getter만 사용하며 @Setter는 생성하지 않기 때문에 각 필드는 getter method만이 생성된다.
  * @Data 어노테이션에서 유용하게 쓰이는 toString(), equals(), hashCode() 메서드 또한 생성시켜준다.
@@ -13,14 +15,31 @@ import lombok.Value;
 @Builder
 public class MemberDTO {
 
+    @NotBlank(message = "아이디를 입력해주세요")
     String username;
+
+    @NotBlank(message = "비밀번호를 입력해주세요")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}",
+             message = "영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다")
     String password;
+
+    @NotBlank(message = "이메일을 입력해주세요")
+    @Email
     String email;
+
+    @NotBlank(message = "이메일확인란을 입력해주세요")
+    @Email
     String confirmEmail;
+
+    @NotBlank(message = "전화번호를 입력해주세요")
+    @Pattern(regexp = "(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})")
     int phoneNo;
+
+    @NotBlank(message = "주소를 입력해주세요")
     String address;
 
     //정해진 값(Y/N)에 다른 값이 들어오는 것을 막기 위해 enum으로 관리
+    @NotNull
     UserLevel userLevel;
 
     public enum UserLevel {

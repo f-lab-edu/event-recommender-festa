@@ -7,7 +7,6 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUE
 import com.festa.common.SessionUtils;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
-import com.sun.istack.internal.NotNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 
 /*
@@ -50,7 +50,7 @@ public class MemberController {
      * @return ResponseEntity
      */
     @PostMapping(value = "/signUp")
-    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @NotNull MemberDTO memberDTO) {
+    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
@@ -63,7 +63,7 @@ public class MemberController {
      * @return ResponseEntity
      */
     @GetMapping("/{id}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @NotNull String id) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid String id) {
         boolean isDuplicated = memberService.idIsDuplicated(id);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -81,7 +81,7 @@ public class MemberController {
      * @return ResponseEntity
      */
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @NotNull MemberDTO memberDTO) {
+    public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @Valid MemberDTO memberDTO) {
         String username = memberDTO.getUsername();
         String password = memberDTO.getPassword();
 
