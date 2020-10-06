@@ -7,6 +7,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUE
 import com.festa.common.commonService.SessionService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -38,6 +40,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/members")
+@RequiredArgsConstructor
 @Log4j2
 public class MemberController {
 
@@ -45,10 +48,6 @@ public class MemberController {
     private MemberService memberService;
 
     private final SessionService sessionService;
-
-    public MemberController(SessionService sessionService) {
-        this.sessionService = sessionService;
-    }
 
     /**
      * 사용자 회원가입 기능
