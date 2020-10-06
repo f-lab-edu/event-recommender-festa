@@ -1,5 +1,6 @@
 package com.festa.common;
 
+import com.festa.common.commonService.SessionService;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpSession;
 
@@ -7,7 +8,7 @@ import javax.servlet.http.HttpSession;
  * 유지보수성을 위해 따로 클래스로 분리시킴.
  */
 @RequiredArgsConstructor
-public class SessionUtils {
+public class SessionUtils implements SessionService {
 
     public static final String USER_NAME = "username";
 
@@ -18,7 +19,8 @@ public class SessionUtils {
      * @param session
      * @param username
      */
-    public static void setUserNameSession(HttpSession session, String username) {
+    @Override
+    public void setUserNameSession(HttpSession session, String username) {
         session.setAttribute(USER_NAME, username);
     }
 }

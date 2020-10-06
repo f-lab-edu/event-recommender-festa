@@ -4,7 +4,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
-import com.festa.common.SessionUtils;
+import com.festa.common.commonService.SessionService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.extern.log4j.Log4j2;
@@ -43,6 +43,12 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    private final SessionService sessionService;
+
+    public MemberController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     /**
      * 사용자 회원가입 기능
@@ -87,11 +93,11 @@ public class MemberController {
 
         MemberDTO members = memberService.loginAsMembers(username, password);
 
-        //로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
+        //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
         if(members == null) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        SessionUtils.setUserNameSession(httpSession, username);
+        sessionService.setUserNameSession(httpSession, username);
 
         return RESPONSE_ENTITY_OK;
     }
