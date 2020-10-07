@@ -14,6 +14,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 - MySQL
 - Mybatis
 - Maven
+- Redis
 - Naver cloud platform 
 - intellij IDEA
 
@@ -31,6 +32,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 - 대용량 트래픽의 상황에서 지속적인 서버 성능 개선
 - 클린코드를 위한 꾸준한 코드 리팩토링 
 - 이유와 근거가 명확한 기능의 사용
+- 객체지향적 개념을 이해하고 이를 코드에 녹여내어 의미있는 설계를 지향
 
 <br>
 <br>
@@ -58,7 +60,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 <br>
 
 #### 참고문헌
-- 우아한 형제들 기술블로그 "우린 Git-flow를 사용하고 있어요" 
+- 우아한 형제들 기술블로그 "우린 Git-flow를 사용하고 있어요"   
 <https://woowabros.github.io/experience/2017/10/30/baemin-mobile-git-branch-strategy.html>
 
 <br>
@@ -71,6 +73,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 
  - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
  - [WIKI Home](https://github.com/f-lab-edu/event-recommender-festa/wiki)
+ - [이슈해결을 정리한 테크블로그](https://github.com/f-lab-edu/event-recommender-festa/wiki/%EC%9D%B4%EC%8A%88%ED%95%B4%EA%B2%B0Posts)
  
 <br>
 <br>
