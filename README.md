@@ -14,7 +14,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 - MySQL
 - Mybatis
 - Maven
-- Redis
+- [Redis](https://redis.io/documentation)
 - Naver cloud platform 
 - intellij IDEA
 
@@ -31,7 +31,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 
 - 대용량 트래픽의 상황에서 지속적인 서버 성능 개선
 - 클린코드를 위한 꾸준한 코드 리팩토링 
-- 이유와 근거가 명확한 기능의 사용
+- 이유와 근거가 명확한 기술의 사용
 - 객체지향적 개념을 이해하고 이를 코드에 녹여내어 의미있는 설계를 지향
 
 <br>
