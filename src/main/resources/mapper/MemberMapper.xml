@@ -25,26 +25,12 @@
     </insert>
 
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
-    <select id="idIsDuplicated" resultType="boolean">
+    <select id="findUserByUsername" resultType="boolean">
         select EXISTS
                    (select username
                     from members
                     where username = #{username}
                    )
-                   as isDuplicated
-    </select>
-
-    <select id="loginAsMembers" resultType="com.festa.dto.MemberDTO">
-        select
-               username
-             , password
-             , email
-             , confirmEmail
-             , phoneNo
-             , address
-             , userLevel
-        from members
-        where username = #{username}
-          and password = #{password}
+                   as isIdExists
     </select>
 </mapper>

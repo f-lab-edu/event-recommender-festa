@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -64,15 +63,15 @@ public class MemberController {
 
     /**
      * 사용자 중복 아이디 체크
-     * @param id
+     * @param username
      * @return ResponseEntity
      */
-    @GetMapping("/{id}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid String id) {
-        boolean isDuplicated = memberService.idIsDuplicated(id);
+    @GetMapping("/{username}/duplicate")
+    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid String username) {
+        boolean isIdDuplicated = memberService.findUserByUsername(username);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(!isDuplicated) {
+        if(!isIdDuplicated) {
             return RESPONSE_ENTITY_CONFLICT;
         } else {
             return RESPONSE_ENTITY_OK;
@@ -88,12 +87,11 @@ public class MemberController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @Valid MemberDTO memberDTO) {
         String username = memberDTO.getUsername();
-        String password = memberDTO.getPassword();
 
-        MemberDTO members = memberService.loginAsMembers(username, password);
+        boolean isIdExists = memberService.findUserByUsername(username);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(members == null) {
+        if(!isIdExists) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
         sessionService.setUserNameSession(httpSession, username);
