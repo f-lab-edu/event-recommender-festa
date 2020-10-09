@@ -9,12 +9,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JasyptConfig {
+    /*
+    @Value : application.properties에 있는 설정 값을 불러올 수 있다.
+     */
+    @Value("${encryption.key}")
+    private String key;
 
     @Bean("jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        config.setPassword("KEY"); // 암호화, 복호화에 사용할 키
+        config.setPassword(key); // 암호화, 복호화에 사용할 키
         config.setAlgorithm("PBEWithMD5AndDES"); // 암호화 알고리즘 지정
         config.setKeyObtentionIterations("1000"); // 암호화 키를 얻기 위해 적용된 해싱 반복 횟수를 설정한다.
         config.setPoolSize("1"); // 암호키 생성을 위한 pool 크기 지정.

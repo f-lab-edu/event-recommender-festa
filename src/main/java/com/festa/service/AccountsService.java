@@ -41,8 +41,8 @@ public class AccountsService {
      * @param email
      */
     public void validateID(String email) {
-        List<SignUpDTO> checkMemberID = accountsDAO.validateID(email);
-        if (!checkMemberID.isEmpty()) {
+        boolean checkMemberID = accountsDAO.validateID(email);
+        if (!checkMemberID) {
             throw new DuplicatedIDException("이미 등록된 이메일입니다.");
         }
     }

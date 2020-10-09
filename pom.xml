@@ -37,7 +37,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- lombok 설정 -->
+        <!-- lombok 설정 : getter, setter, 생성자 등 반복적으로 만드는 코드를 줄이기 위해 사용 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -72,8 +72,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!--jasypt 설정 - 암호화
-        -->
+        <!--jasypt 설정 - 암호화  -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>

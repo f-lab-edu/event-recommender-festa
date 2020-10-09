@@ -21,11 +21,13 @@
             #{userLevel})
     </insert>
 
-    <select id="validateID" parameterType="String">
-        SELECT email
-        FROM USERINFO
-        WHERE
-        email = #{email}
+    <select id="validateID" parameterType="boolean">
+        SELECT EXISTS(
+            SELECT email
+            FROM USERINFO
+            WHERE
+            email = #{email}
+        )
     </select>
 
 </mapper>
