@@ -1,5 +1,6 @@
 package com.festa.service;
 
+import com.festa.generator.SessionWriter;
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
@@ -8,11 +9,16 @@ import com.festa.exception.IsNotExistedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+
 @Service
 public class AccountsService {
 
     @Autowired
     private AccountsDAO accountsDAO;
+
+    @Autowired
+    private SessionWriter sessionWriter;
 
     /**
      * 회원 가입
@@ -42,17 +48,29 @@ public class AccountsService {
      * 로그인
      *
      * 아이디가 존재하는지 확인 후 존재하지 않는다면 IsNotExistedException 발생하며 중단
+     *
      * @param loginDTO
      * @return
      */
-    public LoginDTO login(LoginDTO loginDTO){
+    public void login(LoginDTO loginDTO, HttpSession httpSession){
+        String sessionKey = "USER_LOGIN_KEY";
+
         boolean existedID = existedID(loginDTO.getUserID());
         if (!existedID){
             throw new IsNotExistedException("존재하지 않는 아이디입니다.");
         }
 
         LoginDTO resultLoginDTO = accountsDAO.login(loginDTO);
-        return resultLoginDTO;
+        
+        boolean resultLogin = false;
+
+        if (resultLoginDTO != null) {
+            resultLogin = sessionWriter.makeSession(httpSession, sessionKey, resultLoginDTO);
+        }
+
+        if (!resultLogin){
+            throw new IllegalArgumentException("로그인에 실패하였습니다.");
+        }
     }
 
     /**

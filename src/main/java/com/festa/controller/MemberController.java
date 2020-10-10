@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /*
@@ -43,9 +44,8 @@ public class MemberController {
      * @return HttpStatus
      */
     @PostMapping(value = "/login")
-    public HttpStatus loginMember(@RequestBody @Valid LoginDTO loginDTO){
-        accountsService.login(loginDTO);
-        // session 설정
+    public HttpStatus loginMember(@RequestBody @Valid LoginDTO loginDTO, HttpSession httpSession){
+        accountsService.login(loginDTO, httpSession);
         return HttpStatus.OK;
     }
 }
