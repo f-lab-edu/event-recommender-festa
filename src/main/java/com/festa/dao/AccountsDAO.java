@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface AccountsDAO {
     int signUp(SignUpDTO signUpDTO);
 
-    boolean validateID(String id);
+    boolean existedEmail(String email);
+
+    boolean existedID(String userID);
 }

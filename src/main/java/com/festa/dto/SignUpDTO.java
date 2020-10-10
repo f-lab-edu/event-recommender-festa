@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
  setter가 있다면 객체가 언제, 어디서나 변경 가능하기 때문에 일관성을 유지하기 힘들다.
  대신 @AllArgsConstructor 모든 멤버를 매개변수로 받는 생성자를 만들 수 있다.
  */
+@Value
 @AllArgsConstructor
 @Getter
 public class SignUpDTO {
@@ -20,28 +21,30 @@ public class SignUpDTO {
     @NotBlank : null, "", " " 불가능
      */
     @NotBlank(message = "이름을 입력해주세요.")
-    private final String username;
+    String username;
+
+    @NotBlank(message = "아이디를 입력해주세요.")
+    String userID;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Pattern(message = "영문, 숫자, 특수문자를 각 1개 이상 포함하여 8자 이상 입력해주세요.",
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$")
-    private final String password;
-
+    String password;
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일을 입력해주세요.")
-    private final String email;
+    String email;
 
     @NotBlank(message = "확인 이메일을 입력해주세요.")
     @Email(message = "확인 이메일을 입력해주세요.")
-    private final String emailCheck;
+    String emailCheck;
 
     @Pattern(message = "- 없이 숫자만 입력해주세요.",
             regexp = "/^\\d{3}\\d{3,4}\\d{4}$/;")
-    private String phoneNo;
+    String phoneNo;
 
-    private String address;
+    String address;
 
-    @NotBlank(message = "사용자인지, 주최자인지 선택해 주세요.")
-    private final String userLevel;
+    @NotBlank
+    String userLevel;
 }

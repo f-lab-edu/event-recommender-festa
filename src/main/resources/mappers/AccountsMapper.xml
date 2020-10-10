@@ -6,6 +6,7 @@
         INSERT INTO
             USERINFO
                 (username,
+                userID,
                 password,
                 email,
                 phoneNo,
@@ -21,12 +22,21 @@
             #{userLevel})
     </insert>
 
-    <select id="validateID" parameterType="boolean">
+    <select id="existedEmail" parameterType="boolean">
         SELECT EXISTS(
             SELECT email
             FROM USERINFO
             WHERE
             email = #{email}
+        )
+    </select>
+
+    <select id="existedID" parameterType="boolean">
+        SELECT EXISTS(
+            SELECT userID
+            FROM USERINFO
+            WHERE
+            userID = #{userID}
         )
     </select>
 

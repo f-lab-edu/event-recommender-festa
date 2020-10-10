@@ -2,11 +2,9 @@ package com.festa.service;
 
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.SignUpDTO;
-import com.festa.exception.DuplicatedIDException;
+import com.festa.exception.DuplicatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AccountsService {
@@ -17,33 +15,44 @@ public class AccountsService {
     /**
      * 회원 가입
      *
-     * id를 이용하여 중복 확인 후 이상이 없을 경우 회원 가입.
+     * email, id 중복 확인 후 이상이 없을 경우 회원 가입.
+     * 중복시 DuplicatedException 발생하며 중단
      * @param signUpDTO
      */
     public void signUp(SignUpDTO signUpDTO) {
-        // ID 중복 확인
-        validateID(signUpDTO.getEmail());
+        boolean existedEmail = existedEmail(signUpDTO.getEmail());
+        if (existedEmail) {
+            throw new DuplicatedException("이미 등록된 이메일입니다.");
+        }
 
-        // 비밀번호 암호화 설정 추가할것.
-
+        boolean existedID = existedID(signUpDTO.getUserID());
+        if (existedID) {
+            throw new DuplicatedException("이미 등록된 아이디입니다.");
+        }
+        
         int signUpFlag = accountsDAO.signUp(signUpDTO);
-
         if (signUpFlag <= 0) {
             throw new IllegalStateException("회원가입에 실패하였습니다.");
         }
     }
 
     /**
-     * 중복 가입 확인
+     * 등록 이메일 여부 확인
      *
-     * 중복시 IllegalStateException 발생하며 중단
-     * IllegalStateException : 부적합한 때 메서드가 사용되었음.
      * @param email
      */
-    public void validateID(String email) {
-        boolean checkMemberID = accountsDAO.validateID(email);
-        if (!checkMemberID) {
-            throw new DuplicatedIDException("이미 등록된 이메일입니다.");
-        }
+    public boolean existedEmail(String email) {
+        boolean existedEmail = accountsDAO.existedEmail(email);
+        return existedEmail;
+    }
+
+    /**
+     * 등록 ID 여부 확인
+     *
+     * @param userID
+     */
+    public boolean existedID(String userID) {
+        boolean existedID = accountsDAO.existedID(userID);
+        return existedID;
     }
 }
