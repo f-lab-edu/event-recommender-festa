@@ -10,5 +10,5 @@ public interface MemberDAO {
 
     int insertMemberInfo(MemberDTO memberDTO);
 
-    boolean findUserByUsername(String username);
+    boolean findUserByUsername(long userId);
 }

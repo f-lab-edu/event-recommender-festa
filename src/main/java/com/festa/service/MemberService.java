@@ -15,7 +15,7 @@ public class MemberService {
         memberDAO.insertMemberInfo(memberDTO);
     }
 
-    public boolean findUserByUsername(String username) {
-        return memberDAO.findUserByUsername(username);
+    public boolean findUserByUsername(long userId) {
+        return memberDAO.findUserByUsername(userId);
     }
 }

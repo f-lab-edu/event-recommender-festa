@@ -3,7 +3,10 @@ package com.festa.dto;
 import lombok.Builder;
 import lombok.Value;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /* @Value 어노테이션을 이용하게 되면 필드에 자동으로 private final 이 붙게 되고
  * @Getter만 사용하며 @Setter는 생성하지 않기 때문에 각 필드는 getter method만이 생성된다.
@@ -16,7 +19,7 @@ import javax.validation.constraints.*;
 public class MemberDTO {
 
     @NotBlank(message = "아이디를 입력해주세요")
-    String username;
+    long userId;
 
     @NotBlank(message = "비밀번호를 입력해주세요")
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}",

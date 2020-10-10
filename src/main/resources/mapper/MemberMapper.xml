@@ -5,7 +5,8 @@
     <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
         insert into
             members
-            ( username
+            ( userId
+            , username
             , password
             , email
             , confirmEmail
@@ -14,7 +15,8 @@
             , userLevel
         )
         values
-            ( #{username}
+            ( #{userId}
+            , #{username}
             , #{password}
             , #{email}
             , #{confirmEmail}
@@ -27,9 +29,9 @@
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
     <select id="findUserByUsername" resultType="boolean">
         select EXISTS
-                   (select username
+                   (select userId
                     from members
-                    where username = #{username}
+                    where userId = #{userId}
                    )
                    as isIdExists
     </select>

@@ -4,7 +4,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
-import com.festa.common.commonService.SessionService;
+import com.festa.common.commonService.LoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    private final SessionService sessionService;
+    private final LoginService loginService;
 
     /**
      * 사용자 회원가입 기능
@@ -63,12 +63,12 @@ public class MemberController {
 
     /**
      * 사용자 중복 아이디 체크
-     * @param username
+     * @param userId
      * @return ResponseEntity
      */
-    @GetMapping("/{username}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid String username) {
-        boolean isIdDuplicated = memberService.findUserByUsername(username);
+    @GetMapping("/{userId}/duplicate")
+    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid Long userId) {
+        boolean isIdDuplicated = memberService.findUserByUsername(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
         if(!isIdDuplicated) {
@@ -86,15 +86,15 @@ public class MemberController {
      */
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @Valid MemberDTO memberDTO) {
-        String username = memberDTO.getUsername();
+        long userId = memberDTO.getUserId();
 
-        boolean isIdExists = memberService.findUserByUsername(username);
+        boolean isIdExists = memberService.findUserByUsername(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
         if(!isIdExists) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        sessionService.setUserNameSession(httpSession, username);
+        loginService.setUserNameSession(httpSession, userId);
 
         return RESPONSE_ENTITY_OK;
     }
