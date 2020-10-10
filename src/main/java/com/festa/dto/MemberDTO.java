@@ -21,6 +21,9 @@ public class MemberDTO {
     @NotBlank(message = "아이디를 입력해주세요")
     long userId;
 
+    @NotBlank(message = "이름을 입력해주세요")
+    String username;
+
     @NotBlank(message = "비밀번호를 입력해주세요")
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}",
              message = "영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다")
@@ -47,9 +50,9 @@ public class MemberDTO {
 
     public enum UserLevel {
         //주최자
-        Y,
+        HOST,
 
         //일반사용자
-        N
+        USER
     }
 }

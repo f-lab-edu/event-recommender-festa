@@ -67,8 +67,8 @@ public class MemberController {
      * @return ResponseEntity
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid Long userId) {
-        boolean isIdDuplicated = memberService.findUserByUsername(userId);
+    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
+        boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
         if(!isIdDuplicated) {
@@ -88,10 +88,10 @@ public class MemberController {
     public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
-        boolean isIdExists = memberService.findUserByUsername(userId);
+        boolean isIdExist = memberService.isUserIdExist(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExists) {
+        if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
         loginService.setUserNameSession(httpSession, userId);

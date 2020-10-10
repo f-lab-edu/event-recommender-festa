@@ -27,7 +27,7 @@
     </insert>
 
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
-    <select id="findUserByUsername" resultType="boolean">
+    <select id="isUserIdExist" resultType="boolean">
         select EXISTS
                    (select userId
                     from members
