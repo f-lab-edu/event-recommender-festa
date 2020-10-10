@@ -1,8 +1,10 @@
 package com.festa.service;
 
 import com.festa.dao.AccountsDAO;
+import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.exception.DuplicatedException;
+import com.festa.exception.IsNotExistedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,23 @@ public class AccountsService {
     }
 
     /**
+     * 로그인
+     *
+     * 아이디가 존재하는지 확인 후 존재하지 않는다면 IsNotExistedException 발생하며 중단
+     * @param loginDTO
+     * @return
+     */
+    public LoginDTO login(LoginDTO loginDTO){
+        boolean existedID = existedID(loginDTO.getUserID());
+        if (!existedID){
+            throw new IsNotExistedException("존재하지 않는 아이디입니다.");
+        }
+
+        LoginDTO resultLoginDTO = accountsDAO.login(loginDTO);
+        return resultLoginDTO;
+    }
+
+    /**
      * 등록 이메일 여부 확인
      *
      * @param email
@@ -55,4 +74,5 @@ public class AccountsService {
         boolean existedID = accountsDAO.existedID(userID);
         return existedID;
     }
+
 }

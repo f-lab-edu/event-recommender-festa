@@ -1,5 +1,6 @@
 package com.festa.controller;
 
+import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,17 @@ public class HostController {
     public HttpStatus signUpHost(@RequestBody @Valid SignUpDTO signUpDTO){
         accountsService.signUp(signUpDTO);
         return HttpStatus.CREATED;
+    }
+
+    /**
+     * 주최자 로그인
+     * @param loginDTO
+     * @return HttpStatus
+     */
+    @PostMapping(value = "/login")
+    public HttpStatus loginHost(@RequestBody @Valid LoginDTO loginDTO){
+        accountsService.login(loginDTO);
+        // session 설정
+        return HttpStatus.OK;
     }
 }

@@ -1,5 +1,6 @@
 package com.festa.controller;
 
+import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,17 @@ public class MemberController {
     public HttpStatus signUpMember(@RequestBody @Valid SignUpDTO signUpDTO){
         accountsService.signUp(signUpDTO);
         return HttpStatus.CREATED;
+    }
+
+    /**
+     * 일반 사용자 로그인
+     * @param loginDTO
+     * @return HttpStatus
+     */
+    @PostMapping(value = "/login")
+    public HttpStatus loginMember(@RequestBody @Valid LoginDTO loginDTO){
+        accountsService.login(loginDTO);
+        // session 설정
+        return HttpStatus.OK;
     }
 }
