@@ -4,7 +4,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
-import com.festa.common.commonService.LoginService;
+import com.festa.common.commonService.LogInOutService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    private final LoginService loginService;
+    private final LogInOutService logInOutService;
 
     /**
      * 사용자 회원가입 기능
@@ -71,7 +71,7 @@ public class MemberController {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(!isIdDuplicated) {
+        if(isIdDuplicated) {
             return RESPONSE_ENTITY_CONFLICT;
         } else {
             return RESPONSE_ENTITY_OK;
@@ -94,7 +94,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNameSession(httpSession, userId);
+        logInOutService.setUserNameSession(httpSession, userId);
 
         return RESPONSE_ENTITY_OK;
     }
