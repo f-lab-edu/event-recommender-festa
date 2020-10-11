@@ -9,13 +9,13 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 <br>
 
 ## 프로젝트 사용기술 
-- Spring Boot
-- Java 8
-- MySQL
-- Mybatis
-- Maven
+- [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle)
+- [Java 8](https://docs.oracle.com/javase/8/docs/api/)
+- [MySQL](https://dev.mysql.com/doc/refman/8.0/en/)
+- [Mybatis](https://mybatis.org/mybatis-3/)
+- [Maven](http://maven.apache.org/guides/index.html)
 - [Redis](https://redis.io/documentation)
-- Naver cloud platform 
+- [Naver cloud platform](https://docs.ncloud.com/ko/)
 - intellij IDEA
 
 <br>
