@@ -1,6 +1,6 @@
 package com.festa.common;
 
-import com.festa.common.commonService.LogInOutService;
+import com.festa.common.commonService.SessionLoginService;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpSession;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
  * 따로 인터페이스와 클래스로 분리시켜 둠.
  */
 @RequiredArgsConstructor
-public class LogInOutCheck implements LogInOutService {
+public class SessionLogin implements SessionLoginService {
 
     public static final String USER_ID = "userId";
 

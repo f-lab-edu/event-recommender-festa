@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
  * 자유로운 확장성을 위해 생성함.
  */
 @Service
-public interface LogInOutService {
+public interface SessionLoginService {
 
     void setUserNameSession(HttpSession session, Long userId);
 

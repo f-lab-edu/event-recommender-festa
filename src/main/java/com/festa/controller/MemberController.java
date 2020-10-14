@@ -4,7 +4,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
-import com.festa.common.commonService.LogInOutService;
+import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    private final LogInOutService logInOutService;
+    private final SessionLoginService SessionloginService;
 
     /**
      * 사용자 회원가입 기능
@@ -94,7 +94,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        logInOutService.setUserNameSession(httpSession, userId);
+        SessionloginService.setUserNameSession(httpSession, userId);
 
         return RESPONSE_ENTITY_OK;
     }
