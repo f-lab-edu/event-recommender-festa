@@ -11,6 +11,7 @@ public class ResponseEntityConstants {
 
     public static final ResponseEntity<HttpStatus> RESPONSE_ENTITY_CONFLICT = ResponseEntity.status(HttpStatus.CONFLICT).build();
     public static final ResponseEntity<HttpStatus> RESPONSE_ENTITY_OK = ResponseEntity.status(HttpStatus.OK).build();
+    public static final ResponseEntity<HttpStatus> RESPONSE_ENTITY_UNAUTHORIZED = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     public static final ResponseEntity<String> RESPONSE_ENTITY_BAD_REQUEST_NO_USER = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("미가입 회원입니다.");
 
 }

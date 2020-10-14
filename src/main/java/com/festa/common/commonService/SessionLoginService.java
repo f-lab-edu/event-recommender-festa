@@ -2,8 +2,6 @@ package com.festa.common.commonService;
 
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-
 /*
  * 인터페이스를 선언하여 관심을 분리하고
  * 자유로운 확장성을 위해 생성함.
@@ -11,7 +9,10 @@ import javax.servlet.http.HttpSession;
 @Service
 public interface SessionLoginService {
 
-    void setUserNameSession(HttpSession session, Long userId);
+    void setUserIdSession(Long userId);
 
+    void removeUserIdSession();
+
+    boolean isLoginUser();
 
 }

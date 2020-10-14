@@ -17,11 +17,34 @@ public class SessionLogin implements SessionLoginService {
 
     /**
      * 세션에 userId 저장하는 메서드
-     * @param session
      * @param userId
      */
     @Override
-    public void setUserNameSession(HttpSession session, Long userId) {
-        session.setAttribute(USER_ID, userId);
+    public void setUserIdSession(Long userId) {
+        httpSession.setAttribute(USER_ID, userId);
+    }
+
+    /**
+     * 세션에 userId를 제거하는 메서드
+     * No Param
+     * No return
+     */
+    @Override
+    public void removeUserIdSession() {
+        httpSession.removeAttribute(USER_ID);
+    }
+
+    /**
+     * 로그인 확인 여부
+     * @return boolean
+     */
+    @Override
+    public boolean isLoginUser() {
+        Long userLogin = (Long) httpSession.getAttribute(USER_ID);
+
+        if(userLogin != null) {
+            return true;
+        }
+        return false;
     }
 }
