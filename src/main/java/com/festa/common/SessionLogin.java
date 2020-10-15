@@ -20,7 +20,7 @@ public class SessionLogin implements SessionLoginService {
      * @param userId
      */
     @Override
-    public void setUserIdSession(Long userId) {
+    public void setUserId(Long userId) {
         httpSession.setAttribute(USER_ID, userId);
     }
 
@@ -30,12 +30,13 @@ public class SessionLogin implements SessionLoginService {
      * No return
      */
     @Override
-    public void removeUserIdSession() {
+    public void removeUserId() {
         httpSession.removeAttribute(USER_ID);
     }
 
     /**
      * 로그인 확인 여부
+     * No Param
      * @return boolean
      */
     @Override

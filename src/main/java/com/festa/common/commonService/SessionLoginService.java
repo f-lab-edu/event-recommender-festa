@@ -4,14 +4,15 @@ import org.springframework.stereotype.Service;
 
 /*
  * 인터페이스를 선언하여 관심을 분리하고
- * 자유로운 확장성을 위해 생성함.
+ * 추후 수정이 필요할 때 시간을 절약하고 새로운 기능을 추가할 때
+ * 기존 소스코드의 수정사항을 최소화 하기 위해 생성함.
  */
 @Service
 public interface SessionLoginService {
 
-    void setUserIdSession(Long userId);
+    void setUserId(Long userId);
 
-    void removeUserIdSession();
+    void removeUserId();
 
     boolean isLoginUser();
 
