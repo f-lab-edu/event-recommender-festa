@@ -5,16 +5,18 @@
     <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
         insert into
             members
-            ( username
+            ( userId
+            , username
             , password
             , email
             , confirmEmail
             , phoneNo
             , address
             , userLevel
-            )
+        )
         values
-            ( #{username}
+            ( #{userId}
+            , #{username}
             , #{password}
             , #{email}
             , #{confirmEmail}
@@ -25,12 +27,12 @@
     </insert>
 
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
-    <select id="idIsDuplicated" resultType="boolean">
+    <select id="isUserIdExist" resultType="boolean">
         select EXISTS
-                   (select username
+                   (select userId
                     from members
-                    where username = #{username}
+                    where userId = #{userId}
                    )
-                   as isDuplicated
+                   as isIdExists
     </select>
 </mapper>

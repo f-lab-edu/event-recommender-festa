@@ -10,5 +10,5 @@ public interface MemberDAO {
 
     int insertMemberInfo(MemberDTO memberDTO);
 
-    int idIsDuplicated(String id);
+    boolean isUserIdExist(long userId);
 }
