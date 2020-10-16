@@ -3,6 +3,7 @@ package com.festa.controller;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
@@ -21,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -46,12 +45,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    private final SessionLoginService SessionloginService;
+    private final SessionLoginService sessionLoginService;
 
     /**
      * 사용자 회원가입 기능
      * @param memberDTO
-     * @return ResponseEntity
+     * @return ResponseEntity<MemberDTO>
      */
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @Valid MemberDTO memberDTO) {
@@ -64,7 +63,7 @@ public class MemberController {
     /**
      * 사용자 중복 아이디 체크
      * @param userId
-     * @return ResponseEntity
+     * @return ResponseEntity<HttpStatus>
      */
     @GetMapping("/{userId}/duplicate")
     public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
@@ -80,12 +79,11 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
-     * @param httpSession
      * @param memberDTO
-     * @return ResponseEntity
+     * @return ResponseEntity<HttpStatus>
      */
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(HttpSession httpSession, @RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
         boolean isIdExist = memberService.isUserIdExist(userId);
@@ -94,7 +92,25 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        SessionloginService.setUserNameSession(httpSession, userId);
+        sessionLoginService.setUserId(userId);
+
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 사용자 로그아웃 기능
+     * No Param
+     * @return ResponseEntity<HttpStatus>
+     */
+    @PostMapping(value = "/logout")
+    public ResponseEntity<HttpStatus> logout() {
+        boolean isLoginUser = sessionLoginService.isLoginUser();
+
+        //세션에 로그인 여부 확인 후 false를 return 했다면 로그인 한 사용자가 아님
+        if(!isLoginUser) {
+            return RESPONSE_ENTITY_UNAUTHORIZED;
+        }
+        sessionLoginService.removeUserId();
 
         return RESPONSE_ENTITY_OK;
     }
