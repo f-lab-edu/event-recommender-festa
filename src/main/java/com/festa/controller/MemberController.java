@@ -45,7 +45,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    private final SessionLoginService SessionLoginService;
+    private final SessionLoginService sessionLoginService;
 
     /**
      * 사용자 회원가입 기능
@@ -92,7 +92,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        SessionLoginService.setUserId(userId);
+        sessionLoginService.setUserId(userId);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -104,13 +104,13 @@ public class MemberController {
      */
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        boolean isLoginUser = SessionLoginService.isLoginUser();
+        boolean isLoginUser = sessionLoginService.isLoginUser();
 
         //세션에 로그인 여부 확인 후 false를 return 했다면 로그인 한 사용자가 아님
         if(!isLoginUser) {
             return RESPONSE_ENTITY_UNAUTHORIZED;
         }
-        SessionLoginService.removeUserId();
+        sessionLoginService.removeUserId();
 
         return RESPONSE_ENTITY_OK;
     }
