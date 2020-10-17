@@ -12,7 +12,7 @@ public interface AccountsDAO {
 
     LoginDTO getUserInfoForLogin(LoginDTO loginDTO);
 
-    boolean existedEmail(String email);
+    boolean isExistedEmail(String email);
 
-    boolean existedID(String userID);
+    boolean isExistedID(String userID);
 }

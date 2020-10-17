@@ -32,7 +32,7 @@
             AND password = #{password}
     </select>
 
-    <select id="existedEmail" parameterType="String" resultType="boolean">
+    <select id="isExistedEmail" parameterType="String" resultType="boolean">
         SELECT EXISTS(
             SELECT email
             FROM USERINFO
@@ -41,7 +41,7 @@
         )
     </select>
 
-    <select id="existedID" parameterType="String" resultType="boolean">
+    <select id="isExistedID" parameterType="String" resultType="boolean">
         SELECT EXISTS(
             SELECT userID
             FROM USERINFO

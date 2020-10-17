@@ -18,7 +18,7 @@ public class AccountsService {
     private AccountsDAO accountsDAO;
 
     @Autowired
-    private SessionManagement sessionWriter;
+    private SessionManagement sessionManagement;
 
     private String loginSessionKey = "USER_LOGIN_KEY";
 
@@ -62,7 +62,7 @@ public class AccountsService {
 
         LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
 
-        sessionWriter.makeSession(httpSession, loginSessionKey, resultLoginDTO);
+        sessionManagement.makeSession(httpSession, loginSessionKey, resultLoginDTO);
 
         if(httpSession.getAttribute(loginSessionKey) == null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");
@@ -75,7 +75,7 @@ public class AccountsService {
      * @param email
      */
     public boolean isExistedEmail(String email) {
-        boolean isExistedEmail = accountsDAO.existedEmail(email);
+        boolean isExistedEmail = accountsDAO.isExistedEmail(email);
         return isExistedEmail;
     }
 
@@ -85,7 +85,7 @@ public class AccountsService {
      * @param userID
      */
     public boolean isExistedID(String userID) {
-        boolean isExistedID = accountsDAO.existedID(userID);
+        boolean isExistedID = accountsDAO.isExistedID(userID);
         return isExistedID;
     }
 
