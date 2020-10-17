@@ -48,4 +48,15 @@ public class MemberController {
         accountsService.login(loginDTO, httpSession);
         return HttpStatus.OK;
     }
+
+    /**
+     * 일반 사용자 로그아웃
+     * @param httpSession
+     * @return HttpStatus
+     */
+    @PostMapping(value = "/logout")
+    public HttpStatus logoutMember(@RequestBody @Valid HttpSession httpSession){
+        accountsService.logout(httpSession);
+        return HttpStatus.OK;
+    }
 }

@@ -18,7 +18,7 @@ public class AccountsService {
     private AccountsDAO accountsDAO;
 
     @Autowired
-    private SessionManagement sessionWriter;
+    private SessionManagement sessionManagement;
 
     private String loginSessionKey = "USER_LOGIN_KEY";
 
@@ -62,10 +62,26 @@ public class AccountsService {
 
         LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
 
-        sessionWriter.makeSession(httpSession, loginSessionKey, resultLoginDTO);
+        sessionManagement.makeSession(httpSession, loginSessionKey, resultLoginDTO);
 
-        if(httpSession.getAttribute(loginSessionKey) != null){
+        if(httpSession.getAttribute(loginSessionKey) == null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");
+        }
+    }
+
+    /**
+     * 로그아웃
+     * 
+     * 로그인 되어있는지 세션을 먼저 확인 후 로그아웃, 로그인 되어있지 않다면 IllegalStateException 발생
+     *
+     * @param httpSession
+     */
+    public void logout(HttpSession httpSession){
+        boolean isLogin = sessionManagement.isExistedSession(httpSession, loginSessionKey);
+        if (isLogin){
+            sessionManagement.deleteSession(httpSession, loginSessionKey);
+        } else {
+            throw new IllegalStateException("로그인 되어있지 않은 사용자입니다.");
         }
     }
 

@@ -41,4 +41,15 @@ public class HostController {
         accountsService.login(loginDTO, httpSession);
         return HttpStatus.OK;
     }
+
+    /**
+     * 주최자 로그아웃
+     * @param httpSession
+     * @return HttpStatus
+     */
+    @PostMapping(value = "/logout")
+    public HttpStatus logoutHost(@RequestBody @Valid HttpSession httpSession){
+        accountsService.logout(httpSession);
+        return HttpStatus.OK;
+    }
 }
