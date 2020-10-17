@@ -44,7 +44,7 @@ public class MemberDTO {
     @NotBlank(message = "주소를 입력해주세요")
     String address;
 
-    //정해진 값(Y/N)에 다른 값이 들어오는 것을 막기 위해 enum으로 관리
+    //정해진 값에 다른 값이 들어오는 것을 막기 위해 enum으로 관리
     @NotNull
     UserLevel userLevel;
 
