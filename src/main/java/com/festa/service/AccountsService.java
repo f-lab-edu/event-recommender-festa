@@ -64,7 +64,7 @@ public class AccountsService {
 
         sessionWriter.makeSession(httpSession, loginSessionKey, resultLoginDTO);
 
-        if(httpSession.getAttribute(loginSessionKey) != null){
+        if(httpSession.getAttribute(loginSessionKey) == null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");
         }
     }
