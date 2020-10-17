@@ -22,7 +22,7 @@
             #{userLevel})
     </insert>
 
-    <select id="login" parameterType="com.festa.dto.LoginDTO">
+    <select id="getUserInfoForLogin" parameterType="com.festa.dto.LoginDTO">
         SELECT
             userID,
             userLevel

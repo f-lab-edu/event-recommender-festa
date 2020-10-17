@@ -1,11 +1,11 @@
 package com.festa.service;
 
-import com.festa.generator.SessionWriter;
+import com.festa.management.SessionManagement;
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.exception.DuplicatedException;
-import com.festa.exception.IsNotExistedException;
+import com.festa.exception.NotExistedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,9 @@ public class AccountsService {
     private AccountsDAO accountsDAO;
 
     @Autowired
-    private SessionWriter sessionWriter;
+    private SessionManagement sessionWriter;
+
+    private String loginSessionKey = "USER_LOGIN_KEY";
 
     /**
      * 회원 가입
@@ -28,12 +30,12 @@ public class AccountsService {
      * @param signUpDTO
      */
     public void signUp(SignUpDTO signUpDTO) {
-        boolean existedEmail = existedEmail(signUpDTO.getEmail());
+        boolean existedEmail = isExistedEmail(signUpDTO.getEmail());
         if (existedEmail) {
             throw new DuplicatedException("이미 등록된 이메일입니다.");
         }
 
-        boolean existedID = existedID(signUpDTO.getUserID());
+        boolean existedID = isExistedID(signUpDTO.getUserID());
         if (existedID) {
             throw new DuplicatedException("이미 등록된 아이디입니다.");
         }
@@ -53,22 +55,16 @@ public class AccountsService {
      * @return
      */
     public void login(LoginDTO loginDTO, HttpSession httpSession){
-        String sessionKey = "USER_LOGIN_KEY";
-
-        boolean existedID = existedID(loginDTO.getUserID());
+        boolean existedID = isExistedID(loginDTO.getUserID());
         if (!existedID){
-            throw new IsNotExistedException("존재하지 않는 아이디입니다.");
+            throw new NotExistedException("존재하지 않는 아이디입니다.");
         }
 
-        LoginDTO resultLoginDTO = accountsDAO.login(loginDTO);
-        
-        boolean resultLogin = false;
+        LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
 
-        if (resultLoginDTO != null) {
-            resultLogin = sessionWriter.makeSession(httpSession, sessionKey, resultLoginDTO);
-        }
+        sessionWriter.makeSession(httpSession, loginSessionKey, resultLoginDTO);
 
-        if (!resultLogin){
+        if(httpSession.getAttribute(loginSessionKey) != null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");
         }
     }
@@ -78,9 +74,9 @@ public class AccountsService {
      *
      * @param email
      */
-    public boolean existedEmail(String email) {
-        boolean existedEmail = accountsDAO.existedEmail(email);
-        return existedEmail;
+    public boolean isExistedEmail(String email) {
+        boolean isExistedEmail = accountsDAO.existedEmail(email);
+        return isExistedEmail;
     }
 
     /**
@@ -88,9 +84,9 @@ public class AccountsService {
      *
      * @param userID
      */
-    public boolean existedID(String userID) {
-        boolean existedID = accountsDAO.existedID(userID);
-        return existedID;
+    public boolean isExistedID(String userID) {
+        boolean isExistedID = accountsDAO.existedID(userID);
+        return isExistedID;
     }
 
 }
