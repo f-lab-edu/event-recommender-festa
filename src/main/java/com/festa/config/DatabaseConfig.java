@@ -5,9 +5,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -25,10 +27,17 @@ public class DatabaseConfig {
         return new HikariDataSource(hikariConfig());
     }
 
+    /*
+        SqlSessionFactoryBean: Spring Application context에서 공유된 Mybatis를 설정하는 일반적인 방법
+                               DI를 통해 주입하여 Mybatis 기반의 DAO에게 전달할 수 있게 된다.
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
+        factoryBean.setVfs(SpringBootVFS.class); //스프링부트 전용 가상파일 시스템
+        factoryBean.setTypeAliasesPackage("com.festa.dto"); //domain object(VO, DTO 등) 스캔해야할 패키지 설정
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource("classpath:/mapper/*.xml")); //Mapper 경로 지정
 
         return factoryBean.getObject();
     }
