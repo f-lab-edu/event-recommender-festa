@@ -1,5 +1,6 @@
 package com.festa.dao;
 
+import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface AccountsDAO {
     int signUp(SignUpDTO signUpDTO);
 
-    boolean existedEmail(String email);
+    LoginDTO getUserInfoForLogin(LoginDTO loginDTO);
 
-    boolean existedID(String userID);
+    boolean isExistedEmail(String email);
+
+    boolean isExistedID(String userID);
 }

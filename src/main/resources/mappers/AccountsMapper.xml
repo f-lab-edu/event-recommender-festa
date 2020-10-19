@@ -22,7 +22,17 @@
             #{userLevel})
     </insert>
 
-    <select id="existedEmail" parameterType="boolean">
+    <select id="getUserInfoForLogin" parameterType="com.festa.dto.LoginDTO">
+        SELECT
+            userID,
+            userLevel
+        FROM USERINFO
+        WHERE
+            userID = #{userID}
+            AND password = #{password}
+    </select>
+
+    <select id="isExistedEmail" parameterType="String" resultType="boolean">
         SELECT EXISTS(
             SELECT email
             FROM USERINFO
@@ -31,7 +41,7 @@
         )
     </select>
 
-    <select id="existedID" parameterType="boolean">
+    <select id="isExistedID" parameterType="String" resultType="boolean">
         SELECT EXISTS(
             SELECT userID
             FROM USERINFO
