@@ -48,6 +48,16 @@
             <optional>true</optional>
         </dependency>
 
+        <!--Redis Session 연동을 위한 의존성-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+
         <!--
         hateoas 는 REST API 기반으로, 호출한 URI와 관련된 REST API 정보를 담아서 응답을 보내준다.
         그럼으로써 클라이언트는 단일 고정 URL만 알아도 되서 클라이언트 개발자는 API응답을 봤을 때
