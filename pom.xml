@@ -12,7 +12,7 @@
     <artifactId>festa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>festa</name>
-    <description>Demo project for Spring Boot</description>
+    <description>festa project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -23,6 +23,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -40,6 +47,43 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!--Redis Session 연동을 위한 의존성-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+
+        <!--
+        hateoas 는 REST API 기반으로, 호출한 URI와 관련된 REST API 정보를 담아서 응답을 보내준다.
+        그럼으로써 클라이언트는 단일 고정 URL만 알아도 되서 클라이언트 개발자는 API응답을 봤을 때
+        다음 상태가 어떻게 변할 수 있는지 확인이 가능하다.
+        hateoas 가 하이퍼미디어 링크를 통해 상황에 맞는 적절한 리소스를 동적으로 이동시켜주기 때문에 해당 의존성을 사용함
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+
+        <!--
+        [logback이 아닌 log4j2를 사용한 이유]
+
+        1. log4j2는 멀티쓰레드 환경에서 비동기 로거이기 때문에
+        logback 보다 처리량이 10배 정도 높다.
+
+        2. java 8의 lambda를 지원하기 때문에 원하는 로그레벨에 대해서만
+        메세지를 남길 수 있어 코드가 깔끔해지는 장점이 있기에
+        logback이 아닌 log4j2를 사용함.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -51,8 +95,26 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    </dependencies>
 
+        <!--properties 파일 암호화 의존성-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--유효성 체크 의존성-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
