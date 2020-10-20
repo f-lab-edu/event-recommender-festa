@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.festa.dao.MemberDAO">
+
+    <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
+        insert into
+            members
+            ( userId
+            , username
+            , password
+            , email
+            , confirmEmail
+            , phoneNo
+            , address
+            , userLevel
+        )
+        values
+            ( #{userId}
+            , #{username}
+            , #{password}
+            , #{email}
+            , #{confirmEmail}
+            , #{phoneNo}
+            , #{address}
+            , #{userLevel}
+            )
+    </insert>
+
+    <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
+    <select id="isUserIdExist" resultType="boolean">
+        select EXISTS
+                   (select userId
+                    from members
+                    where userId = #{userId}
+                   )
+                   as isIdExists
+    </select>
+</mapper>
