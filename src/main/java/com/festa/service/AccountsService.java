@@ -1,6 +1,6 @@
 package com.festa.service;
 
-import com.festa.management.SessionManagement;
+import com.festa.manager.SessionManager;
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
@@ -18,7 +18,7 @@ public class AccountsService {
     private AccountsDAO accountsDAO;
 
     @Autowired
-    private SessionManagement sessionManagement;
+    private SessionManager sessionManager;
 
     private String loginSessionKey = "USER_LOGIN_KEY";
 
@@ -62,7 +62,7 @@ public class AccountsService {
 
         LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
 
-        sessionManagement.makeSession(httpSession, loginSessionKey, resultLoginDTO);
+        sessionManager.makeSession(httpSession, loginSessionKey, resultLoginDTO);
 
         if(httpSession.getAttribute(loginSessionKey) == null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");

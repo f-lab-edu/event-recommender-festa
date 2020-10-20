@@ -21,5 +21,10 @@ public class LoginDTO {
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$")
     String password;
 
-    String userLevel;
+    @NotBlank
+    UserLevel userLevel;
+
+    public enum UserLevel{
+        HOST, USER
+    }
 }

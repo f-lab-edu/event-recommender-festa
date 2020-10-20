@@ -46,5 +46,9 @@ public class SignUpDTO {
     String address;
 
     @NotBlank
-    String userLevel;
+    UserLevel userLevel;
+
+    public enum UserLevel{
+        HOST, USER
+    }
 }
