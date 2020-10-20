@@ -55,7 +55,7 @@ public class MemberController {
      * @return HttpStatus
      */
     @PostMapping(value = "/logout")
-    public HttpStatus logoutMember(@RequestBody @Valid HttpSession httpSession){
+    public HttpStatus logoutMember(@RequestBody HttpSession httpSession){
         accountsService.logout(httpSession);
         return HttpStatus.OK;
     }

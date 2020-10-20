@@ -48,7 +48,7 @@ public class HostController {
      * @return HttpStatus
      */
     @PostMapping(value = "/logout")
-    public HttpStatus logoutHost(@RequestBody @Valid HttpSession httpSession){
+    public HttpStatus logoutHost(@RequestBody HttpSession httpSession){
         accountsService.logout(httpSession);
         return HttpStatus.OK;
     }
