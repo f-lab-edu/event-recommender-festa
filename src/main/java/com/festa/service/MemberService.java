@@ -18,4 +18,8 @@ public class MemberService {
     public boolean isUserIdExist(long userId) {
         return memberDAO.isUserIdExist(userId);
     }
+
+    public void modifyMemberInfo(MemberDTO memberDTO) {
+        memberDAO.modifyMemberInfo(memberDTO);
+    }
 }

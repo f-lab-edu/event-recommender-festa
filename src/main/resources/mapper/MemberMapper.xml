@@ -35,4 +35,12 @@
                    )
                    as isIdExists
     </select>
+
+    <update id="modifyMemberInfo" parameterType="com.festa.dto.MemberDTO">
+        update members
+        set username = #{username}
+        and phoneNo  = #{phoneNo}
+        and address  = #{address}
+        where userid = #{userId};
+    </update>
 </mapper>

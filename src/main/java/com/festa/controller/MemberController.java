@@ -53,11 +53,28 @@ public class MemberController {
      * @return ResponseEntity<MemberDTO>
      */
     @PostMapping(value = "/signUp")
-    public ResponseEntity<MemberDTO> signUpAsMember(@RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    /**
+     * 사용자 회원정보 수정 기능
+     * @param memberDTO
+     * @return ResponseEntity<HttpStatus>
+     */
+    @PostMapping(value = "/modifyMemberInfo")
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
+        boolean isLoginUser = sessionLoginService.isLoginUser();
+
+        if(!isLoginUser) {
+            return RESPONSE_ENTITY_UNAUTHORIZED;
+        }
+        memberService.modifyMemberInfo(memberDTO);
+
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
