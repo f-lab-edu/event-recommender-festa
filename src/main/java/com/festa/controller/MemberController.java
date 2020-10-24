@@ -33,7 +33,7 @@ public class MemberController {
      * @return HttpStatus
      */
     @PostMapping(value = "/signUp")
-    public HttpStatus signUpMember(@RequestBody @Valid SignUpDTO signUpDTO){
+    public HttpStatus signUp(@RequestBody @Valid SignUpDTO signUpDTO){
         accountsService.signUp(signUpDTO);
         return HttpStatus.CREATED;
     }
@@ -44,7 +44,7 @@ public class MemberController {
      * @return HttpStatus
      */
     @PostMapping(value = "/login")
-    public HttpStatus loginMember(@RequestBody @Valid LoginDTO loginDTO, HttpSession httpSession){
+    public HttpStatus login(@RequestBody @Valid LoginDTO loginDTO, HttpSession httpSession){
         accountsService.login(loginDTO, httpSession);
         return HttpStatus.OK;
     }
@@ -55,8 +55,7 @@ public class MemberController {
      * @return HttpStatus
      */
     @PostMapping(value = "/logout")
-    public HttpStatus logoutMember(@RequestBody HttpSession httpSession){
+    public void logout(@RequestBody HttpSession httpSession){
         accountsService.logout(httpSession);
-        return HttpStatus.OK;
     }
 }

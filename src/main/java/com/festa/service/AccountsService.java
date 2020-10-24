@@ -1,6 +1,5 @@
 package com.festa.service;
 
-import com.festa.management.SessionManagement;
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
@@ -16,9 +15,6 @@ public class AccountsService {
 
     @Autowired
     private AccountsDAO accountsDAO;
-
-    @Autowired
-    private SessionManagement sessionManagement;
 
     private String loginSessionKey = "USER_LOGIN_KEY";
 
@@ -46,14 +42,6 @@ public class AccountsService {
         }
     }
 
-    /**
-     * 로그인
-     *
-     * 아이디가 존재하는지 확인 후 존재하지 않는다면 IsNotExistedException 발생하며 중단
-     *
-     * @param loginDTO
-     * @return
-     */
     public void login(LoginDTO loginDTO, HttpSession httpSession){
         boolean existedID = isExistedID(loginDTO.getUserID());
         if (!existedID){
@@ -62,27 +50,15 @@ public class AccountsService {
 
         LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
 
-        sessionManagement.makeSession(httpSession, loginSessionKey, resultLoginDTO);
+        httpSession.setAttribute(loginSessionKey, resultLoginDTO);
 
         if(httpSession.getAttribute(loginSessionKey) == null){
             throw new IllegalArgumentException("로그인에 실패하였습니다.");
         }
     }
 
-    /**
-     * 로그아웃
-     * 
-     * 로그인 되어있는지 세션을 먼저 확인 후 로그아웃, 로그인 되어있지 않다면 IllegalStateException 발생
-     *
-     * @param httpSession
-     */
     public void logout(HttpSession httpSession){
-        boolean isLogin = sessionManagement.isExistedSession(httpSession, loginSessionKey);
-        if (isLogin){
-            sessionManagement.deleteSession(httpSession, loginSessionKey);
-        } else {
-            throw new IllegalStateException("로그인 되어있지 않은 사용자입니다.");
-        }
+        httpSession.removeAttribute(loginSessionKey);
     }
 
     /**
