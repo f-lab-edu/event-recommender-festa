@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Value
 @Builder
-public class NoticeDTO {
+public class AlertDTO {
 
     long userId;
 

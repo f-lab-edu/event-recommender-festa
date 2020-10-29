@@ -1,12 +1,12 @@
 package com.festa.dao;
 
-import com.festa.dto.NoticeDTO;
+import com.festa.dto.AlertDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface NoticeDAO {
+public interface AlertDAO {
 
-    NoticeDTO sendChangePwNotice(long userId);
+    AlertDTO sendChangePwNotice(long userId);
 }
