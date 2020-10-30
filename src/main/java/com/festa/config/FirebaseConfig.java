@@ -9,25 +9,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
-@PropertySource("application.properties")
+@PropertySource(value = "application.properties")
 public class FirebaseConfig {
 
-    @Value("${firebase.database.name}")
+    @Value("${firebase.database.url}")
     String databaseName;
 
     @Primary
     @Bean
     public void firebaseInit() throws IOException {
+
+        FileInputStream serviceAccount = new FileInputStream("path/to/serviceAccountKey.json");
+
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.getApplicationDefault())
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setDatabaseUrl(databaseName)
                 .build();
 
-        if(FirebaseApp.getApps().isEmpty()) {
-            FirebaseApp.initializeApp(options);
-        }
+        FirebaseApp.initializeApp(options);
     }
 }
