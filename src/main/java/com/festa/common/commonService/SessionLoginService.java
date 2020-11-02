@@ -14,6 +14,4 @@ public interface SessionLoginService {
 
     void removeUserId();
 
-    boolean isLoginUser();
-
 }

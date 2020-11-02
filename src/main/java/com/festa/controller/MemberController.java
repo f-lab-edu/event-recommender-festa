@@ -3,7 +3,6 @@ package com.festa.controller;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
@@ -67,11 +66,7 @@ public class MemberController {
      */
     @PostMapping(value = "/modifyMemberInfo")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
-        boolean isLoginUser = sessionLoginService.isLoginUser();
 
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
         memberService.modifyMemberInfo(memberDTO);
 
         return RESPONSE_ENTITY_OK;
@@ -121,12 +116,7 @@ public class MemberController {
      */
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        boolean isLoginUser = sessionLoginService.isLoginUser();
 
-        //세션에 로그인 여부 확인 후 false를 return 했다면 로그인 한 사용자가 아님
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
         sessionLoginService.removeUserId();
 
         return RESPONSE_ENTITY_OK;
