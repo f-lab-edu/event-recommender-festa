@@ -4,6 +4,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 
+import com.festa.aop.checkLoginStatus;
 import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
@@ -51,6 +52,7 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity<MemberDTO>
      */
+    @checkLoginStatus
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
@@ -64,6 +66,7 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity<HttpStatus>
      */
+    @checkLoginStatus
     @PostMapping(value = "/modifyMemberInfo")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
 
@@ -114,6 +117,7 @@ public class MemberController {
      * No Param
      * @return ResponseEntity<HttpStatus>
      */
+    @checkLoginStatus
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
 

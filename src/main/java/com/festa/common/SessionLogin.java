@@ -33,4 +33,19 @@ public class SessionLogin implements SessionLoginService {
     public void removeUserId() {
         httpSession.removeAttribute(USER_ID);
     }
+
+    /**
+     * 로그인 확인 여부
+     * No Param
+     * @return boolean
+     */
+    @Override
+    public boolean isLoginUser() {
+        Long userLogin = (Long) httpSession.getAttribute(USER_ID);
+
+        if(userLogin != null) {
+            return true;
+        }
+        return false;
+    }
 }
