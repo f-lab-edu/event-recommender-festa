@@ -1,10 +1,11 @@
 package com.festa.controller;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
-import com.festa.aop.checkLoginStatus;
+import com.festa.aop.CheckLoginStatus;
+import com.festa.aop.CheckLoginStatus.UserLevel;
 import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import javax.validation.Valid;
+import java.net.URI;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -42,9 +43,7 @@ import javax.validation.Valid;
 @Log4j2
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
-
+    private final MemberService memberService;
     private final SessionLoginService sessionLoginService;
 
     /**
@@ -52,7 +51,6 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity<MemberDTO>
      */
-    @checkLoginStatus
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
@@ -66,10 +64,9 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity<HttpStatus>
      */
-    @checkLoginStatus
+    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
     @PostMapping(value = "/modifyMemberInfo")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
-
         memberService.modifyMemberInfo(memberDTO);
 
         return RESPONSE_ENTITY_OK;
@@ -117,10 +114,9 @@ public class MemberController {
      * No Param
      * @return ResponseEntity<HttpStatus>
      */
-    @checkLoginStatus
+    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-
         sessionLoginService.removeUserId();
 
         return RESPONSE_ENTITY_OK;

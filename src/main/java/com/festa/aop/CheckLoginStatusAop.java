@@ -1,6 +1,7 @@
 package com.festa.aop;
 
 import com.festa.common.commonService.SessionLoginService;
+import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,17 +14,18 @@ import org.springframework.web.client.HttpStatusCodeException;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class checkLoginStatusAop {
+public class CheckLoginStatusAop {
 
     private final SessionLoginService sessionLoginService;
+    private final MemberService memberService;
 
     /**
-     * 로그인 확인 여부
-     * No Param
+     * 모든 사용자 로그인 확인여부
+     * No param
+     * @throws HttpStatusCodeException
      */
-    @Before(value = "@annotation(checkLoginStatus)")
-    public void loginStatus() throws HttpStatusCodeException {
-
+    @Before(value = "@annotation(com.festa.aop.CheckLoginStatus)")
+    public void allUserLoginStatus() throws HttpStatusCodeException {
         boolean isLoginUser = sessionLoginService.isLoginUser();
 
         log.debug("Started to check user authentication");
