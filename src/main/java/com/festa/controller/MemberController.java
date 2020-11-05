@@ -1,9 +1,5 @@
 package com.festa.controller;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
@@ -14,15 +10,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+
+import static com.festa.common.ResponseEntityConstants.*;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -59,12 +52,28 @@ public class MemberController {
     }
 
     /**
+     * 사용자 회원정보 조회 기능
+     * @param userId
+     * @return ResponseEntity<HttpStatus>
+     */
+    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
+    @GetMapping(value = "/{userId}/getUser")
+    public ResponseEntity<HttpStatus> getUser(@PathVariable long userId) {
+        MemberDTO memberInfo = memberService.getUser(userId);
+
+        if(memberInfo == null) {
+            return RESPONSE_ENTITY_BAD_REQUEST;
+        }
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
      * 사용자 회원정보 수정 기능
      * @param memberDTO
      * @return ResponseEntity<HttpStatus>
      */
     @CheckLoginStatus(auth = UserLevel.ALL_USERS)
-    @PostMapping(value = "/modifyMemberInfo")
+    @PutMapping(value = "/modifyMemberInfo")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 

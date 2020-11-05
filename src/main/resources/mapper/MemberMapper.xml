@@ -43,4 +43,18 @@
         AND address  = #{address}
         WHERE userid = #{userId};
     </update>
+
+    <select id="getUserById" resultType="com.festa.dto.MemberDTO">
+        SELECT
+            userId,
+            username,
+            password,
+            email,
+            confirmEmail,
+            userLevel,
+            phoneNo,
+            address
+        FROM members
+        WHERE userId = #{userId}
+    </select>
 </mapper>
