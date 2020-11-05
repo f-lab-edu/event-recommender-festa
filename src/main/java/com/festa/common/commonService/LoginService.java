@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * 기존 소스코드의 변경사항을 최소화 하기 위해 생성함.
  */
 @Service
-public interface SessionLoginService {
+public interface LoginService {
 
     void setUserId(Long userId);
 

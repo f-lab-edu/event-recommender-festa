@@ -6,7 +6,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
-import com.festa.common.commonService.SessionLoginService;
+import com.festa.common.commonService.LoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import java.net.URI;
 public class MemberController {
 
     private final MemberService memberService;
-    private final SessionLoginService sessionLoginService;
+    private final LoginService loginService;
 
     /**
      * 사용자 회원가입 기능
@@ -103,7 +103,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        sessionLoginService.setUserId(userId);
+        loginService.setUserId(userId);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -116,7 +116,7 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.ALL_USERS)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        sessionLoginService.removeUserId();
+        loginService.removeUserId();
 
         return RESPONSE_ENTITY_OK;
     }
