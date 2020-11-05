@@ -5,13 +5,12 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 import com.festa.aop.CheckLoginStatus;
-import com.festa.aop.CheckLoginStatus.UserLevel;
+import com.festa.common.UserLevel;
 import com.festa.common.commonService.SessionLoginService;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
 package com.festa.dto;
 
+import com.festa.common.UserLevel;
 import lombok.Builder;
 import lombok.Value;
 
@@ -48,11 +49,4 @@ public class MemberDTO {
     @NotNull
     UserLevel userLevel;
 
-    public enum UserLevel {
-        //주최자
-        HOST,
-
-        //일반사용자
-        USER
-    }
 }

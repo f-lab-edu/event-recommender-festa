@@ -1,5 +1,7 @@
 package com.festa.aop;
 
+import com.festa.common.UserLevel;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,18 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface CheckLoginStatus {
-
-    enum UserLevel {
-
-        //모든사용자
-        ALL_USERS,
-
-        //주최자
-        HOST,
-
-        //일반사용자
-        USER
-    }
 
     UserLevel auth() default UserLevel.ALL_USERS;
 }
