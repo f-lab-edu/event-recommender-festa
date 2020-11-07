@@ -44,9 +44,6 @@ public class CheckLoginStatusAop {
             case USER :
                 userLoginStatus();
                 break;
-
-            default:
-                throw new NoSuchElementException();
         }
     }
 
