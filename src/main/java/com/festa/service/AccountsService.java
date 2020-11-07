@@ -1,10 +1,10 @@
 package com.festa.service;
 
+import com.festa.common.SessionService;
 import com.festa.dao.AccountsDAO;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.exception.DuplicatedException;
-import com.festa.exception.NotExistedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,8 @@ public class AccountsService {
 
     @Autowired
     private AccountsDAO accountsDAO;
-
-    private String loginSessionKey = "USER_LOGIN_KEY";
+    @Autowired
+    private SessionService sessionService;
 
     /**
      * 회원 가입
@@ -42,25 +42,6 @@ public class AccountsService {
         }
     }
 
-    public void login(LoginDTO loginDTO, HttpSession httpSession){
-        boolean existedID = isExistedID(loginDTO.getUserID());
-        if (!existedID){
-            throw new NotExistedException("존재하지 않는 아이디입니다.");
-        }
-
-        LoginDTO resultLoginDTO = accountsDAO.getUserInfoForLogin(loginDTO);
-
-        httpSession.setAttribute(loginSessionKey, resultLoginDTO);
-
-        if(httpSession.getAttribute(loginSessionKey) == null){
-            throw new IllegalArgumentException("로그인에 실패하였습니다.");
-        }
-    }
-
-    public void logout(HttpSession httpSession){
-        httpSession.removeAttribute(loginSessionKey);
-    }
-
     /**
      * 등록 이메일 여부 확인
      *
@@ -81,4 +62,12 @@ public class AccountsService {
         return isExistedID;
     }
 
+    /**
+     * 로그인을 위한 아이디, 비밀번호 확인
+     * @param loginDTO
+     * @return
+     */
+    public LoginDTO getUserInfoLogin(LoginDTO loginDTO) {
+        return accountsDAO.getUserInfoForLogin(loginDTO);
+    }
 }

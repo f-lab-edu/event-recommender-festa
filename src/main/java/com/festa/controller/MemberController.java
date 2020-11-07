@@ -1,5 +1,6 @@
 package com.festa.controller;
 
+import com.festa.common.service.LoginService;
 import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.service.AccountsService;
@@ -26,9 +27,11 @@ public class MemberController {
 
     @Autowired
     private AccountsService accountsService;
+    @Autowired
+    private LoginService loginService;
 
     /**
-     * 일반 사용자 회원가입
+     * 회원가입
      * @param signUpDTO
      * @return HttpStatus
      */
@@ -39,13 +42,14 @@ public class MemberController {
     }
 
     /**
-     * 일반 사용자 로그인
+     * 로그인
      * @param loginDTO
      * @return HttpStatus
      */
     @PostMapping(value = "/login")
     public HttpStatus login(@RequestBody @Valid LoginDTO loginDTO, HttpSession httpSession){
-        accountsService.login(loginDTO, httpSession);
+        LoginDTO resultLoginDTO = accountsService.getUserInfoLogin(loginDTO);
+        loginService.login(httpSession, loginDTO);
         return HttpStatus.OK;
     }
 
@@ -56,6 +60,6 @@ public class MemberController {
      */
     @PostMapping(value = "/logout")
     public void logout(@RequestBody HttpSession httpSession){
-        accountsService.logout(httpSession);
+        loginService.logout(httpSession);
     }
 }
