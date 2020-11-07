@@ -18,4 +18,6 @@ public class MemberService {
     public boolean isUserIdExist(long userId) {
         return memberDAO.isUserIdExist(userId);
     }
+
+    public void memberWithdraw(MemberDTO memberDTO) { memberDAO.modifyMemberInfoForWithdraw(memberDTO); }
 }

@@ -35,4 +35,11 @@
                    )
                    as isIdExists
     </select>
+
+    <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
+        update members
+        set memberWithdraw = TRUE
+        and memberWithdrawDate = NOW()
+        where userId = #{userId};
+    </update>
 </mapper>

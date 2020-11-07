@@ -11,4 +11,6 @@ public interface MemberDAO {
     int insertMemberInfo(MemberDTO memberDTO);
 
     boolean isUserIdExist(long userId);
+
+    void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
 }

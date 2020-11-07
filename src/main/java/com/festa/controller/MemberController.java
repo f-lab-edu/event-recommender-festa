@@ -114,4 +114,21 @@ public class MemberController {
 
         return RESPONSE_ENTITY_OK;
     }
+
+    /**
+     * 회원 탈퇴 기능
+     * @param memberDTO
+     * @return
+     */
+    @PostMapping(value = "/memberWithdraw")
+    public ResponseEntity<HttpStatus> memberWithdraw(@RequestBody @Valid MemberDTO memberDTO) {
+        // 로그인 여부 확인
+        boolean isLoginUser = sessionLoginService.isLoginUser();
+        if(!isLoginUser) {
+            return RESPONSE_ENTITY_UNAUTHORIZED;
+        }
+        memberService.memberWithdraw(memberDTO);
+        
+        return RESPONSE_ENTITY_OK;
+    }
 }
