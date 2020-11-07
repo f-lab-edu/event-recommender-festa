@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import java.util.NoSuchElementException;
+
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -28,15 +30,23 @@ public class CheckLoginStatusAop {
      */
     @Before(value = "@annotation(CheckLoginStatus) && @annotation(checkLoginStatus)")
     public void checkStatus(CheckLoginStatus checkLoginStatus) {
-        if(checkLoginStatus.auth() == UserLevel.ALL_USERS) {
-            allUserLoginStatus();
+        UserLevel auth = checkLoginStatus.auth();
 
-        } else if (checkLoginStatus.auth() == UserLevel.HOST) {
-            hostLoginStatus();
+        switch(auth) {
+            case ALL_USERS:
+                allUserLoginStatus();
+                break;
 
-        } else if(checkLoginStatus.auth() == UserLevel.USER) {
-            userLoginStatus();
+            case HOST :
+                hostLoginStatus();
+                break;
 
+            case USER :
+                userLoginStatus();
+                break;
+
+            default:
+                throw new NoSuchElementException();
         }
     }
 
