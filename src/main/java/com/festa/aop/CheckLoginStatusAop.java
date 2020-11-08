@@ -52,14 +52,10 @@ public class CheckLoginStatusAop {
      * @throws HttpStatusCodeException
      */
     public void allUserLoginStatus() {
-        boolean isLoginUser = loginService.isLoginUser();
         MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
 
         log.debug(memberInfo.getUserId()+": Started to check all-users authentication");
 
-        if(!isLoginUser) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, memberInfo.getUserId()+" is not authorized") {};
-        }
     }
 
     /**
