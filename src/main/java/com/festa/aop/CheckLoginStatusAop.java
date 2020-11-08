@@ -2,8 +2,8 @@ package com.festa.aop;
 
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
+import com.festa.common.commonService.RetrieveMemberService;
 import com.festa.dto.MemberDTO;
-import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,16 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import java.util.NoSuchElementException;
-
 @Aspect
 @Component
 @RequiredArgsConstructor
 @Log4j2
 public class CheckLoginStatusAop {
 
+    private final RetrieveMemberService retrieveMemberService;
     private final LoginService loginService;
-    private final MemberService memberService;
 
     /**
      * 권한에 따른 분기처리를 위한 메서드
@@ -55,14 +53,12 @@ public class CheckLoginStatusAop {
      */
     public void allUserLoginStatus() {
         boolean isLoginUser = loginService.isLoginUser();
-        long userId = loginService.getUserId();
-        MemberDTO memberInfo = memberService.getUser(userId);
+        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
 
-        long userIdInfo = memberInfo.getUserId();
-        log.debug(userIdInfo+": Started to check all-users authentication");
+        log.debug(memberInfo.getUserId()+": Started to check all-users authentication");
 
         if(!isLoginUser) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userIdInfo+" is not authorized") {};
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, memberInfo.getUserId()+" is not authorized") {};
         }
     }
 
@@ -73,11 +69,9 @@ public class CheckLoginStatusAop {
      * @throws HttpStatusCodeException
      */
     public void hostLoginStatus() {
-        long userId = loginService.getUserId();
-        MemberDTO memberInfo = memberService.getUser(userId);
+        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
 
-        long userIdInfo = memberInfo.getUserId();
-        log.debug(userIdInfo+": Started to check Host-user authentication");
+        log.debug(memberInfo.getUserId()+": Started to check Host-user authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.HOST) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "Host is not authorized") {};
@@ -91,11 +85,9 @@ public class CheckLoginStatusAop {
      * @throws HttpStatusCodeException
      */
     public void userLoginStatus() {
-        long userId = loginService.getUserId();
-        MemberDTO memberInfo = memberService.getUser(userId);
+        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
 
-        long userIdInfo = memberInfo.getUserId();
-        log.debug(userIdInfo+": Started to check User authentication");
+        log.debug(memberInfo.getUserId()+": Started to check User authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.USER) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "User is not authorized") {};
