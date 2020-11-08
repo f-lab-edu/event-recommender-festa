@@ -55,11 +55,14 @@ public class CheckLoginStatusAop {
      */
     public void allUserLoginStatus() {
         boolean isLoginUser = loginService.isLoginUser();
+        long userId = loginService.getUserId();
+        MemberDTO memberInfo = memberService.getUser(userId);
 
-        log.debug("Started to check all-users authentication");
+        long userIdInfo = memberInfo.getUserId();
+        log.debug(userIdInfo+": Started to check all-users authentication");
 
         if(!isLoginUser) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "is not authorized") {};
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userIdInfo+" is not authorized") {};
         }
     }
 
@@ -73,7 +76,8 @@ public class CheckLoginStatusAop {
         long userId = loginService.getUserId();
         MemberDTO memberInfo = memberService.getUser(userId);
 
-        log.debug("Started to check Host-user authentication");
+        long userIdInfo = memberInfo.getUserId();
+        log.debug(userIdInfo+": Started to check Host-user authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.HOST) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "Host is not authorized") {};
@@ -90,7 +94,8 @@ public class CheckLoginStatusAop {
         long userId = loginService.getUserId();
         MemberDTO memberInfo = memberService.getUser(userId);
 
-        log.debug("Started to check User authentication");
+        long userIdInfo = memberInfo.getUserId();
+        log.debug(userIdInfo+": Started to check User authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.USER) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "User is not authorized") {};
