@@ -12,6 +12,6 @@ public enum UserLevel {
         HOST,
 
         //일반사용자
-        USER
+        PARTICIPANT
 
 }

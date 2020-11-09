@@ -43,8 +43,8 @@ public class CheckLoginStatusAop {
                 hostLoginStatus();
                 break;
 
-            case USER:
-                userLoginStatus();
+            case PARTICIPANT:
+                pariticipantLoginStatus();
                 break;
 
             default:
@@ -97,7 +97,7 @@ public class CheckLoginStatusAop {
      * @return ResponseEntity
      * @throws HttpStatusCodeException
      */
-    public ResponseEntity<HttpStatus> userLoginStatus() {
+    public ResponseEntity<HttpStatus> pariticipantLoginStatus() {
         boolean isLoginUser = loginService.isLoginUser();
 
         if(!isLoginUser) {
@@ -109,7 +109,7 @@ public class CheckLoginStatusAop {
 
         log.debug(userId + ": Started to check User authentication");
 
-        if(memberInfo.getUserLevel() != UserLevel.USER) {
+        if(memberInfo.getUserLevel() != UserLevel.PARTICIPANT) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Participant") {};
         }
 
