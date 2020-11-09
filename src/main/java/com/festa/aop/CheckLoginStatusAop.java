@@ -2,15 +2,19 @@ package com.festa.aop;
 
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
-import com.festa.common.commonService.RetrieveMemberService;
 import com.festa.dto.MemberDTO;
+import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
+
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 @Aspect
 @Component
@@ -18,8 +22,8 @@ import org.springframework.web.client.HttpStatusCodeException;
 @Log4j2
 public class CheckLoginStatusAop {
 
-    private final RetrieveMemberService retrieveMemberService;
     private final LoginService loginService;
+    private final MemberService memberService;
 
     /**
      * 권한에 따른 분기처리를 위한 메서드
@@ -35,12 +39,15 @@ public class CheckLoginStatusAop {
                 allUserLoginStatus();
                 break;
 
-            case HOST :
+            case HOST:
                 hostLoginStatus();
                 break;
 
-            case USER :
+            case USER:
                 userLoginStatus();
+                break;
+
+            default:
                 break;
         }
     }
@@ -52,41 +59,60 @@ public class CheckLoginStatusAop {
      * @throws HttpStatusCodeException
      */
     public void allUserLoginStatus() {
-        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
+        boolean isLoginUser = loginService.isLoginUser();
 
-        log.debug(memberInfo.getUserId()+": Started to check all-users authentication");
-
+        if(!isLoginUser) {
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "user is not authorized") {};
+        }
     }
 
     /**
      * 주최자 권한 사용자의 로그인 여부 확인
      * No param
-     * No return
+     * @return ResponseEntity
      * @throws HttpStatusCodeException
      */
-    public void hostLoginStatus() {
-        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
+    public ResponseEntity<HttpStatus> hostLoginStatus() {
+        boolean isLoginUser = loginService.isLoginUser();
 
-        log.debug(memberInfo.getUserId()+": Started to check Host-user authentication");
+        if(!isLoginUser) {
+            return RESPONSE_ENTITY_UNAUTHORIZED;
+        }
+
+        long userId = loginService.getUserId();
+        MemberDTO memberInfo = memberService.getUser(userId);
+
+        log.debug(userId + ": Started to check Host-user authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.HOST) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "Host is not authorized") {};
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Host") {};
         }
+
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
-     * 일반 권한의 사용자 로그인 여부 확인
+     * 일반(참여자) 권한의 사용자 로그인 여부 확인
      * No param
-     * No return
+     * @return ResponseEntity
      * @throws HttpStatusCodeException
      */
-    public void userLoginStatus() {
-        MemberDTO memberInfo = retrieveMemberService.retrieveMemberInfo();
+    public ResponseEntity<HttpStatus> userLoginStatus() {
+        boolean isLoginUser = loginService.isLoginUser();
 
-        log.debug(memberInfo.getUserId()+": Started to check User authentication");
+        if(!isLoginUser) {
+            return RESPONSE_ENTITY_UNAUTHORIZED;
+        }
+
+        long userId = loginService.getUserId();
+        MemberDTO memberInfo = memberService.getUser(userId);
+
+        log.debug(userId + ": Started to check User authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.USER) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, "User is not authorized") {};
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Participant") {};
         }
+
+        return RESPONSE_ENTITY_OK;
     }
 }
