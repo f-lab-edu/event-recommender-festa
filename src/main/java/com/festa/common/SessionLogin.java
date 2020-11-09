@@ -10,6 +10,7 @@ import java.util.Optional;
  * 다른 클래스에 종속적으로 동작하지 않게 하면서 이후 확장성도 고려하여
  * 따로 인터페이스와 클래스로 분리시켜 둠.
  */
+
 @RequiredArgsConstructor
 public class SessionLogin implements LoginService {
 
@@ -57,8 +58,7 @@ public class SessionLogin implements LoginService {
     @Override
     public Long getUserId() {
         Optional<Long> userId = Optional.ofNullable(httpSession.getAttribute(USER_ID))
-                .map(String::valueOf)
-                .map(Long::new);
+                .map(id -> (Long) id);
 
         return userId.orElseThrow(NoSuchElementException::new);
     }
