@@ -11,7 +11,4 @@ public enum UserLevel {
         //주최자
         HOST,
 
-        //일반사용자
-        PARTICIPANT
-
 }

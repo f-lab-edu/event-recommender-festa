@@ -42,10 +42,6 @@ public class CheckLoginStatusAop {
                 hostLoginStatus();
                 break;
 
-            case PARTICIPANT:
-                pariticipantLoginStatus();
-                break;
-
             default:
                 break;
         }
@@ -81,27 +77,6 @@ public class CheckLoginStatusAop {
 
         if(memberInfo.getUserLevel() != UserLevel.HOST) {
             throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Host") {};
-        }
-
-        return RESPONSE_ENTITY_OK;
-    }
-
-    /**
-     * 일반(참여자) 권한의 사용자 로그인 여부 확인
-     * No param
-     * @return ResponseEntity
-     * @throws HttpStatusCodeException
-    */
-    public ResponseEntity<HttpStatus> pariticipantLoginStatus() {
-        allUserLoginStatus();
-
-        long userId = loginService.getUserId();
-        MemberDTO memberInfo = memberService.getUser(userId);
-
-        log.debug(userId + ": Started to check User authentication");
-
-        if(memberInfo.getUserLevel() != UserLevel.PARTICIPANT) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Participant") {};
         }
 
         return RESPONSE_ENTITY_OK;
