@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 @Aspect
 @Component
@@ -29,7 +28,7 @@ public class CheckLoginStatusAop {
      * 권한에 따른 분기처리를 위한 메서드
      * No Param
      * No return
-     */
+    */
     @Before(value = "@annotation(CheckLoginStatus) && @annotation(checkLoginStatus)")
     public void checkStatus(CheckLoginStatus checkLoginStatus) {
         UserLevel auth = checkLoginStatus.auth();
@@ -57,7 +56,7 @@ public class CheckLoginStatusAop {
      * No param
      * No return
      * @throws HttpStatusCodeException
-     */
+    */
     public void allUserLoginStatus() {
         boolean isLoginUser = loginService.isLoginUser();
 
@@ -71,13 +70,9 @@ public class CheckLoginStatusAop {
      * No param
      * @return ResponseEntity
      * @throws HttpStatusCodeException
-     */
+    */
     public ResponseEntity<HttpStatus> hostLoginStatus() {
-        boolean isLoginUser = loginService.isLoginUser();
-
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
+        allUserLoginStatus();
 
         long userId = loginService.getUserId();
         MemberDTO memberInfo = memberService.getUser(userId);
@@ -96,13 +91,9 @@ public class CheckLoginStatusAop {
      * No param
      * @return ResponseEntity
      * @throws HttpStatusCodeException
-     */
+    */
     public ResponseEntity<HttpStatus> pariticipantLoginStatus() {
-        boolean isLoginUser = loginService.isLoginUser();
-
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
+        allUserLoginStatus();
 
         long userId = loginService.getUserId();
         MemberDTO memberInfo = memberService.getUser(userId);
