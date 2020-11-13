@@ -66,7 +66,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userId}/info")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<HttpStatus> getUser(@PathVariable long userId) {
         MemberDTO memberInfo = memberService.getUser(userId);
 
@@ -82,8 +82,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping(value = "/info")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
+    @PutMapping(value = "/{userId}")
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@PathVariable long userId, @RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 
         return RESPONSE_ENTITY_OK;
