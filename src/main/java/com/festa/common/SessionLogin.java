@@ -2,6 +2,8 @@ package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import java.util.Optional;
  * 따로 인터페이스와 클래스로 분리시켜 둠.
  */
 
+@Component
 @RequiredArgsConstructor
 public class SessionLogin implements LoginService {
 
@@ -58,7 +61,8 @@ public class SessionLogin implements LoginService {
     @Override
     public Long getUserId() {
         Optional<Long> userId = Optional.ofNullable(httpSession.getAttribute(USER_ID))
-                .map(id -> (Long) id);
+                .map(String::valueOf)
+                .map(Long::new);
 
         return userId.orElseThrow(NoSuchElementException::new);
     }

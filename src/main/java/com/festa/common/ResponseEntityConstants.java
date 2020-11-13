@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
  * 메모리의 낭비를 최소화 하기 위해 미리 static 객체를 만들어 놓은
  * 클래스를 생성함.
  */
+
 public class ResponseEntityConstants {
 
     public static final ResponseEntity<HttpStatus> RESPONSE_ENTITY_CONFLICT = ResponseEntity.status(HttpStatus.CONFLICT).build();
