@@ -65,7 +65,7 @@ public class MemberController {
      * @param userId
      * @return ResponseEntity<HttpStatus>
      */
-    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
+    @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userId}/info")
     public ResponseEntity<HttpStatus> getUser(@PathVariable long userId) {
         MemberDTO memberInfo = memberService.getUser(userId);
@@ -81,7 +81,7 @@ public class MemberController {
      * @param memberDTO
      * @return ResponseEntity<HttpStatus>
      */
-    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
+    @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping(value = "/info")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
@@ -131,7 +131,7 @@ public class MemberController {
      * No Param
      * @return ResponseEntity<HttpStatus>
      */
-    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
+    @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
         loginService.removeUserId();

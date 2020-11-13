@@ -34,7 +34,7 @@ public class CheckLoginStatusAop {
         UserLevel auth = checkLoginStatus.auth();
 
         switch(auth) {
-            case ALL_USERS:
+            case USER:
                 allUserLoginStatus();
                 break;
 
