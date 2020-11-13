@@ -50,7 +50,7 @@ public class MemberController {
     /**
      * 사용자 회원가입 기능
      * @param memberDTO
-     * @return ResponseEntity<MemberDTO>
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
@@ -63,7 +63,7 @@ public class MemberController {
     /**
      * 사용자 회원정보 조회 기능
      * @param userId
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userId}/info")
@@ -79,7 +79,7 @@ public class MemberController {
     /**
      * 사용자 회원정보 수정 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping(value = "/info")
@@ -92,7 +92,7 @@ public class MemberController {
     /**
      * 사용자 중복 아이디 체크
      * @param userId
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
     public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
@@ -109,7 +109,7 @@ public class MemberController {
     /**
      * 사용자 로그인 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
@@ -129,7 +129,7 @@ public class MemberController {
     /**
      * 사용자 로그아웃 기능
      * No Param
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")

@@ -64,7 +64,7 @@ public class CheckLoginStatusAop {
     /**
      * 주최자 권한 사용자의 로그인 여부 확인
      * No param
-     * @return ResponseEntity
+     * @return {@literal ResponseEntity<HttpStatus>}
      * @throws HttpStatusCodeException
     */
     public ResponseEntity<HttpStatus> hostLoginStatus() {
