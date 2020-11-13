@@ -61,8 +61,7 @@ public class SessionLogin implements LoginService {
     @Override
     public Long getUserId() {
         Optional<Long> userId = Optional.ofNullable(httpSession.getAttribute(USER_ID))
-                .map(String::valueOf)
-                .map(Long::new);
+                .map(id -> (Long) id);
 
         return userId.orElseThrow(NoSuchElementException::new);
     }
