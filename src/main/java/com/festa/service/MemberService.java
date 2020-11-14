@@ -19,5 +19,7 @@ public class MemberService {
         return memberDAO.isUserIdExist(userId);
     }
 
-    public void memberWithdraw(MemberDTO memberDTO) { memberDAO.modifyMemberInfoForWithdraw(memberDTO); }
+    public void memberWithdraw(MemberDTO memberDTO) {
+        memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+    }
 }
