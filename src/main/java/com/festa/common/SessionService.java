@@ -15,14 +15,12 @@ public class SessionService implements LoginService {
 
     @Autowired
     private AccountsDAO accountsDAO;
-    @Autowired
-    private AccountsService accountsService;
 
-    private String loginSessionKey = "USER_LOGIN_KEY";
+    private static final String loginSessionKey = "USER_LOGIN_KEY";
 
     @Override
     public void login(HttpSession httpSession, LoginDTO loginDTO) {
-        boolean existedID = accountsService.isExistedID(loginDTO.getUserID());
+        boolean existedID = accountsDAO.existedID(loginDTO.getUserID());
         if (!existedID){
             throw new NotExistedException("존재하지 않는 아이디입니다.");
         }

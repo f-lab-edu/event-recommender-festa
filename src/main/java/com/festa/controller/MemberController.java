@@ -48,7 +48,6 @@ public class MemberController {
      */
     @PostMapping(value = "/login")
     public HttpStatus login(@RequestBody @Valid LoginDTO loginDTO, HttpSession httpSession){
-        LoginDTO resultLoginDTO = accountsService.getUserInfoLogin(loginDTO);
         loginService.login(httpSession, loginDTO);
         return HttpStatus.OK;
     }

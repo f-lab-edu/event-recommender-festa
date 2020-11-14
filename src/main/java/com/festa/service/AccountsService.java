@@ -15,8 +15,6 @@ public class AccountsService {
 
     @Autowired
     private AccountsDAO accountsDAO;
-    @Autowired
-    private SessionService sessionService;
 
     /**
      * 회원 가입
@@ -60,14 +58,5 @@ public class AccountsService {
     public boolean isExistedID(String userID) {
         boolean isExistedID = accountsDAO.existedID(userID);
         return isExistedID;
-    }
-
-    /**
-     * 로그인을 위한 아이디, 비밀번호 확인
-     * @param loginDTO
-     * @return
-     */
-    public LoginDTO getUserInfoLogin(LoginDTO loginDTO) {
-        return accountsDAO.getUserInfoForLogin(loginDTO);
     }
 }
