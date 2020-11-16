@@ -83,7 +83,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(@PathVariable long userId, @RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 
         return RESPONSE_ENTITY_OK;
