@@ -44,6 +44,13 @@
         WHERE userid = #{userId};
     </update>
 
+    <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
+        UPDATE members
+        SET password = #{password}
+        AND updatePwDate = NOW()
+        WHERE userId = #{userId}
+    </update>
+
     <select id="getUserById" resultType="com.festa.dto.MemberDTO">
         SELECT
             userId,
@@ -57,4 +64,6 @@
         FROM members
         WHERE userId = #{userId}
     </select>
+
+
 </mapper>
