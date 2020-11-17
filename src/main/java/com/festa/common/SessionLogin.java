@@ -2,17 +2,22 @@ package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /* 로그인/로그아웃 이라는 특정 도메인에 대한 공통 로직으로
  * 다른 클래스에 종속적으로 동작하지 않게 하면서 이후 확장성도 고려하여
  * 따로 인터페이스와 클래스로 분리시켜 둠.
  */
+
+@Component
 @RequiredArgsConstructor
 public class SessionLogin implements LoginService {
 
     public static final String USER_ID = "userId";
-
     public final HttpSession httpSession;
 
     /**
@@ -47,5 +52,17 @@ public class SessionLogin implements LoginService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 세션의 저장된 user ID 가져오기
+     * @return userId
+     */
+    @Override
+    public Long getUserId() {
+        Optional<Long> userId = Optional.ofNullable(httpSession.getAttribute(USER_ID))
+                .map(id -> (Long) id);
+
+        return userId.orElseThrow(NoSuchElementException::new);
     }
 }

@@ -22,4 +22,8 @@ public class MemberService {
     public void modifyMemberInfo(MemberDTO memberDTO) {
         memberDAO.modifyMemberInfo(memberDTO);
     }
+
+    public MemberDTO getUser(long userId) {
+        return memberDAO.getUserById(userId);
+    }
 }

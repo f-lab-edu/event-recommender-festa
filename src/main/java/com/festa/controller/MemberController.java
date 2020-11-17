@@ -1,9 +1,5 @@
 package com.festa.controller;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
@@ -17,12 +13,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
+
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -48,7 +50,7 @@ public class MemberController {
     /**
      * 사용자 회원가입 기능
      * @param memberDTO
-     * @return ResponseEntity<MemberDTO>
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
@@ -59,12 +61,28 @@ public class MemberController {
     }
 
     /**
+     * 사용자 회원정보 조회 기능
+     * @param userId
+     * @return {@literal ResponseEntity<HttpStatus>}
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<HttpStatus> getUser(@PathVariable long userId) {
+        MemberDTO memberInfo = memberService.getUser(userId);
+
+        if(memberInfo == null) {
+            return RESPONSE_ENTITY_BAD_REQUEST;
+        }
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
      * 사용자 회원정보 수정 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
-    @PostMapping(value = "/modifyMemberInfo")
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @PutMapping(value = "/{userId}")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 
@@ -74,7 +92,7 @@ public class MemberController {
     /**
      * 사용자 중복 아이디 체크
      * @param userId
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
     public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
@@ -91,7 +109,7 @@ public class MemberController {
     /**
      * 사용자 로그인 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
@@ -111,9 +129,9 @@ public class MemberController {
     /**
      * 사용자 로그아웃 기능
      * No Param
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @CheckLoginStatus(auth = UserLevel.ALL_USERS)
+    @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
         loginService.removeUserId();
