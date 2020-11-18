@@ -3,6 +3,7 @@ package com.festa.controller;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
+import com.festa.common.commonService.UserId;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -141,7 +142,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@RequestParam(value = "userId") long userId, @RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<HttpStatus> changePassword(@UserId long userId, @RequestBody @Valid MemberDTO memberDTO) {
 
         memberService.changeUserPw(userId, memberDTO.getPassword());
 
