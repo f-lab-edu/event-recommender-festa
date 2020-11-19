@@ -115,7 +115,7 @@ public class MemberController {
      * @param memberDTO
      * @return
      */
-    @DeleteMapping(value = "/{userId}/withdraw")
+    @DeleteMapping(value = "/")
     public ResponseEntity<HttpStatus> memberWithdraw(@RequestBody @Valid MemberDTO memberDTO) {
         // 로그인 여부 확인
         boolean isLoginUser = sessionLoginService.isLoginUser();
