@@ -11,17 +11,18 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 
 @Service
-public class SessionService implements LoginService {
+public class SessionLoginService implements LoginService {
 
     @Autowired
     private AccountsDAO accountsDAO;
+    @Autowired
+    private AccountsService accountsService;
 
     private static final String loginSessionKey = "USER_LOGIN_KEY";
 
     @Override
     public void login(HttpSession httpSession, LoginDTO loginDTO) {
-        boolean existedID = accountsDAO.existedID(loginDTO.getUserID());
-        if (!existedID){
+        if (!accountsService.isExistedID(loginDTO.getUserID())){
             throw new NotExistedException("존재하지 않는 아이디입니다.");
         }
 

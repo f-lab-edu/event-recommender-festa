@@ -1,14 +1,10 @@
 package com.festa.service;
 
-import com.festa.common.SessionService;
 import com.festa.dao.AccountsDAO;
-import com.festa.dto.LoginDTO;
 import com.festa.dto.SignUpDTO;
 import com.festa.exception.DuplicatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpSession;
 
 @Service
 public class AccountsService {
