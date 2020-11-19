@@ -1,7 +1,7 @@
 package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
-import com.festa.common.commonService.UserId;
+import com.festa.common.commonService.CurrentLoginUserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 
 @Component
 @RequiredArgsConstructor
-public class UserIdResolver implements HandlerMethodArgumentResolver {
+public class LoginUserIdResolver implements HandlerMethodArgumentResolver {
 
     private final LoginService loginService;
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(UserId.class);
+        return methodParameter.hasParameterAnnotation(CurrentLoginUserId.class);
     }
 
     @Override

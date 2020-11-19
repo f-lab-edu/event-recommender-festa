@@ -1,6 +1,6 @@
 package com.festa.config;
 
-import com.festa.common.UserIdResolver;
+import com.festa.common.LoginUserIdResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,10 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final UserIdResolver userIdResolver;
+    private final LoginUserIdResolver loginUserIdResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userIdResolver);
+        resolvers.add(loginUserIdResolver);
     }
 }
