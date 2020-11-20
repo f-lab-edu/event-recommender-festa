@@ -3,7 +3,7 @@
 <mapper namespace="com.festa.dao.MemberDAO">
 
     <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
-        insert into
+        INSERT INTO
             members
             ( userId
             , username
@@ -14,7 +14,7 @@
             , address
             , userLevel
         )
-        values
+        VALUES
             ( #{userId}
             , #{username}
             , #{password}
@@ -28,11 +28,18 @@
 
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
     <select id="isUserIdExist" resultType="boolean">
-        select EXISTS
-                   (select userId
-                    from members
-                    where userId = #{userId}
+        SELECT EXISTS
+                   (SELECT userId
+                    FROM members
+                    WHERE userId = #{userId}
                    )
-                   as isIdExists
+                   AS isIdExists
     </select>
+
+    <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
+        UPDATE members
+        SET memberWithdraw = TRUE
+        AND memberWithdrawDate = NOW()
+        WHERE userId = #{userId};
+    </update>
 </mapper>
