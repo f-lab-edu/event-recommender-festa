@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface CheckLoginStatus {
 
-    UserLevel auth() default UserLevel.ALL_USERS;
+    UserLevel auth() default UserLevel.USER;
 }

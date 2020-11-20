@@ -3,6 +3,7 @@ package com.festa.controller;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
+import com.festa.common.commonService.CurrentLoginUserId;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +68,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@PathVariable long userId) {
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserId long userId) {
         MemberDTO memberInfo = memberService.getUser(userId);
 
         if(memberInfo == null) {
@@ -95,7 +96,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@CurrentLoginUserId long userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -135,6 +136,20 @@ public class MemberController {
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
         loginService.removeUserId();
+
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 사용자 비밀번호 변경 기능
+     * @Param userId
+     * @return {@literal ResponseEntity<HttpStatus>}
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserId long userId, @RequestBody @Valid MemberDTO memberDTO) {
+
+        memberService.changeUserPw(userId, memberDTO.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }
