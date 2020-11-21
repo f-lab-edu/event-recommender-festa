@@ -3,44 +3,67 @@
 <mapper namespace="com.festa.dao.MemberDAO">
 
     <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
-        insert into
+        INSERT INTO
             members
-            ( userId
-            , username
-            , password
-            , email
-            , confirmEmail
-            , phoneNo
-            , address
-            , userLevel
+            ( userId,
+              username,
+              password,
+              email,
+              confirmEmail,
+              phoneNo,
+              address,
+              userLevel
         )
-        values
-            ( #{userId}
-            , #{username}
-            , #{password}
-            , #{email}
-            , #{confirmEmail}
-            , #{phoneNo}
-            , #{address}
-            , #{userLevel}
+        VALUES
+            ( #{userId},
+              #{username},
+              #{password},
+              #{email},
+              #{confirmEmail},
+              #{phoneNo},
+              #{address},
+              #{userLevel}
             )
     </insert>
 
     <!-- EXISTS()에서 true는 Alias가 1로, false는 Alias가 0으로 되어있다.  -->
     <select id="isUserIdExist" resultType="boolean">
-        select EXISTS
-                   (select userId
-                    from members
-                    where userId = #{userId}
+        SELECT EXISTS
+                   (SELECT userId
+                    FROM members
+                    WHERE userId = #{userId}
                    )
-                   as isIdExists
+                   AS isIdExists
     </select>
 
     <update id="modifyMemberInfo" parameterType="com.festa.dto.MemberDTO">
-        update members
-        set username = #{username}
-        and phoneNo  = #{phoneNo}
-        and address  = #{address}
-        where userid = #{userId};
+        UPDATE members
+        SET username = #{username}
+        AND phoneNo  = #{phoneNo}
+        AND address  = #{address}
+        WHERE userid = #{userId};
     </update>
+
+    <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
+        UPDATE members
+        SET password = #{password}
+        AND updatePwDate = NOW()
+        WHERE userId = #{userId}
+    </update>
+
+    <select id="getUserById" resultType="com.festa.dto.MemberDTO">
+        SELECT
+            userId,
+            username,
+            password,
+            email,
+            confirmEmail,
+            userLevel,
+            phoneNo,
+            address
+        FROM members
+        WHERE userId = #{userId}
+    </select>
+
+
 </mapper>

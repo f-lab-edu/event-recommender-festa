@@ -1,28 +1,31 @@
 package com.festa.controller;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
-
-import com.festa.common.commonService.SessionLoginService;
+import com.festa.aop.CheckLoginStatus;
+import com.festa.common.UserLevel;
+import com.festa.common.commonService.LoginService;
+import com.festa.common.commonService.CurrentLoginUserId;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import javax.validation.Valid;
+import java.net.URI;
+
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -42,15 +45,13 @@ import javax.validation.Valid;
 @Log4j2
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
-
-    private final SessionLoginService sessionLoginService;
+    private final MemberService memberService;
+    private final LoginService loginService;
 
     /**
      * 사용자 회원가입 기능
      * @param memberDTO
-     * @return ResponseEntity<MemberDTO>
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @PostMapping(value = "/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
@@ -61,17 +62,29 @@ public class MemberController {
     }
 
     /**
+     * 사용자 회원정보 조회 기능
+     * @param userId
+     * @return {@literal ResponseEntity<HttpStatus>}
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserId long userId) {
+        MemberDTO memberInfo = memberService.getUser(userId);
+
+        if(memberInfo == null) {
+            return RESPONSE_ENTITY_BAD_REQUEST;
+        }
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
      * 사용자 회원정보 수정 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @PostMapping(value = "/modifyMemberInfo")
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @PutMapping(value = "/{userId}")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
-        boolean isLoginUser = sessionLoginService.isLoginUser();
-
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
         memberService.modifyMemberInfo(memberDTO);
 
         return RESPONSE_ENTITY_OK;
@@ -80,10 +93,10 @@ public class MemberController {
     /**
      * 사용자 중복 아이디 체크
      * @param userId
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@PathVariable @Valid long userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@CurrentLoginUserId long userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -97,7 +110,7 @@ public class MemberController {
     /**
      * 사용자 로그인 기능
      * @param memberDTO
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
@@ -109,7 +122,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        sessionLoginService.setUserId(userId);
+        loginService.setUserId(userId);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -117,17 +130,26 @@ public class MemberController {
     /**
      * 사용자 로그아웃 기능
      * No Param
-     * @return ResponseEntity<HttpStatus>
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
+    @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        boolean isLoginUser = sessionLoginService.isLoginUser();
+        loginService.removeUserId();
 
-        //세션에 로그인 여부 확인 후 false를 return 했다면 로그인 한 사용자가 아님
-        if(!isLoginUser) {
-            return RESPONSE_ENTITY_UNAUTHORIZED;
-        }
-        sessionLoginService.removeUserId();
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 사용자 비밀번호 변경 기능
+     * @Param userId
+     * @return {@literal ResponseEntity<HttpStatus>}
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserId long userId, @RequestBody @Valid MemberDTO memberDTO) {
+
+        memberService.changeUserPw(userId, memberDTO.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }

@@ -13,4 +13,8 @@ public interface MemberDAO {
     boolean isUserIdExist(long userId);
 
     void modifyMemberInfo(MemberDTO memberDTO);
+
+    MemberDTO getUserById(long userId);
+
+    void changeUserPw(long userId, String password);
 }
