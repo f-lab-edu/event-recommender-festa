@@ -2,14 +2,14 @@ package com.festa.service;
 
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
 
-    @Autowired
-    private MemberDAO memberDAO;
+    private final MemberDAO memberDAO;
 
     public void insertMemberInfo(MemberDTO memberDTO) {
         memberDAO.insertMemberInfo(memberDTO);
@@ -19,7 +19,20 @@ public class MemberService {
         return memberDAO.isUserIdExist(userId);
     }
 
+    public void modifyMemberInfo(MemberDTO memberDTO) {
+        memberDAO.modifyMemberInfo(memberDTO);
+    }
+
+    public MemberDTO getUser(long userId) {
+        return memberDAO.getUserById(userId);
+    }
+
+    public void changeUserPw(long userId, String password) {
+        memberDAO.changeUserPw(userId, password);
+    }
+
     public void memberWithdraw(MemberDTO memberDTO) {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+
     }
 }
