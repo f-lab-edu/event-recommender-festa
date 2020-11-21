@@ -33,6 +33,5 @@ public class MemberService {
 
     public void memberWithdraw(MemberDTO memberDTO) {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
-
     }
 }

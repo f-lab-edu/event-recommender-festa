@@ -27,7 +27,6 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUE
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -150,7 +149,6 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
     public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserId long userId, @RequestBody @Valid MemberDTO memberDTO) {
-
         memberService.changeUserPw(userId, memberDTO.getPassword());
 
         return RESPONSE_ENTITY_OK;
