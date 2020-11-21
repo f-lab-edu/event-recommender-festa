@@ -65,5 +65,10 @@
         WHERE userId = #{userId}
     </select>
 
-
+    <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
+        UPDATE members
+        SET memberWithdraw = TRUE
+        AND memberWithdrawDate = NOW()
+        WHERE userId = #{userId};
+    </update>
 </mapper>

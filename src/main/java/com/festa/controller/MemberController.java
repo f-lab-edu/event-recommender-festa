@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUE
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_UNAUTHORIZED;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -151,6 +153,19 @@ public class MemberController {
 
         memberService.changeUserPw(userId, memberDTO.getPassword());
 
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 회원 탈퇴 기능
+     * @param memberDTO
+     * @return
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @DeleteMapping(value = "/")
+    public ResponseEntity<HttpStatus> memberWithdraw(@RequestBody @Valid MemberDTO memberDTO) {
+        memberService.memberWithdraw(memberDTO);
+        
         return RESPONSE_ENTITY_OK;
     }
 }

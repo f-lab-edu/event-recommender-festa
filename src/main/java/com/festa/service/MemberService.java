@@ -30,4 +30,9 @@ public class MemberService {
     public void changeUserPw(long userId, String password) {
         memberDAO.changeUserPw(userId, password);
     }
+
+    public void memberWithdraw(MemberDTO memberDTO) {
+        memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+
+    }
 }
