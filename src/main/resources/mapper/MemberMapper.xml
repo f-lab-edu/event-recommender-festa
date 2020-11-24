@@ -12,7 +12,9 @@
               confirmEmail,
               phoneNo,
               address,
-              userLevel
+              userLevel,
+              memberWithdraw,
+              memberWithdrawDate
         )
         VALUES
             ( #{userId},
@@ -22,7 +24,9 @@
               #{confirmEmail},
               #{phoneNo},
               #{address},
-              #{userLevel}
+              #{userLevel},
+              FALSE,
+              NULL
             )
     </insert>
 
