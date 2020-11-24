@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NO_CONTENT;
-
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
@@ -23,17 +21,13 @@ public class EventController {
 
     /**
      * 리스트형 이벤트 목록 조회 기능
-     * @return {@literal List<EventDTO>}
+     * @return {@literal ResponseEntity<List<EventDTO>>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping("/lists")
-    public ResponseEntity<?> getListOfEvents() {
+    @GetMapping
+    public ResponseEntity<List<EventDTO>> getListOfEvents() {
         List<EventDTO> eventLists = eventService.getListOfEvents();
 
-        if(eventLists != null) {
-            return ResponseEntity.ok(eventLists);
-        }
-
-        return RESPONSE_ENTITY_NO_CONTENT;
+        return ResponseEntity.ok(eventLists);
     }
 }
