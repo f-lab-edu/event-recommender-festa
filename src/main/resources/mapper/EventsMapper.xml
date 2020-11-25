@@ -3,15 +3,21 @@
 <mapper namespace="com.festa.dao.EventDAO">
 
     <select id="getListOfEvents" resultType="com.festa.dao.EventDAO">
-        SELECT
-            eventNo,
-            eventTitle,
-            eventContent,
-            period,
-            registerDate,
-            participants,
-            writer
-        FROM events
-        USE INDEX (eventSeq)
+        SELECT *
+        FROM events AS A
+        JOIN
+            (SELECT
+                eventNo,
+                eventTitle,
+                eventContent,
+                period,
+                registerDate,
+                participants,
+                writer
+             FROM events
+             ORDER BY registerDate DESC
+            ) AS B
+        WHERE A.eventNo = B.eventNo
+
     </select>
 </mapper>
