@@ -3,11 +3,9 @@ package com.festa.controller;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.dto.EventDTO;
+import com.festa.model.PageInfo;
 import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +26,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping
-    public Optional<List<EventDTO>> getListOfEvents() {
+    public Optional<List<EventDTO>> getListOfEvents(int noPageLoad) {
 
-        return Optional.ofNullable(eventService.getListOfEvents());
+        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(noPageLoad)));
     }
 }

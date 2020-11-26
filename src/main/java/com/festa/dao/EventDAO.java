@@ -1,6 +1,7 @@
 package com.festa.dao;
 
 import com.festa.dto.EventDTO;
+import com.festa.model.PageInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,5 +9,5 @@ import java.util.List;
 @Repository
 public interface EventDAO {
 
-    List<EventDTO> getListOfEvents();
+    List<EventDTO> getListOfEvents(PageInfo noPageLoad);
 }
