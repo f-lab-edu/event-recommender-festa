@@ -13,8 +13,8 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    public List<EventDTO> getInfoOfEvent(int eventNo) {
-        List<EventDTO> infoOfEvent = eventDAO.getInfoOfEvent(eventNo);
+    public EventDTO getInfoOfEvent(int eventNo) {
+        EventDTO infoOfEvent = eventDAO.getInfoOfEvent(eventNo);
 
         return infoOfEvent;
     }

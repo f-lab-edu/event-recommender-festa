@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface EventDAO {
 
-    List<EventDTO> getInfoOfEvent(int eventNo);
+    EventDTO getInfoOfEvent(int eventNo);
 }
