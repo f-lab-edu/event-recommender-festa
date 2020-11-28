@@ -14,8 +14,8 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    public List<EventDTO> getListOfEvents(PageInfo noPageLoad) {
+    public List<EventDTO> getListOfEvents(PageInfo pageInfo) {
 
-        return eventDAO.getListOfEvents(noPageLoad);
+        return eventDAO.getListOfEvents(pageInfo);
     }
 }

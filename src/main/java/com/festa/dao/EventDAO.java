@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface EventDAO {
 
-    List<EventDTO> getListOfEvents(PageInfo noPageLoad);
+    List<EventDTO> getListOfEvents(PageInfo pageInfo);
 }

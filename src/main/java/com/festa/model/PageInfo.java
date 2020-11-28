@@ -7,10 +7,10 @@ public class PageInfo {
 
     Integer noPageLoad;
 
-    int size = 20;
+    int size;
 
-    public static PageInfo paging(Integer noPageLoad) {
+    public static PageInfo paging(Integer noPageLoad, int size) {
 
-        return new PageInfo(noPageLoad);
+        return new PageInfo(noPageLoad, size);
     }
 }
