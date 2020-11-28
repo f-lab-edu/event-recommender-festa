@@ -13,6 +13,7 @@
         FROM events AS A
         JOIN
             (SELECT
+                userNo,
                 eventNo,
                 eventTitle,
                 eventContent,
@@ -21,9 +22,9 @@
                 participants,
                 writer
              FROM events
+             WHERE userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
              ORDER BY registerDate DESC
-             LIMIT #{PageInfo.noPageLoad}
-             OFFSET #{PageInfo.size}
+             LIMIT #{PageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
 

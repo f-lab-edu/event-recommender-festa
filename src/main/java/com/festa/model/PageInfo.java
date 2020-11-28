@@ -5,12 +5,12 @@ import lombok.Value;
 @Value
 public class PageInfo {
 
-    Integer noPageLoad;
+    long cursorUserNo;
 
     int size;
 
-    public static PageInfo paging(Integer noPageLoad, int size) {
+    public static PageInfo paging(long cursorUserNo, int size) {
 
-        return new PageInfo(noPageLoad, size);
+        return new PageInfo(cursorUserNo, size);
     }
 }

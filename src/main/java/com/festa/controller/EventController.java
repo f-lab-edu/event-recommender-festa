@@ -26,8 +26,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping
-    public Optional<List<EventDTO>> getListOfEvents(int noPageLoad, int size) {
+    public Optional<List<EventDTO>> getListOfEvents(long cursorUserNo, int size) {
 
-        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(noPageLoad, size)));
+        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size)));
     }
 }
