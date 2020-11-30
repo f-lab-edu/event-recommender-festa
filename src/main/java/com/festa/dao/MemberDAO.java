@@ -14,10 +14,12 @@ public interface MemberDAO {
 
     void modifyMemberInfo(MemberDTO memberDTO);
 
-    MemberDTO getUserById(long userId);
+    MemberDTO getUserByNo(int userNo);
 
-    void changeUserPw(long userId, String password);
+    void changeUserPw(int userNo, String password);
 
     void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
+
+    int getUserNoById(long userId);
 
 }

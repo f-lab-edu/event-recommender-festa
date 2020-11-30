@@ -1,7 +1,7 @@
 package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
-import com.festa.common.commonService.CurrentLoginUserId;
+import com.festa.common.commonService.CurrentLoginUserNo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -20,11 +20,11 @@ public class LoginUserIdResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.hasParameterAnnotation(CurrentLoginUserId.class);
+        return methodParameter.hasParameterAnnotation(CurrentLoginUserNo.class);
     }
 
     @Override
     public Object resolveArgument(@Nullable MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, @Nullable NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        return loginService.getUserId();
+        return loginService.getUserNo();
     }
 }

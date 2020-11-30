@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlertDAO {
 
-    AlertDTO sendChangePwNotice(long userId);
+    AlertDTO sendChangePwNotice(int userNo);
 }

@@ -17,26 +17,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SessionLogin implements LoginService {
 
-    public static final String USER_ID = "userId";
+    public static final String USER_NO = "userNo";
     public final HttpSession httpSession;
 
     /**
-     * 세션에 userId 저장하는 메서드
-     * @param userId
+     * 세션에 userNo 저장하는 메서드
+     * @param userNo
      */
     @Override
-    public void setUserId(Long userId) {
-        httpSession.setAttribute(USER_ID, userId);
+    public void setUserNo(int userNo) {
+        httpSession.setAttribute(USER_NO, userNo);
     }
 
     /**
-     * 세션에 userId를 제거하는 메서드
+     * 세션에 userNo를 제거하는 메서드
      * No Param
      * No return
      */
     @Override
-    public void removeUserId() {
-        httpSession.removeAttribute(USER_ID);
+    public void removeUserNo() {
+        httpSession.removeAttribute(USER_NO);
     }
 
     /**
@@ -46,7 +46,7 @@ public class SessionLogin implements LoginService {
      */
     @Override
     public boolean isLoginUser() {
-        Long userLogin = (Long) httpSession.getAttribute(USER_ID);
+        Long userLogin = (Long) httpSession.getAttribute(USER_NO);
 
         if(userLogin != null) {
             return true;
@@ -56,13 +56,13 @@ public class SessionLogin implements LoginService {
 
     /**
      * 세션의 저장된 user ID 가져오기
-     * @return userId
+     * @return userNo
      */
     @Override
-    public Long getUserId() {
-        Optional<Long> userId = Optional.ofNullable(httpSession.getAttribute(USER_ID))
-                .map(id -> (Long) id);
+    public int getUserNo() {
+        Optional<Integer> userNo = Optional.ofNullable(httpSession.getAttribute(USER_NO))
+                .map(no -> (Integer) no);
 
-        return userId.orElseThrow(NoSuchElementException::new);
+        return userNo.orElseThrow(NoSuchElementException::new);
     }
 }

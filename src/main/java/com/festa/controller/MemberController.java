@@ -3,7 +3,7 @@ package com.festa.controller;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
-import com.festa.common.commonService.CurrentLoginUserId;
+import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.MemberDTO;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -64,13 +64,13 @@ public class MemberController {
 
     /**
      * 사용자 회원정보 조회 기능
-     * @param userId
+     * @param userNo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserId long userId) {
-        MemberDTO memberInfo = memberService.getUser(userId);
+    @GetMapping(value = "/{userNo}")
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo int userNo) {
+        MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
             return RESPONSE_ENTITY_BAD_REQUEST;
@@ -84,7 +84,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping(value = "/{userId}")
+    @PutMapping(value = "/{userNo}")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 
@@ -97,7 +97,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@CurrentLoginUserId long userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@CurrentLoginUserNo long userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -117,13 +117,13 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
-        boolean isIdExist = memberService.isUserIdExist(userId);
+        int userNo = memberService.getUserNo(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExist) {
+        if(userNo == 0) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserId(userId);
+        loginService.setUserNo(userNo);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -136,20 +136,20 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        loginService.removeUserId();
+        loginService.removeUserNo();
 
         return RESPONSE_ENTITY_OK;
     }
 
     /**
      * 사용자 비밀번호 변경 기능
-     * @Param userId
+     * @Param userNo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserId long userId, @RequestBody @Valid MemberDTO memberDTO) {
-        memberService.changeUserPw(userId, memberDTO.getPassword());
+    @PatchMapping("/{userNo}/password")
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo int userNo, @RequestBody @Valid MemberDTO memberDTO) {
+        memberService.changeUserPw(userNo, memberDTO.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }

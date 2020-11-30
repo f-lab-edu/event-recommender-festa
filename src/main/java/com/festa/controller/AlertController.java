@@ -2,7 +2,7 @@ package com.festa.controller;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
-import com.festa.common.commonService.CurrentLoginUserId;
+import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ public class AlertController {
 
     /**
      * 비밀번호 변경 알람서비스 기능
-     * @param userId
+     * @param userNo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping
-    public ResponseEntity<HttpStatus> sendChangePwNotice(@CurrentLoginUserId long userId) {
-        alertService.sendChangePwNotice(userId);
+    public ResponseEntity<HttpStatus> sendChangePwNotice(@CurrentLoginUserNo int userNo) {
+        alertService.sendChangePwNotice(userNo);
 
         return RESPONSE_ENTITY_OK;
     }
