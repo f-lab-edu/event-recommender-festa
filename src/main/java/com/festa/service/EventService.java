@@ -18,4 +18,9 @@ public class EventService {
 
         return eventDAO.getListOfEvents(pageInfo);
     }
+
+    public void applyForEvents(EventDTO eventDTO) {
+
+        eventDAO.applyForEvents(eventDTO);
+    }
 }

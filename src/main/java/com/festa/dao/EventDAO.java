@@ -10,4 +10,6 @@ import java.util.List;
 public interface EventDAO {
 
     List<EventDTO> getListOfEvents(PageInfo pageInfo);
+
+    void applyForEvents(EventDTO eventDTO);
 }
