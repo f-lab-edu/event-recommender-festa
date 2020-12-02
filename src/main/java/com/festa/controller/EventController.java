@@ -5,6 +5,7 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
+import com.festa.model.Participants;
 import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,13 +36,13 @@ public class EventController {
 
     /**
      * 이벤트 접수 기능
-     * @param eventDTO
+     * @param participants
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping
-    public ResponseEntity<HttpStatus> applyForEvents(@RequestBody @NotNull EventDTO eventDTO) {
-        eventService.applyForEvents(eventDTO);
+    public ResponseEntity<HttpStatus> applyForEvents(@RequestBody @NotNull Participants participants) {
+        eventService.applyForEvents(participants);
 
         return RESPONSE_ENTITY_OK;
     }

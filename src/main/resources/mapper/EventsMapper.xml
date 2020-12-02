@@ -3,7 +3,6 @@
 <mapper namespace="com.festa.dao.EventDAO">
 
     <select id="getListOfEvents" resultType="com.festa.dao.EventDTO">
-    <![CDATA[
         SELECT
             A.eventTitle,
             A.eventContent,
@@ -23,19 +22,30 @@
                 participants,
                 writer
              FROM events
-             WHERE userNo < #{PageInfo.cursorUserNo}
+             WHERE userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
              ORDER BY registerDate DESC
              LIMIT #{PageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
-    ]]>
+
     </select>
 
-    <update id="applyForEvents" parameterType="com.festa.dao.EventDTO">
-        UPDATE events
-        SET participants = #{participants}
-        WHERE eventNo    = #{eventNo}
-        AND   eventTitle = #{eventTitle}
-
-    </update>
+    <insert id="applyForEvents" parameterType="com.festa.model.Participants">
+        INSERT INTO
+            participant
+            (eventNo,
+             userNo,
+             applyDate,
+             cancelDate,
+             participateDate
+            )
+            VALUES
+            (
+             #{eventNo},
+             #{userNo},
+             #{applyDate},
+             #{cancelDate},
+             #{participateDate}
+            )
+    </insert>
 </mapper>
