@@ -82,6 +82,8 @@
         SELECT
             userNo
         FROM members
-        WHERE userId = #{userId}
+        WHERE
+            userId = #{userId}
+        AND memberWithdraw = FALSE
     </select>
 </mapper>
