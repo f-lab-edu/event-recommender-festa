@@ -36,16 +36,14 @@
             (eventNo,
              userNo,
              applyDate,
-             cancelDate,
              participateDate
             )
             VALUES
             (
              #{eventNo},
              #{userNo},
-             #{applyDate},
-             #{cancelDate},
-             #{participateDate}
+             NOW(),
+             NOW()
             )
     </insert>
 </mapper>
