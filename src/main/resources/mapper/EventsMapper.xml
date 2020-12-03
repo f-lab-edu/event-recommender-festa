@@ -29,4 +29,21 @@
         WHERE A.eventNo = B.eventNo
 
     </select>
+
+    <insert id="applyForEvents" parameterType="com.festa.model.Participants">
+        INSERT INTO
+            participant
+            (eventNo,
+             userNo,
+             applyDate,
+             participateDate
+            )
+            VALUES
+            (
+             #{eventNo},
+             #{userNo},
+             NOW(),
+             NOW()
+            )
+    </insert>
 </mapper>
