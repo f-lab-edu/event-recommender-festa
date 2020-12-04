@@ -34,6 +34,7 @@
                    (SELECT userId
                     FROM members
                     WHERE userId = #{userId}
+                    AND deleted = FALSE
                    )
                    AS isIdExists
     </select>
