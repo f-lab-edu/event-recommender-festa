@@ -42,7 +42,7 @@
         UPDATE members
         SET username = #{username}
         AND phoneNo  = #{phoneNo}
-        AND address  = #{address}
+        AND addressNo  = #{address}
         WHERE userid = #{userId};
     </update>
 
@@ -55,16 +55,22 @@
 
     <select id="getUserById" resultType="com.festa.dto.MemberDTO">
         SELECT
-            userId,
-            username,
-            password,
-            email,
-            confirmEmail,
-            userLevel,
-            phoneNo,
-            address
-        FROM members
+            M.userId,
+            M.userName,
+            M.password,
+            M.email,
+            M.phoneNo,
+            MA.cityName,
+            MA.districtName,
+            MA.streetName,
+            M.userLevel,
+            M.deleted,
+            M.deletedDate
+        FROM members M
+        LEFT OUTER JOIN member_address MA
+        ON M.addressNo = MA.addressNo
         WHERE userId = #{userId}
+        AND M.deleted = FALSE
     </select>
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
