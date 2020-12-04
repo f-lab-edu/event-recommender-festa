@@ -4,14 +4,14 @@
 
     <select id="getInfoOfEvent" resultType="com.festa.dto.EventDTO">
         SELECT
-            A.eventNo,
-            A.eventTitle,
-            A.eventContent,
-            A.period,
-            A.registerDate,
-            A.participants,
-            A.writer
-        FROM NULL events AS A
-        WHERE A.eventNo = #{eventNo}
+            eventNo,
+            eventTitle,
+            eventContent,
+            period,
+            registerDate,
+            participants,
+            writer
+        FROM NULL events
+        WHERE eventNo = #{eventNo}
     </select>
 </mapper>
