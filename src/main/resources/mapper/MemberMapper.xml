@@ -6,12 +6,11 @@
         INSERT INTO
             members
             ( userId,
-              username,
+              userName,
               password,
               email,
-              confirmEmail,
               phoneNo,
-              address,
+              addressNo,
               userLevel,
               deleted,
               deletedDate
@@ -21,12 +20,11 @@
               #{username},
               #{password},
               #{email},
-              #{confirmEmail},
               #{phoneNo},
               #{address},
               #{userLevel},
               FALSE,
-              NULL
+              null
             )
     </insert>
 
