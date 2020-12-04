@@ -7,22 +7,34 @@
             A.eventTitle,
             A.eventContent,
             A.period,
+            EA.cityName,
+            EA.districtName,
+            EA.streetName,
             A.registerDate,
-            A.participants,
-            A.writer
+            M.userName AS writer
         FROM events AS A
+        LEFT OUTER JOIN event_address EA
+        ON EA.addressNo = A.addressNo
+        LEFT OUTER JOIN members M
+        ON A.userNo = M.userNo
         JOIN
             (SELECT
-                userNo,
-                eventNo,
-                eventTitle,
-                eventContent,
-                period,
-                registerDate,
-                participants,
-                writer
-             FROM events
-             WHERE userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
+                E.userNo,
+                E.eventNo,
+                E.eventTitle,
+                E.eventContent,
+                E.period,
+                EA.cityName,
+                EA.districtName,
+                EA.streetName,
+                E.registerDate,
+                M.userName AS writer
+             FROM events E
+             LEFT OUTER JOIN event_address EA
+             ON EA.addressNo = E.addressNo
+             LEFT OUTER JOIN members M
+             ON E.userNo = M.userNo
+             WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
              ORDER BY registerDate DESC
              LIMIT #{PageInfo.size}
             ) AS B
