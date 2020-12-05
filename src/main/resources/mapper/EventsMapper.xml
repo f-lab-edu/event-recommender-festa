@@ -8,16 +8,12 @@
             A.eventContent,
             A.startDate,
             A.endDate,
-            EA.cityName,
-            EA.districtName,
-            EA.streetName,
+            B.cityName,
+            B.districtName,
+            B.streetName,
             A.registerDate,
-            M.userName AS writer
+            B.writer
         FROM events AS A
-        LEFT OUTER JOIN event_address EA
-        ON EA.addressNo = A.addressNo
-        LEFT OUTER JOIN members M
-        ON A.userNo = M.userNo
         JOIN
             (SELECT
                 E.userNo,
