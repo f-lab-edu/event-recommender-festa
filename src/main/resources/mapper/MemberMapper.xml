@@ -51,7 +51,7 @@
         SET cityName = #{cityName}
         AND districtName = #{districtName}
         AND streetName = #{streetName}
-        WHERE addressNo = #{addressNo}
+        WHERE userNo = #{userNo}
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">

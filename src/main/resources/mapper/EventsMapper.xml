@@ -60,4 +60,11 @@
              NOW()
             )
     </insert>
+
+    <update id="cancelEvent" parameterType="long">
+        UPDATE participant
+        SET cancelDate = NOW()
+        WHERE userNo = #{userNo}
+        AND applyDate IS NOT NULL
+    </update>
 </mapper>

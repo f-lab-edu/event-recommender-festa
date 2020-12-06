@@ -24,4 +24,9 @@ public class EventService {
 
         eventDAO.applyForEvents(participants);
     }
+
+    public void cancelEvent(long userNo) {
+
+        eventDAO.cancelEvent(userNo);
+    }
 }
