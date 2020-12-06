@@ -3,13 +3,9 @@
 <mapper namespace="com.festa.dao.MemberDAO">
 
     <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
-        <selectKey keyProperty="userNo" resultType="int" order="BEFORE">
-            SELECT userNoSeq.NEXTVAL AS userNo FROM userNoSequence
-        </selectKey>
         INSERT INTO
             members
-            ( userNo,
-              userId,
+            ( userId,
               username,
               password,
               email,
@@ -19,8 +15,7 @@
               userLevel
         )
         VALUES
-            ( #{userNo},
-              #{userId},
+            ( #{userId},
               #{username},
               #{password},
               #{email},
