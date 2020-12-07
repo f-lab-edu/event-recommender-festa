@@ -8,11 +8,12 @@
             A.eventContent,
             A.startDate,
             A.endDate,
+            A.registerDate,
+            A.participantLimit,
             B.cityName,
             B.districtName,
             B.streetName,
             B.detail,
-            A.registerDate,
             B.writer
         FROM events AS A
         JOIN
@@ -23,16 +24,17 @@
                 E.eventContent,
                 E.startDate,
                 E.endDate,
+                E.registerDate,
+                E.participantLimit,
                 EA.cityName,
                 EA.districtName,
                 EA.streetName,
                 EA.detail,
-                E.registerDate,
                 M.userName AS writer
              FROM events E
              LEFT OUTER JOIN event_address EA
-             ON EA.addressNo = E.addressNo
-             LEFT OUTER JOIN members M
+             ON EA.eventNo = E.eventNo
+             INNER JOIN members M
              ON E.userNo = M.userNo
              WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
              ORDER BY registerDate DESC
