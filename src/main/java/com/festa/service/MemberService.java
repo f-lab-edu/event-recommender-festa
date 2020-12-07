@@ -27,8 +27,8 @@ public class MemberService {
         return memberDAO.getUserById(userNo, userId);
     }
 
-    public void changeUserPw(long userId, String password) {
-        memberDAO.changeUserPw(userId, password);
+    public void changeUserPw(long userNo, String password) {
+        memberDAO.changeUserPw(userNo, password);
     }
 
     public void memberWithdraw(MemberDTO memberDTO) {

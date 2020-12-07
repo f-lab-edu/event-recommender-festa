@@ -58,7 +58,7 @@
         UPDATE members
         SET password = #{password}
         AND updatePwDate = NOW()
-        WHERE userId = #{userId}
+        WHERE userNo = #{userNo}
     </update>
 
     <select id="getUserById" resultType="com.festa.dto.MemberDTO">

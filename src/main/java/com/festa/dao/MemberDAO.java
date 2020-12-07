@@ -16,7 +16,7 @@ public interface MemberDAO {
 
     MemberDTO getUserById(long userNo, long userId);
 
-    void changeUserPw(long userId, String password);
+    void changeUserPw(long userNo, String password);
 
     void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
 
