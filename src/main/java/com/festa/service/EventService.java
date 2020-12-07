@@ -16,17 +16,14 @@ public class EventService {
     private final EventDAO eventDAO;
 
     public List<EventDTO> getListOfEvents(PageInfo pageInfo) {
-
         return eventDAO.getListOfEvents(pageInfo);
     }
 
     public void applyForEvents(Participants participants) {
-
         eventDAO.applyForEvents(participants);
     }
 
     public void cancelEvent(long userNo) {
-
         eventDAO.cancelEvent(userNo);
     }
 }
