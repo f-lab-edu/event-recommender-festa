@@ -62,8 +62,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
-        MemberDTO memberInfo = memberService.getUser(userNo);
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo, @RequestParam long userId) {
+        MemberDTO memberInfo = memberService.getUser(userNo, userId);
 
         if(memberInfo == null) {
             return RESPONSE_ENTITY_BAD_REQUEST;
@@ -90,7 +90,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam String userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam long userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.

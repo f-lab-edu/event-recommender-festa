@@ -78,6 +78,7 @@
         LEFT OUTER JOIN member_address MA
         ON M.userNo = MA.userNo
         WHERE userId = #{userId}
+        AND M.userNo = #{userNo}
         AND M.deleted = FALSE
     </select>
 
