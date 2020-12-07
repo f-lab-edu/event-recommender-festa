@@ -46,12 +46,12 @@
         WHERE userid = #{userId};
     </update>
 
-    <update id="modifyMemberAddress" >
+    <update id="modifyMemberAddress" parameterType="com.festa.dto.MemberDTO">
         UPDATE member_address
         SET cityName = #{cityName}
         AND districtName = #{districtName}
         AND streetName = #{streetName}
-        WHERE addressNo = #{addressNo}
+        WHERE userNo = #{userNo}
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
@@ -76,7 +76,7 @@
             M.deletedDate
         FROM members M
         LEFT OUTER JOIN member_address MA
-        ON M.addressNo = MA.addressNo
+        ON M.userNo = MA.userNo
         WHERE userId = #{userId}
         AND M.deleted = FALSE
     </select>
