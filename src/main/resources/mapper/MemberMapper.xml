@@ -43,7 +43,7 @@
         UPDATE members
         SET username = #{username}
         AND phoneNo  = #{phoneNo}
-        WHERE userid = #{userId};
+        WHERE userNo = #{userNo};
     </update>
 
     <update id="modifyMemberAddress" parameterType="com.festa.dto.MemberDTO">
