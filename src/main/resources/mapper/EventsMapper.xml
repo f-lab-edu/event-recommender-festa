@@ -70,7 +70,8 @@
     
     <update id="reduceParticipants" parameterType="int">
         UPDATE events
-        SET participantLimit = participantLimit - 1
+        SET noOfParticipants = noOfParticipants - 1
         WHERE eventNo = #{eventNo}
+        AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
 </mapper>
