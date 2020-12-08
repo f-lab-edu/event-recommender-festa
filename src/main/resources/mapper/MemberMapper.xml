@@ -45,18 +45,19 @@
         SET username = #{username}
         AND phoneNo  = #{phoneNo}
         AND address  = #{address}
-        WHERE userid = #{userId};
+        WHERE userNo = #{userNo};
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
         SET password = #{password}
         AND updatePwDate = NOW()
-        WHERE userId = #{userId}
+        WHERE userNo = #{userNo}
     </update>
 
-    <select id="getUserById" resultType="com.festa.dto.MemberDTO">
+    <select id="getUserByNo" resultType="com.festa.dto.MemberDTO">
         SELECT
+            userNo,
             userId,
             username,
             password,
@@ -66,13 +67,22 @@
             phoneNo,
             address
         FROM members
-        WHERE userId = #{userId}
+        WHERE userNo = #{userNo}
     </select>
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
         SET deleted = TRUE
         AND deletedDate = NOW()
-        WHERE userId = #{userId};
+        WHERE userNo = #{userNo};
     </update>
+
+    <select id="getUserNoById" resultType="int">
+        SELECT
+            userNo
+        FROM members
+        WHERE
+            userId = #{userId}
+        AND memberWithdraw = FALSE
+    </select>
 </mapper>

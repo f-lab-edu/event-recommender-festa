@@ -11,7 +11,7 @@ public class AlertService {
     @Autowired
     private AlertDAO alertDAO;
 
-    public AlertDTO sendChangePwNotice(long userId) {
-        return alertDAO.sendChangePwNotice(userId);
+    public AlertDTO sendChangePwNotice(int userNo) {
+        return alertDAO.sendChangePwNotice(userNo);
     }
 }

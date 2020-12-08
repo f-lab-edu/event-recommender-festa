@@ -9,6 +9,6 @@
               content,
               pwLastModified
         FROM notice
-        WHERE userId = #{userId}
+        WHERE userNo = #{userNo}
     </select>
 </mapper>
