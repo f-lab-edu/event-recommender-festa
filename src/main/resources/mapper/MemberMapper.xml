@@ -12,7 +12,9 @@
               confirmEmail,
               phoneNo,
               address,
-              userLevel
+              userLevel,
+              deleted,
+              deletedDate
         )
         VALUES
             ( #{userId},
@@ -22,7 +24,9 @@
               #{confirmEmail},
               #{phoneNo},
               #{address},
-              #{userLevel}
+              #{userLevel},
+              FALSE,
+              NULL
             )
     </insert>
 
@@ -68,8 +72,8 @@
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-        SET memberWithdraw = TRUE
-        AND memberWithdrawDate = NOW()
+        SET deleted = TRUE
+        AND deletedDate = NOW()
         WHERE userNo = #{userNo};
     </update>
 

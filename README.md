@@ -94,6 +94,8 @@ ___
 
 ## DB ERD 구조
 
+[DB 테이블 설계:  ](https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing)<https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing>
+
 <br>
 <br>
 
