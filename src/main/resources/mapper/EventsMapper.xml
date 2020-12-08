@@ -67,4 +67,10 @@
         WHERE userNo = #{userNo}
         AND applyDate IS NOT NULL
     </update>
+    
+    <update id="reduceParticipants" parameterType="int">
+        UPDATE events
+        SET participantLimit = participantLimit - 1
+        WHERE eventNo = #{eventNo}
+    </update>
 </mapper>

@@ -6,6 +6,7 @@ import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,7 +24,10 @@ public class EventService {
         eventDAO.applyForEvents(participants);
     }
 
-    public void cancelEvent(long userNo) {
+    @Transactional
+    public void cancelEvent(long userNo, int eventNo) {
         eventDAO.cancelEvent(userNo);
+
+        eventDAO.reduceParticipants(eventNo);
     }
 }

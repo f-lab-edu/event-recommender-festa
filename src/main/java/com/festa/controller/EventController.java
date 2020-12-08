@@ -55,13 +55,13 @@ public class EventController {
 
     /**
      * 접수한 이벤트 취소 기능
-     * @param userNo
+     * @param userNo, eventNo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/cancel")
-    public ResponseEntity<HttpStatus> cancelEvent(@CurrentLoginUserId long userNo) {
-        eventService.cancelEvent(userNo);
+    public ResponseEntity<HttpStatus> cancelEvent(@CurrentLoginUserId long userNo, int eventNo) {
+        eventService.cancelEvent(userNo, eventNo);
 
         return RESPONSE_ENTITY_OK;
     }

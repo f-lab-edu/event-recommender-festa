@@ -15,4 +15,6 @@ public interface EventDAO {
     void applyForEvents(Participants participants);
 
     void cancelEvent(long userNo);
+
+    void reduceParticipants(int eventNo);
 }
