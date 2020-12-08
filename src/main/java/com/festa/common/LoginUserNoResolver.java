@@ -24,7 +24,7 @@ public class LoginUserNoResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(@Nullable MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, @Nullable NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        return loginService.getUserId();
+    public Object resolveArgument(@Nullable MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, @Nullable NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
+        return loginService.getUserNo();
     }
 }

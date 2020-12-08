@@ -116,7 +116,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserId(userId);
+        loginService.setUserNo(userId);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -129,7 +129,7 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
-        loginService.removeUserId();
+        loginService.removeUserNo();
 
         return RESPONSE_ENTITY_OK;
     }

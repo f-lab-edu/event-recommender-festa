@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LoginService {
 
-    void setUserId(Long userId);
+    void setUserNo(Long userNo);
 
-    void removeUserId();
+    void removeUserNo();
 
     boolean isLoginUser();
 
-    Long getUserId();
+    Long getUserNo();
 
 }
