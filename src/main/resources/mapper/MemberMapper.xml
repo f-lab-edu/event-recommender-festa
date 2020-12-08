@@ -86,6 +86,6 @@
         UPDATE members
         SET deleted = TRUE
         AND deletedDate = NOW()
-        WHERE userId = #{userId};
+        WHERE userNo = #{userNo};
     </update>
 </mapper>
