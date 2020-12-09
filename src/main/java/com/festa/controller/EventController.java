@@ -46,7 +46,7 @@ public class EventController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PostMapping("/apply")
+    @PostMapping("/{eventNo}/applies")
     public ResponseEntity<HttpStatus> applyForEvents(@RequestBody @NotNull Participants participants) {
         eventService.applyForEvents(participants);
 
