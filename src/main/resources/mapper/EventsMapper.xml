@@ -62,4 +62,18 @@
              NOW()
             )
     </insert>
+
+    <update id="cancelEvent" parameterType="long">
+        UPDATE participant
+        SET cancelDate = NOW()
+        WHERE userNo = #{userNo}
+        AND applyDate IS NOT NULL
+    </update>
+    
+    <update id="reduceParticipants" parameterType="int">
+        UPDATE events
+        SET noOfParticipants = noOfParticipants - 1
+        WHERE eventNo = #{eventNo}
+        AND noOfParticipants <![CDATA[<]]> participantLimit
+    </update>
 </mapper>
