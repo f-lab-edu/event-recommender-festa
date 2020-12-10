@@ -23,8 +23,8 @@ public class MemberService {
         memberDAO.modifyMemberInfo(memberDTO);
     }
 
-    public MemberDTO getUser(long userNo, long userId) {
-        return memberDAO.getUserById(userNo, userId);
+    public MemberDTO getUser(long userNo) {
+        return memberDAO.getUserByNo(userNo);
     }
 
     public void changeUserPw(long userNo, String password) {
@@ -33,5 +33,9 @@ public class MemberService {
 
     public void memberWithdraw(MemberDTO memberDTO) {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+    }
+
+    public int getUserNo(long userId) {
+        return memberDAO.getUserNoById(userId);
     }
 }

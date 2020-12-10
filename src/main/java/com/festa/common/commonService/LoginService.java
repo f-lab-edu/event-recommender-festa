@@ -18,5 +18,4 @@ public interface LoginService {
     boolean isLoginUser();
 
     Long getUserNo();
-
 }

@@ -70,13 +70,13 @@ public class CheckLoginStatusAop {
     public ResponseEntity<HttpStatus> hostLoginStatus() {
         allUserLoginStatus();
 
-        long userId = loginService.getUserId();
-        MemberDTO memberInfo = memberService.getUser(userId);
+        long userNo = loginService.getUserNo();
+        MemberDTO memberInfo = memberService.getUser(userNo);
 
-        log.debug(userId + ": Started to check Host-user authentication");
+        log.debug(userNo + ": Started to check Host-user authentication");
 
         if(memberInfo.getUserLevel() != UserLevel.HOST) {
-            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userId + " is not a Host") {};
+            throw new HttpStatusCodeException(HttpStatus.UNAUTHORIZED, userNo + " is not a Host") {};
         }
 
         return RESPONSE_ENTITY_OK;

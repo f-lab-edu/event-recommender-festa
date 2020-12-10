@@ -11,7 +11,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -62,8 +70,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo, @RequestParam long userId) {
-        MemberDTO memberInfo = memberService.getUser(userNo, userId);
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
+        MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
             return RESPONSE_ENTITY_BAD_REQUEST;
@@ -77,7 +85,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping(value = "/{userId}")
+    @PutMapping(value = "/{userNo}")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.modifyMemberInfo(memberDTO);
 
@@ -110,13 +118,13 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
-        boolean isIdExist = memberService.isUserIdExist(userId);
+        long userNo = memberService.getUserNo(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExist) {
+        if(userNo == 0) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNo(userId);
+        loginService.setUserNo(userNo);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -136,7 +144,7 @@ public class MemberController {
 
     /**
      * 사용자 비밀번호 변경 기능
-     * @Param userId
+     * @Param userNo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)

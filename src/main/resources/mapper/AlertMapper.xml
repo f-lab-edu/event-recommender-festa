@@ -4,11 +4,11 @@
 
     <select id="sendChangePwNotice" resultType="com.festa.dto.AlertDTO">
         SELECT
-              userId,
+              userNo,
               title,
               content,
               pwLastModified
         FROM notice
-        WHERE userId = #{userId}
+        WHERE userNo = #{userNo}
     </select>
 </mapper>
