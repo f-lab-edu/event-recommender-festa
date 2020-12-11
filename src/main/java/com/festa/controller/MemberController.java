@@ -118,13 +118,13 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
-        long userNo = memberService.getUserNo(userId);
+        boolean isIdExist = memberService.isUserIdExist(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(userNo == 0) {
+        if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNo(userNo);
+        loginService.setUserNo(memberDTO.getUserNo());
 
         return RESPONSE_ENTITY_OK;
     }
