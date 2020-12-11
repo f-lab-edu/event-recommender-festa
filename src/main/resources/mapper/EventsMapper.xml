@@ -10,6 +10,7 @@
             A.endDate,
             A.registerDate,
             A.participantLimit,
+            A.noOfParticipants,
             B.cityName,
             B.districtName,
             B.streetName,
@@ -26,6 +27,7 @@
                 E.endDate,
                 E.registerDate,
                 E.participantLimit,
+                E.noOfParticipants,
                 EA.cityName,
                 EA.districtName,
                 EA.streetName,
@@ -69,7 +71,14 @@
         WHERE userNo = #{userNo}
         AND applyDate IS NOT NULL
     </update>
-    
+
+    <update id="increaseParticipants" parameterType="int">
+        UPDATE events
+        SET noOfParticipants = noOfParticipants + 1
+        WHERE eventNo = #{eventNo}
+          AND noOfParticipants <![CDATA[<]]> participantLimit
+    </update>
+
     <update id="reduceParticipants" parameterType="int">
         UPDATE events
         SET noOfParticipants = noOfParticipants - 1

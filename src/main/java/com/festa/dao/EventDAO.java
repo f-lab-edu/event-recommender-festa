@@ -16,5 +16,7 @@ public interface EventDAO {
 
     void cancelEvent(long userNo);
 
+    void increaseParticipants(int eventNo);
+
     void reduceParticipants(int eventNo);
 }

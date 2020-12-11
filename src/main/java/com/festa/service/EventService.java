@@ -20,14 +20,17 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo);
     }
 
+    @Transactional
     public void applyForEvents(Participants participants) {
         eventDAO.applyForEvents(participants);
+
+        eventDAO.increaseParticipants(participants.getEventNo());
     }
 
     @Transactional
-    public void cancelEvent(long userNo, int eventNo) {
-        eventDAO.cancelEvent(userNo);
+    public void cancelEvent(Participants participants) {
+        eventDAO.cancelEvent(participants.getUserNo());
 
-        eventDAO.reduceParticipants(eventNo);
+        eventDAO.reduceParticipants(participants.getEventNo());
     }
 }
