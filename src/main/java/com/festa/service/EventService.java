@@ -5,8 +5,11 @@ import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -20,9 +23,15 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void applyForEvents(Participants participants) {
         eventDAO.applyForEvents(participants);
+
+        EventDTO participantInfo = eventDAO.checkNoOfParticipants(participants.getEventNo());
+
+        if(participantInfo.getParticipantLimit() == participantInfo.getNoOfParticipants()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "선착순 마감완료 한 이벤트 입니다.");
+        }
 
         eventDAO.increaseParticipants(participants.getEventNo());
     }

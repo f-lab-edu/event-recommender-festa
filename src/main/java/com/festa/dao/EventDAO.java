@@ -19,4 +19,6 @@ public interface EventDAO {
     void increaseParticipants(int eventNo);
 
     void reduceParticipants(int eventNo);
+
+    EventDTO checkNoOfParticipants(int eventNo);
 }

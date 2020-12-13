@@ -45,6 +45,15 @@
         WHERE A.eventNo = B.eventNo
 
     </select>
+    
+    <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
+        SELECT
+            noOfParticipants,
+            participantLimit
+        FROM events
+        WHERE eventNo = #{eventNo}
+
+    </select>
 
     <insert id="applyForEvents" parameterType="com.festa.model.Participants">
         INSERT INTO
