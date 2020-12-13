@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -68,8 +69,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userNo}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo int userNo) {
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
@@ -97,7 +98,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@CurrentLoginUserNo long userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam long userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -117,13 +118,13 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
         long userId = memberDTO.getUserId();
 
-        int userNo = memberService.getUserNo(userId);
+        boolean isIdExist = memberService.isUserIdExist(userId);
 
         //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(userNo == 0) {
+        if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNo(userNo);
+        loginService.setUserNo(memberDTO.getUserNo());
 
         return RESPONSE_ENTITY_OK;
     }
@@ -147,8 +148,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PatchMapping("/{userNo}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo int userNo, @RequestBody @Valid MemberDTO memberDTO) {
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody @Valid MemberDTO memberDTO) {
         memberService.changeUserPw(userNo, memberDTO.getPassword());
 
         return RESPONSE_ENTITY_OK;

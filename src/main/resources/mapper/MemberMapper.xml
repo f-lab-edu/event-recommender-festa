@@ -6,12 +6,11 @@
         INSERT INTO
             members
             ( userId,
-              username,
+              userName,
               password,
               email,
-              confirmEmail,
               phoneNo,
-              address,
+              addressNo,
               userLevel,
               deleted,
               deletedDate
@@ -21,12 +20,11 @@
               #{username},
               #{password},
               #{email},
-              #{confirmEmail},
               #{phoneNo},
               #{address},
               #{userLevel},
               FALSE,
-              NULL
+              null
             )
     </insert>
 
@@ -36,6 +34,7 @@
                    (SELECT userId
                     FROM members
                     WHERE userId = #{userId}
+                    AND deleted = FALSE
                    )
                    AS isIdExists
     </select>
@@ -44,8 +43,15 @@
         UPDATE members
         SET username = #{username}
         AND phoneNo  = #{phoneNo}
-        AND address  = #{address}
         WHERE userNo = #{userNo};
+    </update>
+
+    <update id="modifyMemberAddress" parameterType="com.festa.dto.MemberDTO">
+        UPDATE member_address
+        SET cityName = #{cityName}
+        AND districtName = #{districtName}
+        AND streetName = #{streetName}
+        WHERE userNo = #{userNo}
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
@@ -57,17 +63,22 @@
 
     <select id="getUserByNo" resultType="com.festa.dto.MemberDTO">
         SELECT
-            userNo,
-            userId,
-            username,
-            password,
-            email,
-            confirmEmail,
-            userLevel,
-            phoneNo,
-            address
-        FROM members
-        WHERE userNo = #{userNo}
+            M.userId,
+            M.userName,
+            M.password,
+            M.email,
+            M.phoneNo,
+            MA.cityName,
+            MA.districtName,
+            MA.streetName,
+            M.userLevel,
+            M.deleted,
+            M.deletedDate
+        FROM members M
+        LEFT OUTER JOIN member_address MA
+        ON M.userNo = MA.userNo
+        WHERE M.userNo = #{userNo}
+        AND M.deleted = FALSE
     </select>
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
@@ -77,12 +88,12 @@
         WHERE userNo = #{userNo};
     </update>
 
-    <select id="getUserNoById" resultType="int">
+    <select id="getUserNoById" resultType="long">
         SELECT
             userNo
         FROM members
         WHERE
             userId = #{userId}
-        AND memberWithdraw = FALSE
+        AND deleted = FALSE
     </select>
 </mapper>

@@ -25,7 +25,7 @@ public class SessionLogin implements LoginService {
      * @param userNo
      */
     @Override
-    public void setUserNo(int userNo) {
+    public void setUserNo(Long userNo) {
         httpSession.setAttribute(USER_NO, userNo);
     }
 
@@ -55,13 +55,13 @@ public class SessionLogin implements LoginService {
     }
 
     /**
-     * 세션의 저장된 user ID 가져오기
+     * 세션의 저장된 user No 가져오기
      * @return userNo
      */
     @Override
-    public int getUserNo() {
-        Optional<Integer> userNo = Optional.ofNullable(httpSession.getAttribute(USER_NO))
-                .map(no -> (Integer) no);
+    public Long getUserNo() {
+        Optional<Long> userNo = Optional.ofNullable(httpSession.getAttribute(USER_NO))
+                .map(no -> (Long) no);
 
         return userNo.orElseThrow(NoSuchElementException::new);
     }

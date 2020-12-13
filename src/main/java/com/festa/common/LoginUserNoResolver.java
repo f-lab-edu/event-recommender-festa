@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 @Component
 @RequiredArgsConstructor
-public class LoginUserIdResolver implements HandlerMethodArgumentResolver {
+public class LoginUserNoResolver implements HandlerMethodArgumentResolver {
 
     private final LoginService loginService;
 
@@ -24,7 +24,7 @@ public class LoginUserIdResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(@Nullable MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, @Nullable NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+    public Object resolveArgument(@Nullable MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, @Nullable NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) {
         return loginService.getUserNo();
     }
 }

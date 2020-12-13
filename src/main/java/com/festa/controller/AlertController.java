@@ -3,6 +3,7 @@ package com.festa.controller;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 import com.festa.common.commonService.CurrentLoginUserNo;
+import com.festa.dto.AlertDTO;
 import com.festa.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AlertController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping
-    public ResponseEntity<HttpStatus> sendChangePwNotice(@CurrentLoginUserNo int userNo) {
+    public ResponseEntity<HttpStatus> sendChangePwNotice(@CurrentLoginUserNo long userNo) {
         alertService.sendChangePwNotice(userNo);
 
         return RESPONSE_ENTITY_OK;

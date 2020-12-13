@@ -70,7 +70,7 @@ public class CheckLoginStatusAop {
     public ResponseEntity<HttpStatus> hostLoginStatus() {
         allUserLoginStatus();
 
-        int userNo = loginService.getUserNo();
+        long userNo = loginService.getUserNo();
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         log.debug(userNo + ": Started to check Host-user authentication");

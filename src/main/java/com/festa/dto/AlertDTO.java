@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Builder
 public class AlertDTO {
 
-    long userId;
+    long userNo;
 
     String title;
 

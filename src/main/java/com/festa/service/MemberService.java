@@ -23,11 +23,11 @@ public class MemberService {
         memberDAO.modifyMemberInfo(memberDTO);
     }
 
-    public MemberDTO getUser(int userNo) {
+    public MemberDTO getUser(long userNo) {
         return memberDAO.getUserByNo(userNo);
     }
 
-    public void changeUserPw(int userNo, String password) {
+    public void changeUserPw(long userNo, String password) {
         memberDAO.changeUserPw(userNo, password);
     }
 
