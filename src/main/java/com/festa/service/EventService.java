@@ -36,9 +36,15 @@ public class EventService {
         eventDAO.increaseParticipants(participants.getEventNo());
     }
 
-    @Transactional
+    @Transactional(rollbackFor = RuntimeException.class)
     public void cancelEvent(Participants participants) {
         eventDAO.cancelEvent(participants.getUserNo());
+
+        boolean isParticipated = eventDAO.isParticipated(participants.getUserNo());
+
+        if(!isParticipated) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "참여한 이벤트가 아닙니다.");
+        }
 
         eventDAO.reduceParticipants(participants.getEventNo());
     }

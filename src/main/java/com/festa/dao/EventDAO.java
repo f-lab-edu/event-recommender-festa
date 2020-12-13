@@ -21,4 +21,6 @@ public interface EventDAO {
     void reduceParticipants(int eventNo);
 
     EventDTO checkNoOfParticipants(int eventNo);
+
+    boolean isParticipated(long userNo);
 }

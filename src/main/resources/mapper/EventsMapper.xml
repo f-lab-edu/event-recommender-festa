@@ -55,6 +55,15 @@
 
     </select>
 
+    <select id="isParticipated" resultType="boolean">
+        SELECT EXISTS
+                (SELECT applyDate
+                 FROM participant
+                 WHERE userNo = #{userNo}
+                )
+                AS isIdExists
+    </select>
+
     <insert id="applyForEvents" parameterType="com.festa.model.Participants">
         INSERT INTO
             participant
