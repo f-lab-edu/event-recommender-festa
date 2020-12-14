@@ -1,5 +1,6 @@
 package com.festa.controller;
 
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -43,7 +45,12 @@ public class EventController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping("/{eventNo}/applies")
     public ResponseEntity<HttpStatus> applyForEvents(@RequestBody @NotNull Participants participants) {
-        eventService.applyForEvents(participants);
+        try {
+            eventService.applyForEvents(participants);
+
+        } catch (IllegalAccessException e) {
+            return RESPONSE_ENTITY_BAD_REQUEST;
+        }
 
         return RESPONSE_ENTITY_OK;
     }
@@ -55,8 +62,13 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/cancel")
-    public ResponseEntity<HttpStatus> cancelEvent(@RequestBody @NotNull Participants participants) {
-        eventService.cancelEvent(participants);
+    public ResponseEntity<HttpStatus> cancelEvent(@RequestBody Participants participants) {
+        try {
+            eventService.cancelEvent(participants);
+
+        } catch (IllegalAccessException e) {
+            return RESPONSE_ENTITY_BAD_REQUEST;
+        }
 
         return RESPONSE_ENTITY_OK;
     }
