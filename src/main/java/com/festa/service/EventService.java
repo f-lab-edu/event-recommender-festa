@@ -21,26 +21,26 @@ public class EventService {
     }
 
     @Transactional
-    public void applyForEvents(Participants participants) throws IllegalAccessException {
+    public void applyForEvents(Participants participants) throws IllegalStateException {
         eventDAO.applyForEvents(participants);
 
         EventDTO participantInfo = eventDAO.checkNoOfParticipants(participants.getEventNo());
 
         if(participantInfo.getParticipantLimit() == participantInfo.getNoOfParticipants()) {
-            throw new IllegalAccessException("이미 선착순 마감된 이벤트 입니다.");
+            throw new IllegalStateException("이미 선착순 마감된 이벤트 입니다.");
         }
 
         eventDAO.increaseParticipants(participants.getEventNo());
     }
 
     @Transactional
-    public void cancelEvent(Participants participants) throws IllegalAccessException {
+    public void cancelEvent(Participants participants) throws IllegalStateException {
         eventDAO.cancelEvent(participants.getUserNo());
 
         boolean isParticipated = eventDAO.isParticipated(participants.getUserNo());
 
         if(!isParticipated) {
-            throw new IllegalAccessException("접수한 이벤트가 아닙니다");
+            throw new IllegalStateException("접수한 이벤트가 아닙니다");
         }
 
         eventDAO.reduceParticipants(participants.getEventNo());

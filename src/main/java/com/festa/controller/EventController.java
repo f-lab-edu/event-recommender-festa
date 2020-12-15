@@ -45,7 +45,7 @@ public class EventController {
         try {
             eventService.applyForEvents(participants);
 
-        } catch (IllegalAccessException e) {
+        } catch (IllegalStateException e) {
             return RESPONSE_ENTITY_BAD_REQUEST;
         }
 
@@ -63,7 +63,7 @@ public class EventController {
         try {
             eventService.cancelEvent(participants);
 
-        } catch (IllegalAccessException e) {
+        } catch (IllegalStateException e) {
             return RESPONSE_ENTITY_BAD_REQUEST;
         }
 
