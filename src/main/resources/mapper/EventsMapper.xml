@@ -11,6 +11,7 @@
             A.registerDate,
             A.participantLimit,
             A.noOfParticipants,
+            B.categoryName,
             B.cityName,
             B.districtName,
             B.streetName,
@@ -28,24 +29,29 @@
                 E.registerDate,
                 E.participantLimit,
                 E.noOfParticipants,
+                C.categoryName,
                 EA.cityName,
                 EA.districtName,
                 EA.streetName,
                 EA.detail,
                 M.userName AS writer
              FROM events E
-             LEFT OUTER JOIN event_address EA
-             ON EA.eventNo = E.eventNo
-             INNER JOIN members M
-             ON E.userNo = M.userNo
+              LEFT OUTER JOIN event_address EA
+              ON EA.eventNo = E.eventNo
+              LEFT OUTER JOIN category C
+              ON C.categoryCode = E.categoryCode
+              INNER JOIN members M
+              ON E.userNo = M.userNo
              WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
+             <if test=" categoryCode != 0 ">
+                 AND E.categoryCode = #{categotyCode}
+             </if>
              ORDER BY registerDate DESC
              LIMIT #{PageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
-
     </select>
-    
+
     <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
         SELECT
             noOfParticipants,

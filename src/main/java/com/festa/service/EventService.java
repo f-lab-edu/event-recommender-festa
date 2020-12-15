@@ -16,8 +16,8 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    public List<EventDTO> getListOfEvents(PageInfo pageInfo) {
-        return eventDAO.getListOfEvents(pageInfo);
+    public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
+        return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
     @Transactional

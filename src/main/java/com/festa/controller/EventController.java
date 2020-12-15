@@ -11,7 +11,13 @@ import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +28,7 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
+    public static final int NO_CATEGORY = 0;
 
     /**
      * 리스트형 이벤트 목록 조회 기능
@@ -31,7 +38,19 @@ public class EventController {
     @GetMapping
     public Optional<List<EventDTO>> getListOfEvents(long cursorUserNo, int size) {
 
-        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size)));
+        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), NO_CATEGORY));
+    }
+
+    /**
+     * 카테고리별 이벤트 목록 조회 기능
+     * @return {@literal List<EventDTO>}
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @GetMapping("/categories/{categoryCode}")
+    public ResponseEntity<List<EventDTO>> getCategoryList(@PathVariable int categoryCode, long cursorUserNo, int size) {
+        List<EventDTO> categoryList = eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), categoryCode);
+
+        return ResponseEntity.ok().body(categoryList);
     }
 
     /**
