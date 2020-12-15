@@ -28,7 +28,6 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
-    public static final int NO_CATEGORY = 0;
 
     /**
      * 리스트형 이벤트 목록 조회 기능
@@ -36,21 +35,9 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping
-    public Optional<List<EventDTO>> getListOfEvents(long cursorUserNo, int size) {
+    public Optional<List<EventDTO>> getListOfEvents(long cursorUserNo, int size, int categoryCode) {
 
-        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), NO_CATEGORY));
-    }
-
-    /**
-     * 카테고리별 이벤트 목록 조회 기능
-     * @return {@literal List<EventDTO>}
-     */
-    @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping("/categories/{categoryCode}")
-    public ResponseEntity<List<EventDTO>> getCategoryList(@PathVariable int categoryCode, long cursorUserNo, int size) {
-        List<EventDTO> categoryList = eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), categoryCode);
-
-        return ResponseEntity.ok().body(categoryList);
+        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), categoryCode));
     }
 
     /**

@@ -43,7 +43,7 @@
               INNER JOIN members M
               ON E.userNo = M.userNo
              WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
-             <if test=" categoryCode != 0 ">
+             <if test=" categoryCode != null and categoryCode != '' ">
                  AND E.categoryCode = #{categotyCode}
              </if>
              ORDER BY registerDate DESC
