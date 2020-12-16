@@ -29,6 +29,10 @@ public class EventDTO {
             message = "연, 월, 일을 - 을 포함하여 입력해주세요")
     String endDate;
 
+    int participantLimit;
+
+    int noOfParticipants;
+
     Date registerDate;
 
 }

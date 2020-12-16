@@ -20,14 +20,29 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo);
     }
 
-    public void applyForEvents(Participants participants) {
+    @Transactional
+    public void applyForEvents(Participants participants) throws IllegalStateException {
         eventDAO.applyForEvents(participants);
+
+        EventDTO participantInfo = eventDAO.checkNoOfParticipants(participants.getEventNo());
+
+        if(participantInfo.getParticipantLimit() == participantInfo.getNoOfParticipants()) {
+            throw new IllegalStateException("이미 선착순 마감된 이벤트 입니다.");
+        }
+
+        eventDAO.increaseParticipants(participants.getEventNo());
     }
 
     @Transactional
-    public void cancelEvent(long userNo, int eventNo) {
-        eventDAO.cancelEvent(userNo);
+    public void cancelEvent(Participants participants) throws IllegalStateException {
+        eventDAO.cancelEvent(participants.getUserNo());
 
-        eventDAO.reduceParticipants(eventNo);
+        boolean isParticipated = eventDAO.isParticipated(participants.getUserNo());
+
+        if(!isParticipated) {
+            throw new IllegalStateException("접수한 이벤트가 아닙니다");
+        }
+
+        eventDAO.reduceParticipants(participants.getEventNo());
     }
 }
