@@ -5,6 +5,7 @@ import com.festa.common.UserLevel;
 import com.festa.dto.EventDTO;
 import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +26,11 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping("/{eventNo}")
-    public EventDTO getInfoOfEvent(@PathVariable int eventNo) {
+    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
         EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
         if (infoOfEvent == null) {
-            throw new IllegalArgumentException("존재하지 않는 이벤트입니다.");
+            return ResponseEntity.badRequest().body(infoOfEvent);
         }
-        return infoOfEvent;
+        return ResponseEntity.ok(infoOfEvent);
     }
 }
