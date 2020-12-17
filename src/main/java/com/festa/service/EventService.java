@@ -5,6 +5,7 @@ import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
+    @Cacheable(key = "#categoryCode", value = "getListOfEvents")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }

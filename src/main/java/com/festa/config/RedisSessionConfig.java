@@ -3,11 +3,14 @@ package com.festa.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -16,8 +19,9 @@ public class RedisSessionConfig {
     @Value("${spring.redis.host}")
     private String redisSessionHost;
 
-    @Value("spring.redis.port")
+    @Value("${spring.redis.port}")
     private int redisSessionPort;
+
 
     /*
         Lettuce: Multi-Thread 에서 Thread-Safe한 Redis 클라이언트로 netty에 의해 관리된다.
@@ -30,7 +34,7 @@ public class RedisSessionConfig {
                  늘어난다면 시간이 상당히 소요될 수 있다.
      */
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public RedisConnectionFactory redisSessionConnectionFactory() {
         return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisSessionHost, redisSessionPort));
     }
 
@@ -46,10 +50,27 @@ public class RedisSessionConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisSessionConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisSessionConnectionFactory) {
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .serializeKeysWith(RedisSerializationContext
+                                    .SerializationPair
+                                    .fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext
+                                    .SerializationPair
+                                    .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+
+        return RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(redisSessionConnectionFactory)
+                .cacheDefaults(redisCacheConfiguration)
+                .build();
     }
 }
