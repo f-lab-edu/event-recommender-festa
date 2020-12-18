@@ -17,7 +17,7 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    @Cacheable(key = "#categoryCode", value = "getListOfEvents")
+    @Cacheable(key = "#categoryCode", value = "getListOfEvents", cacheManager = "redisCacheManager")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
