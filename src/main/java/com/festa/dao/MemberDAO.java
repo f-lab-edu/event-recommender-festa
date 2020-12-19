@@ -8,16 +8,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberDAO {
 
-    int insertMemberInfo(MemberDTO memberDTO);
+    void insertMemberInfo(MemberDTO memberDTO);
 
     boolean isUserIdExist(long userId);
 
     void modifyMemberInfo(MemberDTO memberDTO);
 
-    MemberDTO getUserById(long userId);
+    MemberDTO getUserByNo(long userNo);
 
-    void changeUserPw(long userId, String password);
+    void changeUserPw(long userNo, String password);
 
     void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
+
+    int getUserNoById(long userId);
 
 }

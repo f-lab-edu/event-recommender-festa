@@ -1,17 +1,16 @@
 package com.festa.service;
 
 import com.festa.dao.AlertDAO;
-import com.festa.dto.AlertDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AlertService {
 
-    @Autowired
-    private AlertDAO alertDAO;
+    private final AlertDAO alertDAO;
 
-    public AlertDTO sendChangePwNotice(long userId) {
-        return alertDAO.sendChangePwNotice(userId);
+    public void sendChangePwNotice(long userNo) {
+        alertDAO.sendChangePwNotice(userNo);
     }
 }

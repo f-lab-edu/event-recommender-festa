@@ -23,15 +23,19 @@ public class MemberService {
         memberDAO.modifyMemberInfo(memberDTO);
     }
 
-    public MemberDTO getUser(long userId) {
-        return memberDAO.getUserById(userId);
+    public MemberDTO getUser(long userNo) {
+        return memberDAO.getUserByNo(userNo);
     }
 
-    public void changeUserPw(long userId, String password) {
-        memberDAO.changeUserPw(userId, password);
+    public void changeUserPw(long userNo, String password) {
+        memberDAO.changeUserPw(userNo, password);
     }
 
     public void memberWithdraw(MemberDTO memberDTO) {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+    }
+
+    public int getUserNo(long userId) {
+        return memberDAO.getUserNoById(userId);
     }
 }
