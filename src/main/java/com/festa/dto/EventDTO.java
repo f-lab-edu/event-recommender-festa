@@ -13,6 +13,10 @@ public class EventDTO {
 
     int eventNo;
 
+    String participants;
+
+    String writer;
+  
     @NotBlank(message = "제목을 입력해주세요")
     String eventTitle;
 

@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface EventDAO {
 
+    EventDTO getInfoOfEvent(int eventNo);
+
     List<EventDTO> getListOfEvents(PageInfo pageInfo);
 
     void applyForEvents(Participants participants);
@@ -23,4 +25,5 @@ public interface EventDAO {
     EventDTO checkNoOfParticipants(int eventNo);
 
     boolean isParticipated(long userNo);
+
 }

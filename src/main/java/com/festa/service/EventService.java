@@ -16,6 +16,12 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
+    public EventDTO getInfoOfEvent(int eventNo) {
+        EventDTO infoOfEvent = eventDAO.getInfoOfEvent(eventNo);
+
+        return infoOfEvent;
+    }
+
     public List<EventDTO> getListOfEvents(PageInfo pageInfo) {
         return eventDAO.getListOfEvents(pageInfo);
     }
