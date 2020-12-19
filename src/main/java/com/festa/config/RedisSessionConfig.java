@@ -19,10 +19,10 @@ import java.time.Duration;
 public class RedisSessionConfig {
 
     @Value("${spring.redis.host}")
-    private String redisSessionHost;
+    private String redisHost;
 
     @Value("${spring.redis.port}")
-    private int redisSessionPort;
+    private int redisPort;
 
 
     /*
@@ -36,9 +36,10 @@ public class RedisSessionConfig {
                  늘어난다면 시간이 상당히 소요될 수 있다.
      */
     @Bean
-    public RedisConnectionFactory redisSessionConnectionFactory() {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisSessionHost, redisSessionPort));
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisPort));
     }
+
 
     /*
         RedisTemplate: Redis data access code를 간소화 하기 위해 제공되는 클래스이다.
@@ -52,7 +53,7 @@ public class RedisSessionConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisSessionConnectionFactory());
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
@@ -63,7 +64,7 @@ public class RedisSessionConfig {
         Redis Cache 적용을 위한 RedisCacheManager 설정
      */
     @Bean
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisSessionConnectionFactory) {
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext
                                     .SerializationPair
@@ -71,11 +72,11 @@ public class RedisSessionConfig {
                 .serializeValuesWith(RedisSerializationContext
                                     .SerializationPair
                                     .fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofHours(5L));
+                .entryTtl(Duration.ofHours(1L));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
-                .fromConnectionFactory(redisSessionConnectionFactory)
+                .fromConnectionFactory(redisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
                 .build();
     }
