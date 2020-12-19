@@ -1,5 +1,6 @@
 package com.festa.service;
 
+import static com.festa.common.RedisCacheKey.CATEGORY_LIST;
 import com.festa.dao.EventDAO;
 import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
@@ -17,7 +18,7 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    @Cacheable(key = "#categoryCode", value = "getListOfEvents", cacheManager = "redisCacheManager")
+    @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }

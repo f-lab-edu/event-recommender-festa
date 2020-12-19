@@ -1,5 +1,6 @@
 package com.festa.config;
 
+import com.festa.common.RedisCacheKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,11 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
-public class RedisSessionConfig {
+public class RedisConfig {
 
     @Value("${spring.redis.host}")
     private String redisHost;
@@ -71,8 +74,11 @@ public class RedisSessionConfig {
                                     .fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext
                                     .SerializationPair
-                                    .fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofHours(1L));
+                                    .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+
+        Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
+        cacheConfiguration.put(RedisCacheKey.CATEGORY_LIST, redisCacheConfiguration.entryTtl(Duration.ofHours(1L)));
+
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
