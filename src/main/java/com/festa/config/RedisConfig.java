@@ -77,7 +77,7 @@ public class RedisConfig {
                                     .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
-        cacheConfiguration.put(RedisCacheKey.CATEGORY_LIST, redisCacheConfiguration.entryTtl(Duration.ofHours(1L)));
+        cacheConfiguration.put(RedisCacheKey.CATEGORY_LIST, redisCacheConfiguration.entryTtl(Duration.ofSeconds(180L)));
 
 
         return RedisCacheManager
