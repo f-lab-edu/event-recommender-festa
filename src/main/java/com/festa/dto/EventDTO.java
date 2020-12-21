@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -13,6 +12,8 @@ import java.util.Date;
 public class EventDTO {
 
     int eventNo;
+
+    long userNo;
 
     @NotBlank(message = "제목을 입력해주세요")
     String eventTitle;
@@ -38,4 +39,16 @@ public class EventDTO {
 
     Date registerDate;
 
+    public EventDTO entityForRegister() {
+
+        return EventDTO.builder()
+                .userNo(this.userNo)
+                .eventTitle(this.eventTitle)
+                .eventContent(this.eventContent)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .participantLimit(this.participantLimit)
+                .categoryCode(this.categoryCode)
+                .build();
+    }
 }

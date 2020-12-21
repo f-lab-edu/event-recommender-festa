@@ -70,6 +70,17 @@
                 AS isIdExists
     </select>
 
+    <select id="isEventExists" resultType="boolean">
+        SELECT EXISTS
+                   (SELECT eventTitle,
+                           startDate
+                    FROM events
+                    WHERE eventTitle = #{eventTitle}
+                      AND startDate  = #{startDate}
+                   )
+                   AS isEventExists
+    </select>
+
     <insert id="applyForEvents" parameterType="com.festa.model.Participants">
         INSERT INTO
             participant
@@ -87,6 +98,34 @@
              NULL,
              NOW()
             )
+    </insert>
+
+    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO">
+        INSERT INTO
+            events
+            (eventTitle,
+             eventContent,
+             registerDate,
+             userNo,
+             categoryCode,
+             startDate,
+             endDate,
+             participantLimit,
+             noOfParticipants
+             )
+             VALUES
+             (
+              #{eventTitle},
+              #{eventContent},
+              NOW(),
+              #{userNo},
+              #{categoryCode},
+              #{startDate},
+              #{endDate},
+              #{participantLimit},
+              #{participantLimit}
+             )
+
     </insert>
 
     <update id="cancelEvent" parameterType="long">

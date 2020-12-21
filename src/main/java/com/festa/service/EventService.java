@@ -24,6 +24,16 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
+    public void registerEvents(EventDTO eventDTO) {
+
+        eventDAO.registerEvents(eventDTO);
+    }
+
+    public boolean isEventExists(String eventTitle, String startDate) {
+
+        return eventDAO.isEventExists(eventTitle, startDate);
+    }
+
     @Transactional
     public void applyForEvents(Participants participants) throws IllegalStateException {
         eventDAO.applyForEvents(participants);

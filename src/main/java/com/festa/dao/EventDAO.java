@@ -16,6 +16,10 @@ public interface EventDAO {
 
     void applyForEvents(Participants participants);
 
+    void registerEvents(EventDTO eventDTO);
+
+    boolean isEventExists(String eventTitle, String startDate);
+
     void cancelEvent(long userNo);
 
     void increaseParticipants(int eventNo);
