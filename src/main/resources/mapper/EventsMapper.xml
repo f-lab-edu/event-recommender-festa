@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.EventDAO">
 
-    <select id="getListOfEvents" resultType="com.festa.dao.EventDTO">
+    <select id="getListOfEvents" resultType="com.festa.dto.EventDTO">
         SELECT
             A.eventTitle,
             A.eventContent,
