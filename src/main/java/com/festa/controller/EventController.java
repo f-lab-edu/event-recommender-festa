@@ -83,7 +83,7 @@ public class EventController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> registerEvents(@RequestBody EventDTO eventDTO) {
         boolean isEventExists = eventService.isEventExists(eventDTO.getEventTitle(), eventDTO.getStartDate());
 
