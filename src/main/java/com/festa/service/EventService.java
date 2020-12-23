@@ -24,6 +24,11 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
+    public EventDTO getInfoOfEvent(int eventNo) {
+
+        return eventDAO.getInfoOfEvent(eventNo);
+    }
+
     @Transactional
     public void applyForEvents(Participants participants) throws IllegalStateException {
         eventDAO.applyForEvents(participants);

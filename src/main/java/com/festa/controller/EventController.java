@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,5 +74,22 @@ public class EventController {
         }
 
         return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 이벤트 상세보기
+     *
+     * @param eventNo
+     * @return EventDTO
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @GetMapping("/{eventNo}")
+    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
+        EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
+
+        if (infoOfEvent == null) {
+            return ResponseEntity.badRequest().body(infoOfEvent);
+        }
+        return ResponseEntity.ok(infoOfEvent);
     }
 }

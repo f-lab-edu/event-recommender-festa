@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -13,7 +12,7 @@ import java.util.Date;
 public class EventDTO {
 
     int eventNo;
-
+  
     @NotBlank(message = "제목을 입력해주세요")
     String eventTitle;
 
