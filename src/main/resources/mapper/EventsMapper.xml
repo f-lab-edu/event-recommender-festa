@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.EventDAO">
+
     <select id="getInfoOfEvent" resultType="com.festa.dto.EventDTO">
         SELECT
-            eventNo,
-            eventTitle,
-            eventContent,
-            startDate,
-            endDate,
-            registerDate,
-            participants,
-            writer
-        FROM NULL events
-        WHERE eventNo = #{eventNo}
+            E.eventNo,
+            E.eventTitle,
+            E.eventContent,
+            E.startDate,
+            E.endDate,
+            E.registerDate,
+            E.participantLimit,
+            E.noOfParticipants,
+            M.userName AS writer
+        FROM events E
+        INNER JOIN members M
+        WHERE E.userNo = M.userNo
+        AND E.eventNo = #{eventNo}
     </select>
 
     <select id="getListOfEvents" resultType="com.festa.dao.EventDTO">
@@ -24,6 +28,7 @@
             A.registerDate,
             A.participantLimit,
             A.noOfParticipants,
+            B.categoryName,
             B.cityName,
             B.districtName,
             B.streetName,
@@ -41,24 +46,29 @@
                 E.registerDate,
                 E.participantLimit,
                 E.noOfParticipants,
+                C.categoryName,
                 EA.cityName,
                 EA.districtName,
                 EA.streetName,
                 EA.detail,
                 M.userName AS writer
              FROM events E
-             LEFT OUTER JOIN event_address EA
-             ON EA.eventNo = E.eventNo
-             INNER JOIN members M
-             ON E.userNo = M.userNo
+              LEFT OUTER JOIN event_address EA
+              ON EA.eventNo = E.eventNo
+              LEFT OUTER JOIN category C
+              ON C.categoryCode = E.categoryCode
+              INNER JOIN members M
+              ON E.userNo = M.userNo
              WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
+             <if test=" categoryCode != null and categoryCode != '' ">
+                 AND E.categoryCode = #{categotyCode}
+             </if>
              ORDER BY registerDate DESC
              LIMIT #{PageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
-
     </select>
-    
+
     <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
         SELECT
             noOfParticipants,

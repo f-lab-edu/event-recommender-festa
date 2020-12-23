@@ -3,16 +3,18 @@ package com.festa.dao;
 import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Mapper
 @Repository
 public interface EventDAO {
 
-    EventDTO getInfoOfEvent(int eventNo);
+    List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode);
 
-    List<EventDTO> getListOfEvents(PageInfo pageInfo);
+    EventDTO getInfoOfEvent(int eventNo);
 
     void applyForEvents(Participants participants);
 

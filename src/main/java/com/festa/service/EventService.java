@@ -1,10 +1,12 @@
 package com.festa.service;
 
+import static com.festa.common.RedisCacheKey.CATEGORY_LIST;
 import com.festa.dao.EventDAO;
 import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +18,15 @@ public class EventService {
 
     private final EventDAO eventDAO;
 
-    public EventDTO getInfoOfEvent(int eventNo) {
-        EventDTO infoOfEvent = eventDAO.getInfoOfEvent(eventNo);
+    @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
+    public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
 
-        return infoOfEvent;
+        return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
-    public List<EventDTO> getListOfEvents(PageInfo pageInfo) {
-        return eventDAO.getListOfEvents(pageInfo);
+    public EventDTO getInfoOfEvent(int eventNo) {
+
+        return eventDAO.getInfoOfEvent(eventNo);
     }
 
     @Transactional
