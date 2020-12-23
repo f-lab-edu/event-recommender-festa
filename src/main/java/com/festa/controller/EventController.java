@@ -91,7 +91,7 @@ public class EventController {
             return RESPONSE_ENTITY_CONFLICT;
         }
 
-        EventDTO eventInfo = eventDTO.entityForRegister();
+        EventDTO eventInfo = eventDTO.toEntityForRegister();
         eventService.registerEvents(eventInfo);
 
         return RESPONSE_ENTITY_OK;

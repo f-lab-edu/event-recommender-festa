@@ -39,7 +39,7 @@ public class EventDTO {
 
     Date registerDate;
 
-    public EventDTO entityForRegister() {
+    public EventDTO toEntityForRegister() {
 
         return EventDTO.builder()
                 .userNo(this.userNo)
