@@ -46,7 +46,7 @@
         WHERE userNo = #{userNo};
     </update>
 
-    <update id="modifyMemberAddress" parameterType="com.festa.dto.MemberDTO">
+    <update id="modifyMemberAddress" parameterType="com.festa.model.Address">
         UPDATE member_address
         SET cityName = #{cityName}
         AND districtName = #{districtName}

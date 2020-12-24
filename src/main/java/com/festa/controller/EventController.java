@@ -100,7 +100,6 @@ public class EventController {
 
     /**
      * 이벤트 상세보기
-     *
      * @param eventNo
      * @return EventDTO
      */
