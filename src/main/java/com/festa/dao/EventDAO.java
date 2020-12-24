@@ -14,6 +14,8 @@ public interface EventDAO {
 
     List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode);
 
+    EventDTO getInfoOfEvent(int eventNo);
+
     void applyForEvents(Participants participants);
 
     void registerEvents(EventDTO eventDTO);
@@ -29,4 +31,5 @@ public interface EventDAO {
     EventDTO checkNoOfParticipants(int eventNo);
 
     boolean isParticipated(long userNo);
+
 }
