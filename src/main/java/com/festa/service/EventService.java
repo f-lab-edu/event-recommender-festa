@@ -20,13 +20,19 @@ public class EventService {
 
     @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
-
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
     public EventDTO getInfoOfEvent(int eventNo) {
-
         return eventDAO.getInfoOfEvent(eventNo);
+    }
+
+    public void registerEvents(EventDTO eventDTO) {
+        eventDAO.registerEvents(eventDTO);
+    }
+
+    public boolean isEventExists(String eventTitle, String startDate) {
+        return eventDAO.isEventExists(eventTitle, startDate);
     }
 
     @Transactional

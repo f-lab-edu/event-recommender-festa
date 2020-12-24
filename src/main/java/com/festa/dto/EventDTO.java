@@ -12,7 +12,9 @@ import java.util.Date;
 public class EventDTO {
 
     int eventNo;
-  
+
+    long userNo;
+
     @NotBlank(message = "제목을 입력해주세요")
     String eventTitle;
 
@@ -37,4 +39,16 @@ public class EventDTO {
 
     Date registerDate;
 
+    public EventDTO toEntityForRegister() {
+
+        return EventDTO.builder()
+                .userNo(this.userNo)
+                .eventTitle(this.eventTitle)
+                .eventContent(this.eventContent)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .participantLimit(this.participantLimit)
+                .categoryCode(this.categoryCode)
+                .build();
+    }
 }

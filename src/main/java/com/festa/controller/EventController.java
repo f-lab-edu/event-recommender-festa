@@ -1,7 +1,5 @@
 package com.festa.controller;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.dto.EventDTO;
@@ -21,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 @RestController
 @RequestMapping("/events")
@@ -72,6 +74,26 @@ public class EventController {
         } catch (IllegalStateException e) {
             return RESPONSE_ENTITY_BAD_REQUEST;
         }
+
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 주최자 이벤트 등록 기능
+     * @param eventDTO
+     * @return {@literal ResponseEntity<HttpStatus>}
+     */
+    @CheckLoginStatus(auth = UserLevel.HOST)
+    @PostMapping
+    public ResponseEntity<HttpStatus> registerEvents(@RequestBody EventDTO eventDTO) {
+        boolean isEventExists = eventService.isEventExists(eventDTO.getEventTitle(), eventDTO.getStartDate());
+
+        if(isEventExists) {
+            return RESPONSE_ENTITY_CONFLICT;
+        }
+
+        EventDTO eventInfo = eventDTO.toEntityForRegister();
+        eventService.registerEvents(eventInfo);
 
         return RESPONSE_ENTITY_OK;
     }
