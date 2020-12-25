@@ -17,13 +17,13 @@ public class FirebaseConfig {
     @Bean
     public void firebaseInit() throws IOException {
 
-        FileInputStream serviceAccount = new FileInputStream("path/to/serviceAccountKey.json");
-
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://festa-42bbe.firebaseio.com")
-                .build();
-
-        FirebaseApp.initializeApp(options);
+//        FileInputStream serviceAccount = new FileInputStream("path/to/serviceAccountKey.json");
+//
+//        FirebaseOptions options = FirebaseOptions.builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .setDatabaseUrl("https://festa-42bbe.firebaseio.com")
+//                .build();
+//
+//        FirebaseApp.initializeApp(options);
     }
 }

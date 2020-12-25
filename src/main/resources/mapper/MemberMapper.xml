@@ -41,7 +41,7 @@
 
     <update id="modifyMemberInfo" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-        SET username = #{username}
+        SET userName = #{username}
         AND phoneNo  = #{phoneNo}
         WHERE userNo = #{userNo};
     </update>
@@ -51,6 +51,7 @@
         SET cityName = #{cityName}
         AND districtName = #{districtName}
         AND streetName = #{streetName}
+        AND streetCode = #{streetCode}
         WHERE userNo = #{userNo}
     </update>
 
