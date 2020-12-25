@@ -87,11 +87,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping(value = "/{userNo}")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(String modifyMemberInfo, @RequestBody @Valid MemberDTO memberDTO, @RequestBody Address address) {
-
-        if(modifyMemberInfo.equals("true")) {
-            memberService.modifyMemberInfo(memberDTO, address);
-        }
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO, @RequestBody Address address) {
+        memberService.modifyMemberInfo(memberDTO, address);
 
         return RESPONSE_ENTITY_OK;
     }
