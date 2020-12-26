@@ -1,7 +1,7 @@
 package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
-import com.festa.model.Address;
+import com.festa.model.MemberInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +13,9 @@ public interface MemberDAO {
 
     boolean isUserIdExist(long userId);
 
-    void modifyMemberInfo(MemberDTO memberDTO);
+    void modifyMemberInfo(MemberInfo memberInfo);
 
-    void modifyMemberAddress(Address address);
+    void modifyMemberAddress(MemberInfo memberInfo);
 
     MemberDTO getUserByNo(long userNo);
 

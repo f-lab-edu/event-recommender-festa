@@ -39,14 +39,14 @@
                    AS isIdExists
     </select>
 
-    <update id="modifyMemberInfo" parameterType="com.festa.dto.MemberDTO">
+    <update id="modifyMemberInfo" parameterType="com.festa.model.MemberInfo">
         UPDATE members
         SET userName = #{username}
         AND phoneNo  = #{phoneNo}
         WHERE userNo = #{userNo};
     </update>
 
-    <update id="modifyMemberAddress" parameterType="com.festa.model.Address">
+    <update id="modifyMemberAddress" parameterType="com.festa.model.MemberInfo">
         UPDATE member_address
         SET cityName = #{cityName}
         AND districtName = #{districtName}

@@ -1,9 +1,8 @@
 package com.festa.service;
 
 import com.festa.dao.MemberDAO;
-import com.festa.dto.EventDTO;
 import com.festa.dto.MemberDTO;
-import com.festa.model.Address;
+import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +22,11 @@ public class MemberService {
     }
 
     @Transactional
-    public void modifyMemberInfo(MemberDTO memberDTO, Address address) {
-        memberDAO.modifyMemberInfo(memberDTO);
+    public void modifyMemberInfo(MemberInfo memberInfo) {
+        MemberInfo modifyInfoList = memberInfo.toEntityForInfo();
+        memberDAO.modifyMemberInfo(modifyInfoList);
 
-        Address memberAddress = address.toEntityForMember();
+        MemberInfo memberAddress = memberInfo.toEntityForAddress();
         memberDAO.modifyMemberAddress(memberAddress);
     }
 
