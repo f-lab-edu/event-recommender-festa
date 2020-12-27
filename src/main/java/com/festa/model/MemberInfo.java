@@ -24,7 +24,7 @@ public class MemberInfo {
 
     String streetName;
 
-    String userModifyInfo;
+    boolean isUserModifyInfo;
 
     public MemberInfo toEntityForInfo() {
 
