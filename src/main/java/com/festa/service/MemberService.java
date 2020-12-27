@@ -30,6 +30,12 @@ public class MemberService {
         memberDAO.modifyMemberAddress(memberAddress);
     }
 
+    public void modifyParticipantInfo(MemberInfo memberInfo) {
+        MemberInfo participantAddress = memberInfo.toEntityForAddress();
+
+        memberDAO.modifyParticipantInfo(participantAddress);
+    }
+
     public MemberDTO getUser(long userNo) {
         return memberDAO.getUserByNo(userNo);
     }

@@ -23,6 +23,8 @@ public interface MemberDAO {
 
     void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
 
+    void modifyParticipantInfo(MemberInfo memberInfo);
+
     int getUserNoById(long userId);
 
 }

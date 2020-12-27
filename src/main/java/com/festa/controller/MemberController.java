@@ -91,7 +91,11 @@ public class MemberController {
         boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
 
         if(isUserModifyInfo) {
+            memberService.modifyParticipantInfo(memberInfo);
             memberService.modifyMemberInfo(memberInfo);
+
+        } else {
+            memberService.modifyParticipantInfo(memberInfo);
         }
 
         return RESPONSE_ENTITY_OK;
