@@ -55,6 +55,16 @@
         WHERE userNo = #{userNo}
     </update>
 
+    <update id="modifyParticipantInfo" parameterType="com.festa.model.MemberInfo">
+        UPDATE participant_address
+        SET cityName = #{cityName}
+        AND districtName = #{districtName}
+        AND streetName = #{streetName}
+        AND streetCode = #{streetCode}
+        WHERE userNo = #{userNo}
+        AND eventNo = #{eventNo}
+    </update>
+
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
         SET password = #{password}

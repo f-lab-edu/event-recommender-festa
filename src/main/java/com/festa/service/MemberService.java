@@ -31,7 +31,7 @@ public class MemberService {
     }
 
     public void modifyParticipantInfo(MemberInfo memberInfo) {
-        MemberInfo participantAddress = memberInfo.toEntityForAddress();
+        MemberInfo participantAddress = memberInfo.toEntityParticipantAddress();
 
         memberDAO.modifyParticipantInfo(participantAddress);
     }
