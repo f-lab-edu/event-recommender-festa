@@ -61,6 +61,7 @@
         AND districtName = #{districtName}
         AND streetName = #{streetName}
         AND streetCode = #{streetCode}
+        AND detail = #{detail}
         WHERE userNo = #{userNo}
         AND eventNo = #{eventNo}
     </update>
