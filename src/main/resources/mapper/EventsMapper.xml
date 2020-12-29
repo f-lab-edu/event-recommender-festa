@@ -147,22 +147,22 @@
 
     <update id="cancelEvent" parameterType="long">
         UPDATE participant
-        SET cancelDate = NOW()
+            SET cancelDate = NOW()
         WHERE userNo = #{userNo}
-        AND applyDate IS NOT NULL
+            AND applyDate IS NOT NULL
     </update>
 
     <update id="increaseParticipants" parameterType="int">
         UPDATE events
-        SET noOfParticipants = noOfParticipants + 1
+            SET noOfParticipants = noOfParticipants + 1
         WHERE eventNo = #{eventNo}
-          AND noOfParticipants <![CDATA[<]]> participantLimit
+            AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
 
     <update id="reduceParticipants" parameterType="int">
         UPDATE events
-        SET noOfParticipants = noOfParticipants - 1
+            SET noOfParticipants = noOfParticipants - 1
         WHERE eventNo = #{eventNo}
-        AND noOfParticipants <![CDATA[<]]> participantLimit
+            AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
 </mapper>

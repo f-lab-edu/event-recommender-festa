@@ -10,18 +10,16 @@
               password,
               email,
               phoneNo,
-              addressNo,
               userLevel,
               deleted,
               deletedDate
         )
         VALUES
             ( #{userId},
-              #{username},
+              #{userName},
               #{password},
               #{email},
               #{phoneNo},
-              #{address},
               #{userLevel},
               FALSE,
               null
@@ -41,35 +39,35 @@
 
     <update id="modifyMemberInfo" parameterType="com.festa.model.MemberInfo">
         UPDATE members
-        SET userName = #{username}
-        AND phoneNo  = #{phoneNo}
+            SET userName = #{username}
+            AND phoneNo  = #{phoneNo}
         WHERE userNo = #{userNo};
     </update>
 
     <update id="modifyMemberAddress" parameterType="com.festa.model.MemberInfo">
         UPDATE member_address
-        SET cityName = #{cityName}
-        AND districtName = #{districtName}
-        AND streetName = #{streetName}
-        AND streetCode = #{streetCode}
+            SET cityName = #{cityName}
+            AND districtName = #{districtName}
+            AND streetName = #{streetName}
+            AND streetCode = #{streetCode}
         WHERE userNo = #{userNo}
     </update>
 
     <update id="modifyParticipantInfo" parameterType="com.festa.model.MemberInfo">
         UPDATE participant_address
-        SET cityName = #{cityName}
-        AND districtName = #{districtName}
-        AND streetName = #{streetName}
-        AND streetCode = #{streetCode}
-        AND detail = #{detail}
+            SET cityName = #{cityName}
+            AND districtName = #{districtName}
+            AND streetName = #{streetName}
+            AND streetCode = #{streetCode}
+            AND detail = #{detail}
         WHERE userNo = #{userNo}
-        AND eventNo = #{eventNo}
+            AND eventNo = #{eventNo}
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-        SET password = #{password}
-        AND updatePwDate = NOW()
+            SET password = #{password}
+            AND updatePwDate = NOW()
         WHERE userNo = #{userNo}
     </update>
 
@@ -95,8 +93,8 @@
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-        SET deleted = TRUE
-        AND deletedDate = NOW()
+            SET deleted = TRUE
+            AND deletedDate = NOW()
         WHERE userNo = #{userNo};
     </update>
 
