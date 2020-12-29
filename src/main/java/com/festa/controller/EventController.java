@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.*;
 
 @RestController
 @RequestMapping("/events")
@@ -79,6 +78,22 @@ public class EventController {
     }
 
     /**
+     * 이벤트 상세보기
+     * @param eventNo
+     * @return EventDTO
+     */
+    @CheckLoginStatus(auth = UserLevel.USER)
+    @GetMapping("/{eventNo}")
+    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
+        EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
+
+        if (infoOfEvent == null) {
+            return ResponseEntity.badRequest().body(infoOfEvent);
+        }
+        return ResponseEntity.ok(infoOfEvent);
+    }
+
+    /**
      * 주최자 이벤트 등록 기능
      * @param eventDTO
      * @return {@literal ResponseEntity<HttpStatus>}
@@ -99,18 +114,20 @@ public class EventController {
     }
 
     /**
-     * 이벤트 상세보기
-     * @param eventNo
-     * @return EventDTO
+     * 주최자 이벤트 참여자 목록 조회 기능
+     * @param participants
+     * @return {@literal ResponseEntity<HttpStatus>}
+     * @throws NoSuchElementException (조회된 데이터가 없을 경우)
      */
-    @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping("/{eventNo}")
-    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
-        EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
+    @CheckLoginStatus(auth = UserLevel.HOST)
+    @GetMapping("/{eventNo}/participants")
+    public ResponseEntity<HttpStatus> getParticipantList(@RequestBody Participants participants) {
+        Participants participantsList = eventService.getParticipantList(participants);
 
-        if (infoOfEvent == null) {
-            return ResponseEntity.badRequest().body(infoOfEvent);
+        if(participantsList == null) {
+            throw new NoSuchElementException("현재 참여자가 없습니다.");
         }
-        return ResponseEntity.ok(infoOfEvent);
+
+        return RESPONSE_ENTITY_OK;
     }
 }

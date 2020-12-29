@@ -37,13 +37,16 @@ public class EventService {
 
     @Transactional
     public void applyForEvents(Participants participants) throws IllegalStateException {
-        eventDAO.applyForEvents(participants);
-
         EventDTO participantInfo = eventDAO.checkNoOfParticipants(participants.getEventNo());
 
         if(participantInfo.getParticipantLimit() == participantInfo.getNoOfParticipants()) {
             throw new IllegalStateException("이미 선착순 마감된 이벤트 입니다.");
         }
+
+        eventDAO.applyForEvents(participants);
+
+        Participants participantAddress = participants.toEntityForAddress();
+        eventDAO.insertParticipantAddress(participantAddress);
 
         eventDAO.increaseParticipants(participants.getEventNo());
     }
@@ -59,5 +62,9 @@ public class EventService {
         }
 
         eventDAO.reduceParticipants(participants.getEventNo());
+    }
+
+    public Participants getParticipantList(Participants participants) {
+        return eventDAO.getParticipantList(participants);
     }
 }
