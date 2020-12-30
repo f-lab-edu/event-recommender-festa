@@ -64,7 +64,12 @@ public class EventService {
         eventDAO.reduceParticipants(participants.getEventNo());
     }
 
-    public Participants getParticipantList(Participants participants) {
+    public Participants getParticipantList(long userNo, Participants participants) {
+
+        if(userNo != participants.getUserNo()) {
+            throw new IllegalStateException("이벤트를 등록한 주최자만 조회가 가능합니다.");
+        }
+
         return eventDAO.getParticipantList(participants);
     }
 }

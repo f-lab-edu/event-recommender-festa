@@ -2,6 +2,7 @@ package com.festa.controller;
 
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
+import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
@@ -122,8 +123,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @GetMapping("/{eventNo}/participants")
-    public ResponseEntity<HttpStatus> getParticipantList(@RequestBody Participants participants) {
-        Participants participantsList = eventService.getParticipantList(participants);
+    public ResponseEntity<HttpStatus> getParticipantList(@CurrentLoginUserNo long userNo, @RequestBody Participants participants) {
+        Participants participantsList = eventService.getParticipantList(userNo, participants);
 
         if(participantsList == null) {
             throw new NoSuchElementException("현재 참여자가 없습니다.");
