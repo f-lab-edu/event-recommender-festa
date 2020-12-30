@@ -84,12 +84,13 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping("/{eventNo}")
-    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
+    public ResponseEntity<?> getInfoOfEvent(@PathVariable int eventNo) {
         EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
 
         if (infoOfEvent == null) {
-            return ResponseEntity.badRequest().body(infoOfEvent);
+            return ResponseEntity.badRequest().body("해당 건이 존재하지 않습니다.");
         }
+
         return ResponseEntity.ok(infoOfEvent);
     }
 
