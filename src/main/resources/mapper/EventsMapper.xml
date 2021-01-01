@@ -189,6 +189,23 @@
 
     </insert>
 
+    <update id="modifyEventsInfo" parameterType="com.festa.dto.EventDTO">
+        UPDATE events
+            SET eventTitle = #{eventTitle}
+            AND eventContent = #{eventContent}
+        WHERE eventNo = #{eventNo}
+    </update>
+
+    <update id="modifyEventsAddress" parameterType="com.festa.dto.EventDTO">
+        UPDATE event_address
+            SET cityName = #{cityName}
+            AND districtName = #{districtName}
+            AND streetCode = #{streetCode}
+            AND streetName = #{streetName}
+            AND detail = #{detail}
+        WHERE eventNo = #{eventNo}
+    </update>
+
     <update id="cancelEvent" parameterType="long">
         UPDATE participant
             SET cancelDate = NOW()

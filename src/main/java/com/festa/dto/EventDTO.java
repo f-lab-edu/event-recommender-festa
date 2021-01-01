@@ -39,7 +39,17 @@ public class EventDTO {
 
     Date registerDate;
 
-    public EventDTO toEntityForRegister() {
+    String cityName;
+
+    String districtName;
+
+    String streetCode;
+
+    String streetName;
+
+    String detail;
+
+    public EventDTO toEntityForInfo() {
 
         return EventDTO.builder()
                 .userNo(this.userNo)
@@ -49,6 +59,18 @@ public class EventDTO {
                 .endDate(this.endDate)
                 .participantLimit(this.participantLimit)
                 .categoryCode(this.categoryCode)
+                .build();
+    }
+
+    public EventDTO toEntityForEventAddress() {
+
+        return EventDTO.builder()
+                .eventNo(this.eventNo)
+                .cityName(this.cityName)
+                .districtName(this.districtName)
+                .streetCode(this.streetCode)
+                .streetName(this.streetName)
+                .detail(this.detail)
                 .build();
     }
 }

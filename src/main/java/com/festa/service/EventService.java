@@ -31,6 +31,15 @@ public class EventService {
         eventDAO.registerEvents(eventDTO);
     }
 
+    @Transactional
+    public void modifyEventsInfo(EventDTO eventDTO) {
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.modifyEventsInfo(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.modifyEventsAddress(eventAddress);
+    }
+
     public boolean isEventExists(String eventTitle, String startDate) {
         return eventDAO.isEventExists(eventTitle, startDate);
     }

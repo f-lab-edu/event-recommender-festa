@@ -22,6 +22,10 @@ public interface EventDAO {
 
     void registerEvents(EventDTO eventDTO);
 
+    void modifyEventsInfo(EventDTO eventDTO);
+
+    void modifyEventsAddress(EventDTO eventDTO);
+
     boolean isEventExists(String eventTitle, String startDate);
 
     void cancelEvent(long userNo);
