@@ -1,5 +1,9 @@
 package com.festa.controller;
 
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+
 import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.CurrentLoginUserNo;
@@ -17,12 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import static com.festa.common.ResponseEntityConstants.*;
 
 @RestController
 @RequestMapping("/events")
@@ -85,12 +86,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping("/{eventNo}")
-    public ResponseEntity<?> getInfoOfEvent(@PathVariable int eventNo) {
+    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
         EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
-
-        if (infoOfEvent == null) {
-            return ResponseEntity.badRequest().body("해당 건이 존재하지 않습니다.");
-        }
 
         return ResponseEntity.ok(infoOfEvent);
     }
