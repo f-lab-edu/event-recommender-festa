@@ -27,8 +27,13 @@ public class EventService {
         return eventDAO.getInfoOfEvent(eventNo);
     }
 
+    @Transactional
     public void registerEvents(EventDTO eventDTO) {
-        eventDAO.registerEvents(eventDTO);
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.registerEvents(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.registerEventsAddress(eventAddress);
     }
 
     @Transactional

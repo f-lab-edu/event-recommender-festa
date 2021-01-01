@@ -22,6 +22,8 @@ public interface EventDAO {
 
     void registerEvents(EventDTO eventDTO);
 
+    void registerEventsAddress(EventDTO eventDTO);
+
     void modifyEventsInfo(EventDTO eventDTO);
 
     void modifyEventsAddress(EventDTO eventDTO);
