@@ -5,6 +5,7 @@ import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -81,13 +82,21 @@ public class MemberController {
 
     /**
      * 사용자 회원정보 수정 기능
-     * @param memberDTO
+     * @param memberInfo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping(value = "/{userNo}")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
-        memberService.modifyMemberInfo(memberDTO);
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
+        boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
+
+        if(isUserModifyInfo) {
+            memberService.modifyParticipantInfo(memberInfo);
+            memberService.modifyMemberInfo(memberInfo);
+
+        } else {
+            memberService.modifyParticipantInfo(memberInfo);
+        }
 
         return RESPONSE_ENTITY_OK;
     }
