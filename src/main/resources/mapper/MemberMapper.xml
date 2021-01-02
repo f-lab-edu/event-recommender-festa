@@ -13,7 +13,7 @@
               userLevel,
               deleted,
               deletedDate
-        )
+            )
         VALUES
             ( #{userId},
               #{userName},
@@ -23,6 +23,22 @@
               #{userLevel},
               FALSE,
               null
+            )
+    </insert>
+    
+    <insert id="insertMemberAddress" parameterType="com.festa.dto.MemberDTO">
+        INSERT INTO
+            member_address
+            (cityName,
+             districtName,
+             streetCode,
+             streetName
+            )
+        VALUES
+            ( #{cityName},
+              #{districtName},
+              #{streetCode},
+              #{streetName}
             )
     </insert>
 

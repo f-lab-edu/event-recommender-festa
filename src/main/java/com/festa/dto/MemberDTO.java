@@ -44,4 +44,33 @@ public class MemberDTO {
     @NotNull
     UserLevel userLevel;
 
+    String cityName;
+
+    String districtName;
+
+    String streetCode;
+
+    String streetName;
+
+    public MemberDTO toEntityForInfo() {
+
+        return MemberDTO.builder()
+                .userId(this.userId)
+                .userName(this.userName)
+                .password(this.password)
+                .email(this.email)
+                .phoneNo(this.phoneNo)
+                .userLevel(this.userLevel)
+                .build();
+    }
+
+    public MemberDTO toEntityForAddress() {
+
+        return MemberDTO.builder()
+                .cityName(this.cityName)
+                .districtName(this.districtName)
+                .streetCode(this.streetCode)
+                .streetName(this.streetName)
+                .build();
+    }
 }

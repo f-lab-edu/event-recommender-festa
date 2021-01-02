@@ -13,8 +13,13 @@ public class MemberService {
 
     private final MemberDAO memberDAO;
 
+    @Transactional
     public void insertMemberInfo(MemberDTO memberDTO) {
-        memberDAO.insertMemberInfo(memberDTO);
+        MemberDTO memberInfo = memberDTO.toEntityForInfo();
+        memberDAO.insertMemberInfo(memberInfo);
+
+        MemberDTO memberAddress = memberDTO.toEntityForAddress();
+        memberDAO.insertMemberAddress(memberAddress);
     }
 
     public boolean isUserIdExist(long userId) {
