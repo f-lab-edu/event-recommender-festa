@@ -22,7 +22,7 @@ public class MemberService {
         memberDAO.insertMemberAddress(memberAddress);
     }
 
-    public boolean isUserIdExist(long userId) {
+    public boolean isUserIdExist(String userId) {
         return memberDAO.isUserIdExist(userId);
     }
 
@@ -53,7 +53,7 @@ public class MemberService {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
     }
 
-    public int getUserNo(long userId) {
+    public int getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
 }

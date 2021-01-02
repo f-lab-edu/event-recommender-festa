@@ -22,7 +22,7 @@ public class MemberDTO {
     long userNo;
 
     @NotBlank(message = "아이디를 입력해주세요")
-    long userId;
+    String userId;
 
     @NotBlank(message = "이름을 입력해주세요")
     String userName;
