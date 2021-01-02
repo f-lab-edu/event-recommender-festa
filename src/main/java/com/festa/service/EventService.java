@@ -27,8 +27,22 @@ public class EventService {
         return eventDAO.getInfoOfEvent(eventNo);
     }
 
+    @Transactional
     public void registerEvents(EventDTO eventDTO) {
-        eventDAO.registerEvents(eventDTO);
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.registerEvents(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.registerEventsAddress(eventAddress);
+    }
+
+    @Transactional
+    public void modifyEventsInfo(EventDTO eventDTO) {
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.modifyEventsInfo(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.modifyEventsAddress(eventAddress);
     }
 
     public boolean isEventExists(String eventTitle, String startDate) {
@@ -37,13 +51,16 @@ public class EventService {
 
     @Transactional
     public void applyForEvents(Participants participants) throws IllegalStateException {
-        eventDAO.applyForEvents(participants);
-
         EventDTO participantInfo = eventDAO.checkNoOfParticipants(participants.getEventNo());
 
         if(participantInfo.getParticipantLimit() == participantInfo.getNoOfParticipants()) {
             throw new IllegalStateException("이미 선착순 마감된 이벤트 입니다.");
         }
+
+        eventDAO.applyForEvents(participants);
+
+        Participants participantAddress = participants.toEntityForAddress();
+        eventDAO.insertParticipantAddress(participantAddress);
 
         eventDAO.increaseParticipants(participants.getEventNo());
     }
@@ -59,5 +76,14 @@ public class EventService {
         }
 
         eventDAO.reduceParticipants(participants.getEventNo());
+    }
+
+    public Participants getParticipantList(long userNo, Participants participants) {
+
+        if(userNo != participants.getUserNo()) {
+            throw new IllegalStateException("이벤트를 등록한 주최자만 조회가 가능합니다.");
+        }
+
+        return eventDAO.getParticipantList(participants);
     }
 }

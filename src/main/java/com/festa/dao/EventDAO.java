@@ -18,7 +18,15 @@ public interface EventDAO {
 
     void applyForEvents(Participants participants);
 
+    void insertParticipantAddress(Participants participants);
+
     void registerEvents(EventDTO eventDTO);
+
+    void registerEventsAddress(EventDTO eventDTO);
+
+    void modifyEventsInfo(EventDTO eventDTO);
+
+    void modifyEventsAddress(EventDTO eventDTO);
 
     boolean isEventExists(String eventTitle, String startDate);
 
@@ -31,5 +39,7 @@ public interface EventDAO {
     EventDTO checkNoOfParticipants(int eventNo);
 
     boolean isParticipated(long userNo);
+
+    Participants getParticipantList(Participants participants);
 
 }

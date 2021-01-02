@@ -2,6 +2,7 @@ package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
+import com.festa.model.Participants;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
