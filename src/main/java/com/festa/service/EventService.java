@@ -27,8 +27,22 @@ public class EventService {
         return eventDAO.getInfoOfEvent(eventNo);
     }
 
+    @Transactional
     public void registerEvents(EventDTO eventDTO) {
-        eventDAO.registerEvents(eventDTO);
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.registerEvents(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.registerEventsAddress(eventAddress);
+    }
+
+    @Transactional
+    public void modifyEventsInfo(EventDTO eventDTO) {
+        EventDTO eventInfo = eventDTO.toEntityForInfo();
+        eventDAO.modifyEventsInfo(eventInfo);
+
+        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        eventDAO.modifyEventsAddress(eventAddress);
     }
 
     public boolean isEventExists(String eventTitle, String startDate) {

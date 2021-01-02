@@ -174,7 +174,7 @@
              participantLimit,
              noOfParticipants
              )
-             VALUES
+        VALUES
              (
               #{eventTitle},
               #{eventContent},
@@ -188,6 +188,44 @@
              )
 
     </insert>
+
+    <insert id="registerEventsAddress" parameterType="com.festa.dto.EventDTO">
+        INSERT INTO
+            event_address
+            (eventNo,
+             cityName,
+             districtName,
+             streetCode,
+             detail,
+             streetName
+             )
+        VALUES
+             (
+              #{eventNo},
+              #{cityName},
+              #{districtName},
+              #{streetCode},
+              #{detail},
+              #{streetName}
+             )
+    </insert>
+
+    <update id="modifyEventsInfo" parameterType="com.festa.dto.EventDTO">
+        UPDATE events
+            SET eventTitle = #{eventTitle}
+            AND eventContent = #{eventContent}
+        WHERE eventNo = #{eventNo}
+    </update>
+
+    <update id="modifyEventsAddress" parameterType="com.festa.dto.EventDTO">
+        UPDATE event_address
+            SET cityName = #{cityName}
+            AND districtName = #{districtName}
+            AND streetCode = #{streetCode}
+            AND streetName = #{streetName}
+            AND detail = #{detail}
+        WHERE eventNo = #{eventNo}
+    </update>
 
     <update id="cancelEvent" parameterType="long">
         UPDATE participant
