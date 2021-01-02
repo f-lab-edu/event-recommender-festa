@@ -174,7 +174,7 @@
              participantLimit,
              noOfParticipants
              )
-             VALUES
+        VALUES
              (
               #{eventTitle},
               #{eventContent},
@@ -187,6 +187,27 @@
               #{participantLimit}
              )
 
+    </insert>
+
+    <insert id="registerEventsAddress" parameterType="com.festa.dto.EventDTO">
+        INSERT INTO
+            event_address
+            (eventNo,
+             cityName,
+             districtName,
+             streetCode,
+             detail,
+             streetName
+             )
+        VALUES
+             (
+              #{eventNo},
+              #{cityName},
+              #{districtName},
+              #{streetCode},
+              #{detail},
+              #{streetName}
+             )
     </insert>
 
     <update id="modifyEventsInfo" parameterType="com.festa.dto.EventDTO">

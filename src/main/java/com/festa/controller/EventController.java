@@ -100,9 +100,7 @@ public class EventController {
         if(isEventExists) {
             return RESPONSE_ENTITY_CONFLICT;
         }
-
-        EventDTO eventInfo = eventDTO.toEntityForInfo();
-        eventService.registerEvents(eventInfo);
+        eventService.registerEvents(eventDTO);
 
         return RESPONSE_ENTITY_OK;
     }
