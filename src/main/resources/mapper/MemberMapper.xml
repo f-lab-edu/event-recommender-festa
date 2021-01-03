@@ -89,22 +89,23 @@
 
     <select id="getUserByNo" resultType="com.festa.dto.MemberDTO">
         SELECT
+            M.userNo,
             M.userId,
             M.userName,
             M.password,
             M.email,
             M.phoneNo,
+            M.userLevel,
             MA.cityName,
             MA.districtName,
             MA.streetName,
-            M.userLevel,
             M.deleted,
             M.deletedDate
         FROM members M
         LEFT OUTER JOIN member_address MA
         ON M.userNo = MA.userNo
         WHERE M.userNo = #{userNo}
-        AND M.deleted = FALSE
+          AND M.deleted = FALSE
     </select>
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">

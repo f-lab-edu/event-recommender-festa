@@ -6,7 +6,6 @@ import lombok.Value;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /* @Value 어노테이션을 이용하게 되면 필드에 자동으로 private final 이 붙게 되고
@@ -24,7 +23,6 @@ public class MemberDTO {
     @NotBlank(message = "아이디를 입력해주세요")
     String userId;
 
-    @NotBlank(message = "이름을 입력해주세요")
     String userName;
 
     @NotBlank(message = "비밀번호를 입력해주세요")
@@ -32,16 +30,13 @@ public class MemberDTO {
              message = "영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다")
     String password;
 
-    @NotBlank(message = "이메일을 입력해주세요")
     @Email
     String email;
 
-    @NotBlank(message = "전화번호를 입력해주세요")
     @Pattern(regexp = "(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})")
     String phoneNo;
 
     //정해진 값에 다른 값이 들어오는 것을 막기 위해 enum으로 관리
-    @NotNull
     UserLevel userLevel;
 
     String cityName;

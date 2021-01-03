@@ -70,8 +70,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
+    @GetMapping(value = "/{userNo}")
+    public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
