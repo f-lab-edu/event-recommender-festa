@@ -25,10 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.*;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -67,17 +64,17 @@ public class MemberController {
     /**
      * 사용자 회원정보 조회 기능
      * @param userNo
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userNo}")
-    public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
+    public ResponseEntity<MemberDTO> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
-            return RESPONSE_ENTITY_BAD_REQUEST;
+            return RESPONSE_ENTITY_MEMBER_NULL;
         }
-        return RESPONSE_ENTITY_OK;
+        return ResponseEntity.ok().body(memberInfo);
     }
 
     /**
