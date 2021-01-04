@@ -2,6 +2,7 @@ package com.festa.service;
 
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -5,6 +5,7 @@ import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -117,12 +118,12 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
-     * @param memberDTO
+     * @param memberLogin
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
-        String userId = memberDTO.getUserId();
+    public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
+        String userId = memberLogin.getUserId();
 
         boolean isIdExist = memberService.isUserIdExist(userId);
 
@@ -130,7 +131,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNo(memberDTO.getUserNo());
+        loginService.setUserNo(memberLogin.getUserNo());
 
         return RESPONSE_ENTITY_OK;
     }
