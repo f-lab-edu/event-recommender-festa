@@ -9,11 +9,13 @@ import java.sql.Timestamp;
 @Builder
 public class AlertDTO {
 
-    long userNo;
+    int userNo;
 
     String title;
 
     String content;
 
-    Timestamp pwLastModified;
+    String pwLastModified;
+
+    String token;
 }

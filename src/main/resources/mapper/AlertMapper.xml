@@ -7,7 +7,7 @@
               userNo,
               title,
               content,
-              pwLastModified
+              DATE_FORMAT(pwLastModified, '%Y-%m-%d')
         FROM notice
         WHERE userNo = #{userNo}
     </select>
