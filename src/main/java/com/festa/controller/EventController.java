@@ -81,7 +81,7 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping("/{eventNo}")
-    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable int eventNo) {
+    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable long eventNo) {
         EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
 
         return ResponseEntity.ok(infoOfEvent);

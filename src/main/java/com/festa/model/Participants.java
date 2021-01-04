@@ -11,10 +11,10 @@ import java.util.Date;
 public class Participants {
 
     @NotNull
-    int eventNo;
+    long eventNo;
 
     @NotNull
-    int userNo;
+    long userNo;
 
     String userName;
 
