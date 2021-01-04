@@ -63,14 +63,4 @@ public class MemberDTO {
                 .userLevel(this.userLevel)
                 .build();
     }
-
-    public MemberDTO toEntityForAddress() {
-
-        return MemberDTO.builder()
-                .cityName(this.cityName)
-                .districtName(this.districtName)
-                .streetCode(this.streetCode)
-                .streetName(this.streetName)
-                .build();
-    }
 }
