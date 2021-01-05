@@ -69,13 +69,13 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @GetMapping(value = "/{userNo}")
-    public ResponseEntity<MemberDTO> getUser(@RequestParam long userNo) {
+    public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
             return RESPONSE_ENTITY_MEMBER_NULL;
         }
-        return ResponseEntity.ok().body(memberInfo);
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
