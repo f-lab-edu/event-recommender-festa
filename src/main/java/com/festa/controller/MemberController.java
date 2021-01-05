@@ -156,8 +156,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody @Valid MemberDTO memberDTO) {
-        memberService.changeUserPw(userNo, memberDTO.getPassword());
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
+        memberService.changeUserPw(userNo, memberLogin.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }
