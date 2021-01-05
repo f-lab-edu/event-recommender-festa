@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.MemberDAO">
 
-    <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO">
+    <insert id="insertMemberInfo" parameterType="com.festa.dto.MemberDTO" useGeneratedKeys="true" keyProperty="userNo">
         INSERT INTO
             members
             ( userId,
@@ -13,7 +13,7 @@
               userLevel,
               deleted,
               deletedDate
-        )
+            )
         VALUES
             ( #{userId},
               #{userName},
@@ -23,6 +23,24 @@
               #{userLevel},
               FALSE,
               null
+            )
+    </insert>
+
+    <insert id="insertMemberAddress" parameterType="com.festa.dto.MemberDTO">
+        INSERT INTO
+            member_address
+            (userNo,
+             cityName,
+             districtName,
+             streetCode,
+             streetName
+            )
+        VALUES
+            ( #{userNo},
+              #{cityName},
+              #{districtName},
+              #{streetCode},
+              #{streetName}
             )
     </insert>
 

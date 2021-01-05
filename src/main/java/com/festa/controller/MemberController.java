@@ -107,7 +107,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam long userId) {
+    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam String userId) {
         boolean isIdDuplicated = memberService.isUserIdExist(userId);
 
         //1을 리턴 받았다면 true이므로 id가 존재한다.
@@ -125,7 +125,7 @@ public class MemberController {
      */
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
-        long userId = memberDTO.getUserId();
+        String userId = memberDTO.getUserId();
 
         boolean isIdExist = memberService.isUserIdExist(userId);
 

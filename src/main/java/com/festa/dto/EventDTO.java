@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 public class EventDTO {
 
-    int eventNo;
+    long eventNo;
 
     long userNo;
 

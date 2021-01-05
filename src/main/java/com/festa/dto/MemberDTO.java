@@ -22,7 +22,7 @@ public class MemberDTO {
     long userNo;
 
     @NotBlank(message = "아이디를 입력해주세요")
-    long userId;
+    String userId;
 
     @NotBlank(message = "이름을 입력해주세요")
     String userName;
@@ -44,4 +44,23 @@ public class MemberDTO {
     @NotNull
     UserLevel userLevel;
 
+    String cityName;
+
+    String districtName;
+
+    String streetCode;
+
+    String streetName;
+
+    public MemberDTO toEntityForInfo() {
+
+        return MemberDTO.builder()
+                .userId(this.userId)
+                .userName(this.userName)
+                .password(this.password)
+                .email(this.email)
+                .phoneNo(this.phoneNo)
+                .userLevel(this.userLevel)
+                .build();
+    }
 }

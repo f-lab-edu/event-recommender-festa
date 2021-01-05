@@ -12,7 +12,9 @@ public interface MemberDAO {
 
     void insertMemberInfo(MemberDTO memberDTO);
 
-    boolean isUserIdExist(long userId);
+    void insertMemberAddress(MemberDTO memberDTO);
+
+    boolean isUserIdExist(String userId);
 
     void modifyMemberInfo(MemberInfo memberInfo);
 
@@ -26,6 +28,6 @@ public interface MemberDAO {
 
     void modifyParticipantInfo(MemberInfo memberInfo);
 
-    int getUserNoById(long userId);
+    int getUserNoById(String userId);
 
 }

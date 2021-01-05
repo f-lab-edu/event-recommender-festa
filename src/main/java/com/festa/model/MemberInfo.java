@@ -11,12 +11,12 @@ public class MemberInfo {
 
     long userNo;
 
-    int eventNo;
+    long eventNo;
 
     String userName;
 
     @Pattern(regexp = "(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})")
-    int phoneNo;
+    String phoneNo;
 
     String cityName;
 

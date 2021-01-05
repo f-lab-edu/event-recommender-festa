@@ -4,20 +4,34 @@ import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberDAO memberDAO;
 
+    @Transactional
     public void insertMemberInfo(MemberDTO memberDTO) {
-        memberDAO.insertMemberInfo(memberDTO);
+        MemberDTO memberInfo = memberDTO.toEntityForInfo();
+        memberDAO.insertMemberInfo(memberInfo);
+
+        MemberDTO memberAddress = MemberDTO.builder()
+                .userNo(memberInfo.getUserNo())
+                .cityName(memberDTO.getCityName())
+                .districtName(memberDTO.getDistrictName())
+                .streetCode(memberDTO.getStreetCode())
+                .streetName(memberDTO.getStreetName())
+                .build();
+
+        memberDAO.insertMemberAddress(memberAddress);
     }
 
-    public boolean isUserIdExist(long userId) {
+    public boolean isUserIdExist(String userId) {
         return memberDAO.isUserIdExist(userId);
     }
 
@@ -48,7 +62,7 @@ public class MemberService {
         memberDAO.modifyMemberInfoForWithdraw(memberDTO);
     }
 
-    public int getUserNo(long userId) {
+    public int getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
 }

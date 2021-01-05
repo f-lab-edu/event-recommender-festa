@@ -23,7 +23,7 @@ public class EventService {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
 
-    public EventDTO getInfoOfEvent(int eventNo) {
+    public EventDTO getInfoOfEvent(long eventNo) {
         return eventDAO.getInfoOfEvent(eventNo);
     }
 
