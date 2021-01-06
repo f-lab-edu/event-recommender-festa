@@ -164,13 +164,13 @@ public class MemberController {
 
     /**
      * 회원 탈퇴 기능
-     * @param memberDTO
-     * @return
+     * @Param userNo
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @DeleteMapping(value = "/")
-    public ResponseEntity<HttpStatus> memberWithdraw(@RequestBody @Valid MemberDTO memberDTO) {
-        memberService.memberWithdraw(memberDTO);
+    @DeleteMapping("/")
+    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo) {
+        memberService.memberWithdraw(userNo);
         
         return RESPONSE_ENTITY_OK;
     }
