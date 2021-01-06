@@ -2,6 +2,7 @@ package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import java.util.Optional;
  * 따로 인터페이스와 클래스로 분리시켜 둠.
  */
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class SessionLogin implements LoginService {

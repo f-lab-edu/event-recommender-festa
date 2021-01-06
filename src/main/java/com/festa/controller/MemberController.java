@@ -5,6 +5,7 @@ import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
+import static com.festa.common.ResponseEntityConstants.*;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -67,15 +65,15 @@ public class MemberController {
     /**
      * 사용자 회원정보 조회 기능
      * @param userNo
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
+    @GetMapping(value = "/{userNo}")
+    public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
-            return RESPONSE_ENTITY_BAD_REQUEST;
+            return RESPONSE_ENTITY_MEMBER_NULL;
         }
         return RESPONSE_ENTITY_OK;
     }
@@ -120,12 +118,12 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
-     * @param memberDTO
+     * @param memberLogin
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
-        String userId = memberDTO.getUserId();
+    public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
+        String userId = memberLogin.getUserId();
 
         boolean isIdExist = memberService.isUserIdExist(userId);
 
@@ -133,7 +131,7 @@ public class MemberController {
         if(!isIdExist) {
             return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
         }
-        loginService.setUserNo(memberDTO.getUserNo());
+        loginService.setUserNo(memberLogin.getUserNo());
 
         return RESPONSE_ENTITY_OK;
     }
@@ -158,8 +156,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody @Valid MemberDTO memberDTO) {
-        memberService.changeUserPw(userNo, memberDTO.getPassword());
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
+        memberService.changeUserPw(userNo, memberLogin.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }

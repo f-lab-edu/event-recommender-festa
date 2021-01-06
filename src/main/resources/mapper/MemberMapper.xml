@@ -57,62 +57,63 @@
 
     <update id="modifyMemberInfo" parameterType="com.festa.model.MemberInfo">
         UPDATE members
-            SET userName = #{username}
-            AND phoneNo  = #{phoneNo}
+            SET userName = #{userName},
+                phoneNo  = #{phoneNo}
         WHERE userNo = #{userNo};
     </update>
 
     <update id="modifyMemberAddress" parameterType="com.festa.model.MemberInfo">
         UPDATE member_address
-            SET cityName = #{cityName}
-            AND districtName = #{districtName}
-            AND streetName = #{streetName}
-            AND streetCode = #{streetCode}
+            SET cityName = #{cityName},
+                districtName = #{districtName},
+                streetName = #{streetName},
+                streetCode = #{streetCode}
         WHERE userNo = #{userNo}
     </update>
 
     <update id="modifyParticipantInfo" parameterType="com.festa.model.MemberInfo">
         UPDATE participant_address
-            SET cityName = #{cityName}
-            AND districtName = #{districtName}
-            AND streetName = #{streetName}
-            AND streetCode = #{streetCode}
-            AND detail = #{detail}
+            SET cityName = #{cityName},
+                districtName = #{districtName},
+                streetName = #{streetName},
+                streetCode = #{streetCode},
+                detail = #{detail}
         WHERE userNo = #{userNo}
             AND eventNo = #{eventNo}
     </update>
 
     <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-            SET password = #{password}
-            AND updatePwDate = NOW()
+            SET password = #{password},
+                updatePwDate = NOW()
         WHERE userNo = #{userNo}
     </update>
 
     <select id="getUserByNo" resultType="com.festa.dto.MemberDTO">
         SELECT
+            M.userNo,
             M.userId,
             M.userName,
             M.password,
             M.email,
             M.phoneNo,
+            M.userLevel,
             MA.cityName,
             MA.districtName,
             MA.streetName,
-            M.userLevel,
             M.deleted,
             M.deletedDate
         FROM members M
         LEFT OUTER JOIN member_address MA
         ON M.userNo = MA.userNo
         WHERE M.userNo = #{userNo}
-        AND M.deleted = FALSE
+          AND M.deleted = FALSE
     </select>
 
     <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
         UPDATE members
-            SET deleted = TRUE
-            AND deletedDate = NOW()
+            SET deleted = TRUE,
+                deletedDate = NOW()
         WHERE userNo = #{userNo};
     </update>
 
