@@ -26,7 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.*;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_MEMBER_NULL;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
  * @RestController : @Controller와 @ResponseBody를 포함하고 있는 어노테이션
@@ -54,7 +57,7 @@ public class MemberController {
      * @param memberDTO
      * @return {@literal ResponseEntity<MemberDTO>}
      */
-    @PostMapping(value = "/signUp")
+    @PostMapping("/signUp")
     public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
@@ -68,7 +71,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<MemberDTO>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userNo}")
+    @GetMapping("/{userNo}")
     public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
@@ -84,7 +87,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping(value = "/{userNo}")
+    @PutMapping("/{userNo}")
     public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
         boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
 
@@ -121,7 +124,7 @@ public class MemberController {
      * @param memberLogin
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
 
@@ -142,7 +145,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PostMapping(value = "/logout")
+    @PostMapping("/logout")
     public ResponseEntity<HttpStatus> logout() {
         loginService.removeUserNo();
 
