@@ -58,8 +58,8 @@ public class MemberService {
         memberDAO.changeUserPw(userNo, password);
     }
 
-    public void memberWithdraw(MemberDTO memberDTO) {
-        memberDAO.modifyMemberInfoForWithdraw(memberDTO);
+    public void memberWithdraw(long userNo) {
+        memberDAO.modifyMemberInfoForWithdraw(userNo);
     }
 
     public int getUserNo(String userId) {
