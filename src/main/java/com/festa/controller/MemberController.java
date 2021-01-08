@@ -58,7 +58,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<MemberDTO>}
      */
     @PostMapping("/signUp")
-    public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<MemberDTO> signUp(@RequestBody MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
