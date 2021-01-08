@@ -161,7 +161,7 @@
              )
     </insert>
 
-    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO">
+    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO" useGeneratedKeys="true" keyProperty="eventNo">
         INSERT INTO
             events
             (eventTitle,
