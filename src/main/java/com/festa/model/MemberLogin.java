@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Value
-@Builder
 public class MemberLogin {
 
     long userNo;
