@@ -98,7 +98,7 @@ class MemberServiceTests {
 
     @DisplayName("아이디 중복 시 로그인 실패")
     @Test
-    public void loginWithoutIdTest() {
+    public void loginDulicatedIdTest() {
         MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#");
 
         when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(true);
@@ -106,5 +106,13 @@ class MemberServiceTests {
         boolean isUserIdExists = memberDAO.isUserIdExist(memberLogin.getUserId());
 
         assertTrue(isUserIdExists);
+    }
+
+    @DisplayName("아이디가 null일 경우 로그인 실패")
+    @Test
+    public void loginUserIdNullTest() {
+        MemberLogin memberLogin = new MemberLogin(5, null, "test123#");
+
+        assertNotNull(memberLogin.getUserId());
     }
 }
