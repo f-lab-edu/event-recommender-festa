@@ -62,7 +62,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNull(memberInfo, "아이디를 입력해주세요");
+        assertNotEquals(memberInfo.getUserId(), "", "아이디를 입력해주세요.");
     }
 
     @DisplayName("비밀번호 미입력 시 회원가입 불가")
@@ -81,7 +81,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNull(memberInfo, "비밀번호를 입력해주세요");
+        assertNotEquals(memberInfo.getPassword(), "", "비밀번호를 입력해주세요.");
     }
 
     @DisplayName("회원 로그인 성공")
