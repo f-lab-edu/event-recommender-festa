@@ -157,7 +157,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertTrue(memberInfo.getPhoneNo().matches("(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})"));
+        assertFalse(memberInfo.getPhoneNo().matches("(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})"));
     }
 
     @DisplayName("비밀번호 특수기호 미포함 회원가입 불가")
@@ -176,7 +176,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertTrue(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
+        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
     }
 
     @DisplayName("비밀번호 숫자 미포함 회원가입 불가")
@@ -195,7 +195,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertTrue(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
+        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
     }
 
     @DisplayName("비밀번호 5자 이하일 경우 회원가입 불가")
@@ -214,7 +214,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertTrue(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
+        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
     }
 
     @DisplayName("비밀번호 10자 이상일 경우 회원가입 불가")
@@ -233,7 +233,7 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertTrue(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
+        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
     }
 
     @DisplayName("회원 로그인 성공")
