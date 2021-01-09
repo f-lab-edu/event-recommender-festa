@@ -2,12 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.AlertDAO">
 
-    <select id="sendChangePwNotice" resultType="com.festa.dto.AlertDTO">
+    <select id="sendChangePwNotice" resultType="String">
         SELECT
-              userNo,
-              title,
-              content,
-              DATE_FORMAT(pwLastModified, '%Y-%m-%d')
+              DATEDIFF(NOW(), pwLastModified) > 180
         FROM notice
         WHERE userNo = #{userNo}
     </select>

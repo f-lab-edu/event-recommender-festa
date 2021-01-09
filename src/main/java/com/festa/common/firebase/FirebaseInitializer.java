@@ -1,10 +1,12 @@
 package com.festa.common.firebase;
 
+import com.festa.exception.FcmInitException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +15,10 @@ import java.io.IOException;
 
 @Service
 public class FirebaseInitializer {
-    private String firebaseConfigPath = "firebase/festa-42bbe-firebase-adminsdk-h4kbg-5b386e249d.json";
+    @Value("${firebase.firebaseConfigPath}")
+    private String firebaseConfigPath;
+    @Value("${firebase.database.url}")
+    private String project;
 
     /**
      * FCM 초기화
@@ -30,19 +35,14 @@ public class FirebaseInitializer {
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://festa-42bbe.firebaseio.com")
+                    .setDatabaseUrl(project)
                     .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
             }
         } catch(IOException e) {
-
+            throw new FcmInitException("FCM 서버를 초기화시키지 못했습니다.");
         }
-    }
-
-    public Firestore getFirebase() {
-        return FirestoreClient.getFirestore();
-
     }
 }

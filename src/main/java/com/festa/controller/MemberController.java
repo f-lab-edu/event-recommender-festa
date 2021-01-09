@@ -4,7 +4,9 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
+import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
+import com.festa.service.AlertService;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,6 +51,8 @@ public class MemberController {
 
     private final MemberService memberService;
     private final LoginService loginService;
+    private final FirebaseTokenManager firebaseTokenManager;
+    private final AlertService alertService;
 
     /**
      * 사용자 회원가입 기능
@@ -126,6 +130,10 @@ public class MemberController {
         }
         loginService.setUserNo(memberDTO.getUserNo());
 
+        firebaseTokenManager.makeAccessToken(memberDTO.getUserNo());
+
+        alertService.sendChangePwNotice(memberDTO.getUserNo());
+
         return RESPONSE_ENTITY_OK;
     }
 
@@ -138,6 +146,8 @@ public class MemberController {
     @PostMapping(value = "/logout")
     public ResponseEntity<HttpStatus> logout() {
         loginService.removeUserNo();
+
+        firebaseTokenManager.removeToken(userNo);
 
         return RESPONSE_ENTITY_OK;
     }
