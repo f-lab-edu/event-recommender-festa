@@ -1,10 +1,13 @@
 package com.festa;
 
 import com.festa.common.UserLevel;
+import com.festa.common.commonService.LoginService;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.service.MemberService;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +15,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
@@ -25,6 +38,14 @@ class MemberServiceTests {
 
     @Mock
     private MemberDAO memberDAO;
+
+    private Validator validator;
+
+    @BeforeEach
+    public void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     @DisplayName("회원의 신규가입 성공")
     @Test
@@ -41,6 +62,9 @@ class MemberServiceTests {
                 .streetCode("1")
                 .streetName("종로")
                 .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+        assertTrue(violations.isEmpty());
 
         memberService.insertMemberInfo(memberInfo);
         then(memberDAO).should().insertMemberAddress(any(MemberDTO.class));
@@ -62,7 +86,10 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNotEquals(memberInfo.getUserId(), "", "아이디를 입력해주세요.");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("아이디를 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("비밀번호 미입력 시 회원가입 불가")
@@ -70,7 +97,7 @@ class MemberServiceTests {
     public void signUpWithoutPasswordTest() {
         MemberDTO memberInfo = MemberDTO.builder()
                 .userId("jes7077")
-                .password("")
+                .password(" ")
                 .userName("testUser")
                 .email("aaa@aaa.com")
                 .phoneNo("01033334444")
@@ -81,7 +108,10 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNotEquals(memberInfo.getPassword(), "", "비밀번호를 입력해주세요.");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("비밀번호를 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("이름 미입력시 회원가입 불가")
@@ -90,7 +120,7 @@ class MemberServiceTests {
         MemberDTO memberInfo = MemberDTO.builder()
                 .userId("jes7077")
                 .password("test123#")
-                .userName("")
+                .userName(" ")
                 .email("aaa@aaa.com")
                 .phoneNo("01033334444")
                 .userLevel(UserLevel.valueOf("USER"))
@@ -100,7 +130,10 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNotEquals(memberInfo.getUserName(), "", "이름을 입력해주세요.");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("이름을 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("이메일 미입력시 회원가입 불가")
@@ -110,7 +143,7 @@ class MemberServiceTests {
                 .userId("jes7077")
                 .password("test123#")
                 .userName("제인")
-                .email("")
+                .email(" ")
                 .phoneNo("01033334444")
                 .userLevel(UserLevel.valueOf("USER"))
                 .cityName("서울")
@@ -119,15 +152,18 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNotEquals(memberInfo.getEmail(), "", "이메일을 입력해주세요.");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("이메일을 입력해주세요", violation.getMessage());
     }
 
-    @DisplayName("전화번호 미입력시 회원가입 불가")
+    @DisplayName("비밀번호 특수기호 미포함 시 회원가입 불가")
     @Test
-    public void signUpWithoutPhoneTest() {
+    public void signUpPasswordWithoutSpecialSymbolTest() {
         MemberDTO memberInfo = MemberDTO.builder()
                 .userId("jes7077")
-                .password("test123#")
+                .password("test123")
                 .userName("제인")
                 .email("aaa@aaa.com")
                 .phoneNo("01033334444")
@@ -138,12 +174,103 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertNotEquals(memberInfo.getPhoneNo(), "", "전화번호를 입력해주세요.");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
     }
 
-    @DisplayName("전화번호 -(하이픈) 입력시 회원가입 불가")
+    @DisplayName("비밀번호 숫자 미포함 시 회원가입 불가")
     @Test
-    public void signUpWithoutPhoneRegexTest() {
+    public void signUpPasswordWithoutNumberTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("test#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo("01033334444")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
+    }
+
+    @DisplayName("비밀번호 영문자 미포함 시 회원가입 불가")
+    @Test
+    public void signUpPasswordWithoutEnglishCharTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("12345#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo("01033334444")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
+    }
+
+    @DisplayName("비밀번호 길이 10자 이상 시 회원가입 불가")
+    @Test
+    public void signUpPasswordOverTenCharTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("tester123456#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo("01033334444")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
+    }
+
+    @DisplayName("비밀번호 길이 5자 이하 시 회원가입 불가")
+    @Test
+    public void signUpPasswordBelowFiveCharTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("t12#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo("01033334444")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
+    }
+
+    @DisplayName("전화번호 하이픈 입력 시 회원가입 불가")
+    @Test
+    public void signUpInvalidPhonePatternTest() {
         MemberDTO memberInfo = MemberDTO.builder()
                 .userId("jes7077")
                 .password("test123#")
@@ -157,83 +284,10 @@ class MemberServiceTests {
                 .streetName("종로")
                 .build();
 
-        assertFalse(memberInfo.getPhoneNo().matches("(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})"));
-    }
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
 
-    @DisplayName("비밀번호 특수기호 미포함 회원가입 불가")
-    @Test
-    public void signUpPasswordWithoutSpecialSymbolTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
-                .userId("jes7077")
-                .password("test12")
-                .userName("testUser")
-                .email("aaa@aaa.com")
-                .phoneNo("01033334444")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .build();
-
-        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
-    }
-
-    @DisplayName("비밀번호 숫자 미포함 회원가입 불가")
-    @Test
-    public void signUpPasswordWithoutNumberTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
-                .userId("jes7077")
-                .password("test#")
-                .userName("testUser")
-                .email("aaa@aaa.com")
-                .phoneNo("01033334444")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .build();
-
-        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
-    }
-
-    @DisplayName("비밀번호 5자 이하일 경우 회원가입 불가")
-    @Test
-    public void signUpPasswordBelowFiveCharTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
-                .userId("jes7077")
-                .password("t12#")
-                .userName("testUser")
-                .email("aaa@aaa.com")
-                .phoneNo("01033334444")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .build();
-
-        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
-    }
-
-    @DisplayName("비밀번호 10자 이상일 경우 회원가입 불가")
-    @Test
-    public void signUpPasswordOverTenCharTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
-                .userId("jes7077")
-                .password("test123123123###")
-                .userName("testUser")
-                .email("aaa@aaa.com")
-                .phoneNo("01033334444")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .build();
-
-        assertFalse(memberInfo.getPassword().matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{5,10}"));
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("하이픈 없이 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("회원 로그인 성공")
@@ -265,7 +319,10 @@ class MemberServiceTests {
     public void loginUserIdNullTest() {
         MemberLogin memberLogin = new MemberLogin(5, null, "test123#");
 
-        assertNotNull(memberLogin.getUserId());
+        Set<ConstraintViolation<MemberLogin>> violations = validator.validate(memberLogin);
+
+        ConstraintViolation<MemberLogin> violation = violations.iterator().next();
+        assertEquals("아이디를 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("아이디가 공백일 경우 로그인 실패")
@@ -273,6 +330,9 @@ class MemberServiceTests {
     public void loginUserIdBlankTest() {
         MemberLogin memberLogin = new MemberLogin(5, " ", "test123#");
 
-        assertNotEquals(memberLogin.getUserId(), " ", "아이디를 입력해주세요.");
+        Set<ConstraintViolation<MemberLogin>> violations = validator.validate(memberLogin);
+
+        ConstraintViolation<MemberLogin> violation = violations.iterator().next();
+        assertEquals("아이디를 입력해주세요", violation.getMessage());
     }
 }
