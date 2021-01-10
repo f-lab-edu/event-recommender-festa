@@ -290,6 +290,28 @@ class MemberServiceTests {
         assertEquals("하이픈 없이 입력해주세요", violation.getMessage());
     }
 
+    @DisplayName("전화번호 미입력 시 회원가입 불가")
+    @Test
+    public void signUpWithoutPhoneTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("test123#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo("")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("전화번호를 입력해주세요", violation.getMessage());
+    }
+
     @DisplayName("회원 로그인 성공")
     @Test
     public void loginTest() {
