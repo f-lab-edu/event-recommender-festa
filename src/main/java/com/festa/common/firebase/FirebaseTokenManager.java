@@ -1,5 +1,6 @@
 package com.festa.common.firebase;
 
+import com.festa.exception.FcmTokenException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,14 +10,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class FirebaseTokenManager {
+
     @Value("${firebase.firebaseConfigPath}")
     private String firebaseConfigPath;
 
     // 토큰을 저장해둘 곳
-    private Map<Long, String> tokenMap = new HashMap<>();
+    private Map<Long, String> tokenMap = new ConcurrentHashMap<>();
 
     /**
      * 토큰을 HashMap에 저장하는 메서드
@@ -55,7 +58,7 @@ public class FirebaseTokenManager {
                     .createScoped(Arrays.asList("https://www.googleapis.com/auth/firebase.remoteconfig"));
             googleCredential.refreshToken();
         } catch (IOException e) {
-
+            throw new FcmTokenException("Token 생성에 실패하였습니다.");
         }
         String token = googleCredential.getAccessToken();
 

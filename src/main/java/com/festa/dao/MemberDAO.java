@@ -22,4 +22,6 @@ public interface MemberDAO {
 
     int getUserNoById(long userId);
 
+    String getChangePwDateDiff(long userNo);
+
 }

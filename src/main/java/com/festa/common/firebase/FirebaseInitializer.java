@@ -15,6 +15,7 @@ import java.io.IOException;
 
 @Service
 public class FirebaseInitializer {
+
     @Value("${firebase.firebaseConfigPath}")
     private String firebaseConfigPath;
     @Value("${firebase.database.url}")

@@ -96,4 +96,11 @@
             userId = #{userId}
         AND deleted = FALSE
     </select>
+
+    <select id="sendChangePwNotice" resultType="String">
+        SELECT
+              DATEDIFF(NOW(), pwLastModified) > 90
+        FROM notice
+        WHERE userNo = #{userNo}
+    </select>
 </mapper>

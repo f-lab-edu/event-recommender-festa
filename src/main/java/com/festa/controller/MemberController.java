@@ -132,9 +132,7 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberDTO.getUserNo());
 
-        alertService.sendChangePwNotice(memberDTO.getUserNo());
-
-        return RESPONSE_ENTITY_OK;
+        return ResponseEntity.ok(memberService.getChangePwDateDiff(memberDTO.getUserNo()));
     }
 
     /**
