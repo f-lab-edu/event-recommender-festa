@@ -94,6 +94,8 @@ ___
 
 ## DB ERD 구조
 
+![event-recommender-festa-erd](https://user-images.githubusercontent.com/53729311/104211019-e896c080-5476-11eb-8dbc-183656873e5e.jpg)
+
 [DB 테이블 설계:  ](https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing)<https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing>
 
 <br>
