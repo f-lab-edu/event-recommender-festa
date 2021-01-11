@@ -172,7 +172,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @DeleteMapping("/")
-    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo) {
+    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
         memberService.memberWithdraw(userNo);
         
         return RESPONSE_ENTITY_OK;

@@ -125,4 +125,11 @@
             userId = #{userId}
         AND deleted = FALSE
     </select>
+
+    <select id="getUserPassword" parameterType="long">
+        SELECT
+            password
+        FROM members
+        WHERE userNo = #{userNo}
+    </select>
 </mapper>

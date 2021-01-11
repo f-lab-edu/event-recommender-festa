@@ -28,6 +28,8 @@ public interface MemberDAO {
 
     void modifyParticipantInfo(MemberInfo memberInfo);
 
-    int getUserNoById(String userId);
+    long getUserNoById(String userId);
+
+    String getUserPassword(long userNo);
 
 }

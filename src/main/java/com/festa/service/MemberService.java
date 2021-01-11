@@ -55,14 +55,24 @@ public class MemberService {
     }
 
     public void changeUserPw(long userNo, String password) {
+
+        if(!memberDAO.getUserPassword(userNo).equals(password)) {
+            throw new IllegalArgumentException("일치하는 비밀번호가 없습니다.");
+        }
+
         memberDAO.changeUserPw(userNo, password);
     }
 
     public void memberWithdraw(long userNo) {
+
+        if(memberDAO.getUserByNo(userNo) == null) {
+            throw new IllegalStateException("일치하는 사용자정보가 없습니다.");
+        }
+
         memberDAO.modifyMemberInfoForWithdraw(userNo);
     }
 
-    public int getUserNo(String userId) {
+    public long getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
 }
