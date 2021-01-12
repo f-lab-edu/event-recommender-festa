@@ -6,6 +6,7 @@ import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +29,13 @@ class MemberServiceTests {
     @Mock
     private MemberDAO memberDAO;
 
-    @Mock
-    private LoginService loginService;
-
     private MockHttpSession mockHttpSession;
+
+    @BeforeEach
+    public void setUp() {
+        mockHttpSession = new MockHttpSession();
+    }
+
 
     @DisplayName("회원의 신규가입 성공")
     @Test
@@ -52,6 +56,18 @@ class MemberServiceTests {
         memberService.insertMemberInfo(memberInfo);
         then(memberDAO).should().insertMemberAddress(any(MemberDTO.class));
     }
+
+    @DisplayName("회원 로그인 성공")
+    @Test
+    public void loginTest() {
+        MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#");
+
+        when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(false);
+        mockHttpSession.setAttribute("USER_NO", memberLogin.getUserNo());
+
+        assertEquals(memberLogin.getUserNo(), mockHttpSession.getAttribute("USER_NO"));
+    }
+
 
     @DisplayName("아이디 중복 시 true를 리턴")
     @Test
