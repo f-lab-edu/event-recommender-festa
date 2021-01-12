@@ -1,7 +1,6 @@
 package com.festa;
 
 import com.festa.common.UserLevel;
-import com.festa.common.commonService.LoginService;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
@@ -17,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
@@ -31,16 +31,17 @@ class MemberServiceTests {
 
     private MockHttpSession mockHttpSession;
 
+    private MemberDTO memberDTO;
+
     @BeforeEach
     public void setUp() {
         mockHttpSession = new MockHttpSession();
     }
 
-
-    @DisplayName("회원의 신규가입 성공")
-    @Test
-    public void signUpTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
+    @BeforeEach
+    public void dtoSetUp() {
+        memberDTO = MemberDTO.builder()
+                .userNo(5)
                 .userId("jes7077")
                 .password("test123#")
                 .userName("testUser")
@@ -52,8 +53,13 @@ class MemberServiceTests {
                 .streetCode("1")
                 .streetName("종로")
                 .build();
+    }
 
-        memberService.insertMemberInfo(memberInfo);
+    @DisplayName("회원의 신규가입 성공")
+    @Test
+    public void signUpTest() {
+        memberService.insertMemberInfo(memberDTO);
+
         then(memberDAO).should().insertMemberAddress(any(MemberDTO.class));
     }
 
@@ -81,13 +87,35 @@ class MemberServiceTests {
         assertTrue(isUserIdExists);
     }
 
-    @DisplayName("사용자 정보가 없다면 IllegalArgumentException이 발생")
+    @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴 성공")
+    @Test
+    public void memberWithdrawTest() {
+        given(memberDAO.getUserByNo(5)).willReturn(memberDTO);
+
+        memberService.memberWithdraw(5);
+
+        then(memberDAO).should().modifyMemberInfoForWithdraw(5);
+    }
+
+    @DisplayName("사용자 탈퇴 시 정보가 없다면 IllegalArgumentException이 발생")
     @Test
     public void memberWithdrawWithoutUserInfoTest() {
-        when(memberDAO.getUserByNo(any(Long.class))).thenReturn(null);
+        given(memberDAO.getUserByNo(5)).willReturn(null);
 
-        assertThrows(IllegalStateException.class, () -> memberService.memberWithdraw(29));
+        memberService.memberWithdraw(5);
 
+        assertThrows(IllegalStateException.class, () -> memberService.memberWithdraw(5));
+
+    }
+
+    @DisplayName("일치하는 비밀번호가 있을 경우 비밀번호 변경")
+    @Test
+    public void memberChangePwTest() {
+        given(memberDAO.getUserPassword(5)).willReturn("tt1234##");
+
+        memberService.changeUserPw(5, "tt1234##");
+
+        assertEquals("tt1234##", memberDAO.getUserPassword(5));
     }
 
     @DisplayName("일치하는 비밀번호가 없을 경우 IllegalArgumentException이 발생")
@@ -97,5 +125,4 @@ class MemberServiceTests {
 
         assertThrows(IllegalArgumentException.class, () -> memberService.changeUserPw(5, "tt1234##"));
     }
-
 }
