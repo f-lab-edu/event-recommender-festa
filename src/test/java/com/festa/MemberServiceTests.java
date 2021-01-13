@@ -31,18 +31,15 @@ class MemberServiceTests {
 
     private MockHttpSession mockHttpSession;
 
-    private MemberDTO memberDTO;
-
     @BeforeEach
     public void setUp() {
         mockHttpSession = new MockHttpSession();
     }
 
-    @BeforeEach
-    public void dtoSetUp() {
-        memberDTO = MemberDTO.builder()
+    public MemberDTO memberInfoSetUp() {
+        return MemberDTO.builder()
                 .userNo(5)
-                .userId("jes7077")
+                .userId("rbdl879")
                 .password("test123#")
                 .userName("testUser")
                 .email("aaa@aaa.com")
@@ -58,7 +55,7 @@ class MemberServiceTests {
     @DisplayName("회원의 신규가입 성공")
     @Test
     public void signUpTest() {
-        memberService.insertMemberInfo(memberDTO);
+        memberService.insertMemberInfo(memberInfoSetUp());
 
         then(memberDAO).should().insertMemberAddress(any(MemberDTO.class));
     }
@@ -74,8 +71,15 @@ class MemberServiceTests {
         assertEquals(memberLogin.getUserNo(), mockHttpSession.getAttribute("USER_NO"));
     }
 
+    @DisplayName("아이디가 불일치할 경우 로그인에 실패한다")
+    @Test
+    public void loginUserIdMismatchTest() {
+        MemberLogin memberLogin = new MemberLogin(5, "jeje12", "test123#");
 
+        when(memberDAO.getUserNoById(memberLogin.getUserId())).thenReturn(7L);
 
+        assertNotEquals(memberLogin.getUserNo(),7);
+    }
 
     @DisplayName("아이디가 중복된다면 true를 리턴한다")
     @Test
@@ -92,7 +96,7 @@ class MemberServiceTests {
     @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴에 성공한다")
     @Test
     public void memberWithdrawTest() {
-        given(memberDAO.getUserByNo(5)).willReturn(memberDTO);
+        given(memberDAO.getUserByNo(5)).willReturn(memberInfoSetUp());
 
         memberService.memberWithdraw(5);
 

@@ -53,6 +53,8 @@ public class MemberDTO {
 
     String streetName;
 
+    boolean isDeleted;
+
     public MemberDTO toEntityForInfo() {
 
         return MemberDTO.builder()
