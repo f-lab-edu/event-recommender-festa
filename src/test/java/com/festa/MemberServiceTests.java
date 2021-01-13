@@ -75,7 +75,9 @@ class MemberServiceTests {
     }
 
 
-    @DisplayName("아이디 중복 시 true를 리턴")
+
+
+    @DisplayName("아이디가 중복된다면 true를 리턴한다")
     @Test
     public void dulicatedIdTest() {
         MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#");
@@ -87,7 +89,7 @@ class MemberServiceTests {
         assertTrue(isUserIdExists);
     }
 
-    @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴 성공")
+    @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴에 성공한다")
     @Test
     public void memberWithdrawTest() {
         given(memberDAO.getUserByNo(5)).willReturn(memberDTO);
@@ -97,7 +99,7 @@ class MemberServiceTests {
         then(memberDAO).should().modifyMemberInfoForWithdraw(5);
     }
 
-    @DisplayName("사용자 탈퇴 시 정보가 없다면 IllegalArgumentException이 발생")
+    @DisplayName("사용자 탈퇴 시 정보가 없다면 IllegalArgumentException이 발생한다")
     @Test
     public void memberWithdrawWithoutUserInfoTest() {
         given(memberDAO.getUserByNo(5)).willReturn(null);
@@ -108,7 +110,7 @@ class MemberServiceTests {
 
     }
 
-    @DisplayName("일치하는 비밀번호가 있을 경우 비밀번호 변경")
+    @DisplayName("기존 비밀번호가 일치할 경우 비밀번호 변경에 성공한다")
     @Test
     public void memberChangePwTest() {
         given(memberDAO.getUserPassword(5)).willReturn("tt1234##");
@@ -118,7 +120,7 @@ class MemberServiceTests {
         assertEquals("tt1234##", memberDAO.getUserPassword(5));
     }
 
-    @DisplayName("일치하는 비밀번호가 없을 경우 IllegalArgumentException이 발생")
+    @DisplayName("기존 비밀번호가 불일치할 경우 IllegalArgumentException이 발생한다")
     @Test
     public void memberChangePwMismatchTest() {
         when(memberDAO.getUserPassword(any(Long.class))).thenReturn("");
