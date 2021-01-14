@@ -59,7 +59,8 @@
         UPDATE members
             SET userName = #{userName},
                 phoneNo  = #{phoneNo}
-        WHERE userNo = #{userNo};
+        WHERE userNo = #{userNo}
+        AND deletedDate is null
     </update>
 
     <update id="modifyMemberAddress" parameterType="com.festa.model.MemberInfo">

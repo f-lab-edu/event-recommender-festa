@@ -28,6 +28,8 @@ public class MemberInfo {
 
     String detail;
 
+    boolean isDeleted;
+
     boolean isUserModifyInfo;
 
     public MemberInfo toEntityForInfo() {
@@ -36,6 +38,7 @@ public class MemberInfo {
                 .userNo(this.userNo)
                 .userName(this.userName)
                 .phoneNo(this.phoneNo)
+                .isDeleted(this.isDeleted)
                 .build();
     }
 

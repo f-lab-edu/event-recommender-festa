@@ -3,6 +3,7 @@ package com.festa;
 import com.festa.common.UserLevel;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberInfo;
 import com.festa.model.MemberLogin;
 import com.festa.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +15,14 @@ import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class MemberServiceTests {
@@ -49,6 +53,50 @@ class MemberServiceTests {
                 .districtName("종로구")
                 .streetCode("1")
                 .streetName("종로")
+                .isDeleted(false)
+                .build();
+    }
+
+    public MemberDTO deletedMemberInfoSetUp() {
+        return MemberDTO.builder()
+                .userNo(1)
+                .userId("jes7077")
+                .password("test123#")
+                .userName("testUser")
+                .email("bbb@bbb.com")
+                .phoneNo("01022223333")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .isDeleted(true)
+                .build();
+    }
+
+    public MemberInfo modifyMemberInfoSetUp() {
+        return MemberInfo.builder()
+                .userNo(5)
+                .userName("testUser")
+                .phoneNo("01033334444")
+                .cityName("서울")
+                .districtName("은평구")
+                .streetCode("2")
+                .streetName("은평로")
+                .isDeleted(false)
+                .build();
+    }
+
+    public MemberInfo modifyDeletedMemberInfoSetUp() {
+        return MemberInfo.builder()
+                .userNo(1)
+                .userName("제인")
+                .phoneNo("01033334444")
+                .cityName("서울")
+                .districtName("은평구")
+                .streetCode("2")
+                .streetName("은평로")
+                .isDeleted(true)
                 .build();
     }
 
@@ -130,5 +178,48 @@ class MemberServiceTests {
         when(memberDAO.getUserPassword(any(Long.class))).thenReturn("");
 
         assertThrows(IllegalArgumentException.class, () -> memberService.changeUserPw(5, "tt1234##"));
+    }
+
+    @DisplayName("사용자의 정보를 조회한다")
+    @Test
+    public void getUserTest() {
+        given(memberDAO.getUserByNo(5)).willReturn(memberInfoSetUp());
+
+        MemberDTO memberInfo = memberService.getUser(5);
+
+        assertEquals(memberInfoSetUp().getUserId(), memberInfo.getUserId());
+    }
+
+    @DisplayName("삭제된 회원의 정보를 요청하면 조회에 실패한다")
+    @Test
+    public void getUserDeletedTest() {
+        given(memberDAO.getUserByNo(1)).willReturn(deletedMemberInfoSetUp());
+
+        MemberDTO memberInfo = memberService.getUser(1);
+
+        assertThat(memberInfo.isDeleted(), is(not(true)));
+    }
+
+    @DisplayName("회원정보 수정에 성공한다")
+    @Test
+    public void modifyMemberInfoTest() {
+        memberService.modifyMemberInfo(modifyMemberInfoSetUp());
+
+        doNothing().when(memberDAO).modifyMemberInfo(modifyMemberInfoSetUp());
+
+        assertThat(modifyMemberInfoSetUp().isDeleted(), is(not(true)));
+
+        then(memberDAO).should().modifyMemberInfo(modifyMemberInfoSetUp().toEntityForInfo());
+        then(memberDAO).should().modifyMemberAddress(modifyMemberInfoSetUp().toEntityForAddress());
+    }
+
+    @DisplayName("삭제된 회원이 회원정보 수정을 요청하면 수정에 실패한다.")
+    @Test
+    public void modifyDeletedMemberInfoTest() {
+        memberService.modifyMemberInfo(modifyMemberInfoSetUp());
+
+        doNothing().when(memberDAO).modifyMemberInfo(modifyDeletedMemberInfoSetUp());
+
+        assertThat(modifyDeletedMemberInfoSetUp().isDeleted(), is(not(true)));
     }
 }
