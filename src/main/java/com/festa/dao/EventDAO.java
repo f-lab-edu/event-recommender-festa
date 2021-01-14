@@ -42,4 +42,7 @@ public interface EventDAO {
 
     Participants getParticipantList(Participants participants);
 
+    void deleteEvent(long eventNo);
+
+    void deleteEventAddress(long eventNo);
 }

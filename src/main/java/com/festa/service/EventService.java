@@ -2,7 +2,9 @@ package com.festa.service;
 
 import static com.festa.common.RedisCacheKey.CATEGORY_LIST;
 import com.festa.dao.EventDAO;
+import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
+import com.festa.dto.MemberDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class EventService {
 
     private final EventDAO eventDAO;
+    private final MemberDAO memberDAO;
 
     @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
@@ -95,5 +98,18 @@ public class EventService {
         }
 
         return eventDAO.getParticipantList(participants);
+    }
+
+    @Transactional
+    public void deleteEventNo(long eventNo, long userNo) {
+        EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
+        MemberDTO memberInfo = memberDAO.getUserByNo(userNo);
+
+        if(eventInfo.getEventNo() != memberInfo.getUserNo()) {
+            throw new IllegalStateException("해당 이벤트를 등록한 사용자가 아닙니다");
+        }
+
+        eventDAO.deleteEvent(eventNo);
+        eventDAO.deleteEventAddress(eventNo);
     }
 }
