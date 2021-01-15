@@ -104,7 +104,7 @@ public class MemberController {
      * @param userId
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @GetMapping("/{userId}/duplicate")
+    @GetMapping("/{userId}/delete")
     public ResponseEntity<HttpStatus> idIsDeleted(@RequestParam String userId, @RequestParam String password) {
         memberService.isUserIdExist(userId, password);
 
