@@ -14,7 +14,7 @@ public interface MemberDAO {
 
     void insertMemberAddress(MemberDTO memberDTO);
 
-    boolean isUserIdExist(String userId);
+    boolean isUserIdExist(String userId, String password);
 
     void modifyMemberInfo(MemberInfo memberInfo);
 

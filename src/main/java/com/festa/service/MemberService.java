@@ -31,8 +31,8 @@ public class MemberService {
         memberDAO.insertMemberAddress(memberAddress);
     }
 
-    public void isUserIdExist(String userId) {
-        boolean isUserIdExist = memberDAO.isUserIdExist(userId);
+    public void isUserIdExist(String userId, String password) {
+        boolean isUserIdExist = memberDAO.isUserIdExist(userId, password);
 
         if(!isUserIdExist) {
             throw new IllegalStateException("탈퇴한 아이디 입니다.");

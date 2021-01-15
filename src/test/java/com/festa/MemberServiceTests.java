@@ -96,7 +96,7 @@ class MemberServiceTests {
     public void loginTest() {
         MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#");
 
-        when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(false);
+        when(memberDAO.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword())).thenReturn(false);
         mockHttpSession.setAttribute("USER_NO", memberLogin.getUserNo());
 
         assertEquals(memberLogin.getUserNo(), mockHttpSession.getAttribute("USER_NO"));
@@ -107,9 +107,9 @@ class MemberServiceTests {
     public void deletedIdLoginTest() {
         MemberLogin memberLogin = new MemberLogin(1, "jes7077", "test123#");
 
-        when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(false);
+        when(memberDAO.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword())).thenReturn(false);
 
-        assertThrows(IllegalStateException.class, () -> memberService.isUserIdExist(memberLogin.getUserId()));
+        assertThrows(IllegalStateException.class, () -> memberService.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword()));
     }
 
     @DisplayName("아이디가 불일치할 경우 로그인에 실패한다")

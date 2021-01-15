@@ -105,8 +105,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDeleted(@RequestParam String userId) {
-        memberService.isUserIdExist(userId);
+    public ResponseEntity<HttpStatus> idIsDeleted(@RequestParam String userId, @RequestParam String password) {
+        memberService.isUserIdExist(userId, password);
 
         return RESPONSE_ENTITY_OK;
     }
@@ -119,8 +119,9 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
+        String password = memberLogin.getPassword();
 
-        memberService.isUserIdExist(userId);
+        memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
         return RESPONSE_ENTITY_OK;

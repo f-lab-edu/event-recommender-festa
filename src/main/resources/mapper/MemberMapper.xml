@@ -50,6 +50,7 @@
                    (SELECT userId
                     FROM members
                     WHERE userId = #{userId}
+                    AND password = #{password}
                     AND deleted = FALSE
                    )
                    AS isIdExists
