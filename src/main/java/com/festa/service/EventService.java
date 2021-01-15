@@ -21,7 +21,6 @@ import java.util.List;
 public class EventService {
 
     private final EventDAO eventDAO;
-    private final MemberDAO memberDAO;
 
     @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
@@ -103,9 +102,8 @@ public class EventService {
     @Transactional
     public void deleteEventNo(long eventNo, long userNo) {
         EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
-        MemberDTO memberInfo = memberDAO.getUserByNo(userNo);
 
-        if(eventInfo.getEventNo() != memberInfo.getUserNo()) {
+        if(eventInfo.getUserNo() != userNo) {
             throw new IllegalStateException("해당 이벤트를 등록한 사용자가 아닙니다");
         }
 
