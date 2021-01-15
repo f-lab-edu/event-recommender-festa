@@ -103,20 +103,15 @@ public class MemberController {
     }
 
     /**
-     * 사용자 중복 아이디 체크
+     * 탈퇴한 사용자 아이디 체크
      * @param userId
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam String userId) {
-        boolean isIdDuplicated = memberService.isUserIdExist(userId);
+    public ResponseEntity<HttpStatus> idIsDeleted(@RequestParam String userId) {
+        memberService.isUserIdExist(userId);
 
-        //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(isIdDuplicated) {
-            return RESPONSE_ENTITY_CONFLICT;
-        } else {
-            return RESPONSE_ENTITY_OK;
-        }
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
@@ -128,12 +123,7 @@ public class MemberController {
     public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
 
-        boolean isIdExist = memberService.isUserIdExist(userId);
-
-        //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExist) {
-            return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-        }
+        memberService.isUserIdExist(userId);
         loginService.setUserNo(memberLogin.getUserNo());
 
         return RESPONSE_ENTITY_OK;

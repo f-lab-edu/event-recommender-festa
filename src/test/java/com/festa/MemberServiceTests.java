@@ -57,23 +57,6 @@ class MemberServiceTests {
                 .build();
     }
 
-    public MemberDTO deletedMemberInfoSetUp() {
-        return MemberDTO.builder()
-                .userNo(1)
-                .userId("jes7077")
-                .password("test123#")
-                .userName("testUser")
-                .email("bbb@bbb.com")
-                .phoneNo("01022223333")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .isDeleted(true)
-                .build();
-    }
-
     public MemberInfo modifyMemberInfoSetUp() {
         return MemberInfo.builder()
                 .userNo(5)
@@ -119,6 +102,16 @@ class MemberServiceTests {
         assertEquals(memberLogin.getUserNo(), mockHttpSession.getAttribute("USER_NO"));
     }
 
+    @DisplayName("탈퇴한 아이디가 로그인 요청이 오면 IllegalStateException이 발생한다")
+    @Test
+    public void deletedIdLoginTest() {
+        MemberLogin memberLogin = new MemberLogin(1, "jes7077", "test123#");
+
+        when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(false);
+
+        assertThrows(IllegalStateException.class, () -> memberService.isUserIdExist(memberLogin.getUserId()));
+    }
+
     @DisplayName("아이디가 불일치할 경우 로그인에 실패한다")
     @Test
     public void loginUserIdMismatchTest() {
@@ -127,18 +120,6 @@ class MemberServiceTests {
         when(memberDAO.getUserNoById(memberLogin.getUserId())).thenReturn(7L);
 
         assertNotEquals(memberLogin.getUserNo(),7);
-    }
-
-    @DisplayName("아이디가 중복된다면 true를 리턴한다")
-    @Test
-    public void dulicatedIdTest() {
-        MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#");
-
-        when(memberDAO.isUserIdExist(memberLogin.getUserId())).thenReturn(true);
-
-        boolean isUserIdExists = memberDAO.isUserIdExist(memberLogin.getUserId());
-
-        assertTrue(isUserIdExists);
     }
 
     @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴에 성공한다")
@@ -190,10 +171,10 @@ class MemberServiceTests {
         assertEquals(memberInfoSetUp().getUserId(), memberInfo.getUserId());
     }
 
-    @DisplayName("삭제된 회원의 정보를 요청하면 조회에 실패한다")
+    @DisplayName("회원정보를 요청할때 탈퇴한 회원이면 null을 리턴한다")
     @Test
     public void getUserDeletedTest() {
-        given(memberDAO.getUserByNo(1)).willReturn(deletedMemberInfoSetUp());
+        given(memberDAO.getUserByNo(1)).willReturn(null);
 
         MemberDTO memberInfo = memberService.getUser(1);
 
@@ -213,7 +194,7 @@ class MemberServiceTests {
         then(memberDAO).should().modifyMemberAddress(modifyMemberInfoSetUp().toEntityForAddress());
     }
 
-    @DisplayName("삭제된 회원이 회원정보 수정을 요청하면 수정에 실패한다.")
+    @DisplayName("회원정보 수정할 때 탈퇴한 회원임이 확인되면 수정을 하지 않는다")
     @Test
     public void modifyDeletedMemberInfoTest() {
         memberService.modifyMemberInfo(modifyMemberInfoSetUp());
