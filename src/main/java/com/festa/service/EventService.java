@@ -2,9 +2,7 @@ package com.festa.service;
 
 import static com.festa.common.RedisCacheKey.CATEGORY_LIST;
 import com.festa.dao.EventDAO;
-import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
-import com.festa.dto.MemberDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
