@@ -42,7 +42,6 @@ class MemberServiceTests {
 
     public MemberDTO memberInfoSetUp() {
         return MemberDTO.builder()
-                .userNo(5)
                 .userId("rbdl879")
                 .password("test123#")
                 .userName("testUser")
@@ -87,8 +86,17 @@ class MemberServiceTests {
     @Test
     public void signUpTest() {
         memberService.insertMemberInfo(memberInfoSetUp());
+        
+        doNothing().when(memberDAO).insertMemberInfo(memberInfoSetUp().toEntityForInfo());
 
-        then(memberDAO).should().insertMemberAddress(any(MemberDTO.class));
+        then(memberDAO).should().insertMemberAddress(
+                memberInfoSetUp().builder()
+                .userNo(memberInfoSetUp().getUserNo())
+                .cityName(memberInfoSetUp().getCityName())
+                .districtName(memberInfoSetUp().getDistrictName())
+                .streetCode(memberInfoSetUp().getStreetCode())
+                .streetName(memberInfoSetUp().getStreetName())
+                .build());
     }
 
     @DisplayName("회원 로그인 성공")
