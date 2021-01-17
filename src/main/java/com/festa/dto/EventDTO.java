@@ -14,7 +14,7 @@ public class EventDTO {
 
     private long eventNo;
 
-    long userNo;
+    private long userNo;
 
     @NotBlank(message = "제목을 입력해주세요")
     private String eventTitle;
