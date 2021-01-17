@@ -1,53 +1,54 @@
 package com.festa.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Builder
 public class EventDTO {
 
-    long eventNo;
+    private long eventNo;
 
     long userNo;
 
     @NotBlank(message = "제목을 입력해주세요")
-    String eventTitle;
+    private String eventTitle;
 
     @NotBlank(message = "이벤트 내용을 입력해주세요")
-    String eventContent;
+    private String eventContent;
 
     @NotBlank(message = "이벤트 시작일 입력해주세요")
     @Pattern(regexp  = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$",
              message = "연, 월, 일을 - 을 포함하여 입력해주세요")
-    String startDate;
+    private String startDate;
 
     @NotBlank(message = "이벤트 종료일 입력해주세요")
     @Pattern(regexp  = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$",
             message = "연, 월, 일을 - 을 포함하여 입력해주세요")
-    String endDate;
+    private String endDate;
 
-    int categoryCode;
+    private int categoryCode;
 
-    int participantLimit;
+    private int participantLimit;
 
-    int noOfParticipants;
+    private int noOfParticipants;
 
-    Date registerDate;
+    private Date registerDate;
 
-    String cityName;
+    private String cityName;
 
-    String districtName;
+    private String districtName;
 
-    String streetCode;
+    private String streetCode;
 
-    String streetName;
+    private String streetName;
 
-    String detail;
+    private String detail;
 
     public EventDTO toEntityForInfo() {
 
