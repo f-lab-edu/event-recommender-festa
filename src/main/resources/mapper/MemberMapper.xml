@@ -101,6 +101,7 @@
             M.userLevel,
             MA.cityName,
             MA.districtName,
+            MA.streetCode,
             MA.streetName,
             M.deleted,
             M.deletedDate

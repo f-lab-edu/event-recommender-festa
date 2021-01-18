@@ -104,11 +104,12 @@ public class EventController {
     @PostMapping
     public ResponseEntity<HttpStatus> registerEvents(@RequestBody EventDTO eventDTO) {
         boolean isEventExists = eventService.isEventExists(eventDTO.getEventTitle(), eventDTO.getStartDate());
+        int categoryCode = eventDTO.getCategoryCode();
 
         if(isEventExists) {
             return RESPONSE_ENTITY_CONFLICT;
         }
-        eventService.registerEvents(eventDTO);
+        eventService.registerEvents(eventDTO, categoryCode);
 
         return RESPONSE_ENTITY_OK;
     }

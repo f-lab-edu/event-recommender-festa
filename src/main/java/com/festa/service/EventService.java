@@ -7,6 +7,7 @@ import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,8 @@ public class EventService {
     }
 
     @Transactional
-    public void registerEvents(EventDTO eventDTO) {
+    @CacheEvict(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
+    public void registerEvents(EventDTO eventDTO, int categoryCode) {
         EventDTO eventInfo = eventDTO.toEntityForInfo();
         eventDAO.registerEvents(eventInfo);
 
