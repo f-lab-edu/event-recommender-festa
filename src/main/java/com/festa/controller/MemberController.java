@@ -105,7 +105,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/delete")
-    public ResponseEntity<HttpStatus> idIsDeleted(@RequestParam String userId, @RequestParam String password) {
+    public ResponseEntity<HttpStatus> isIdDeleted(@RequestParam String userId, @RequestParam String password) {
         memberService.isUserIdExist(userId, password);
 
         return RESPONSE_ENTITY_OK;
