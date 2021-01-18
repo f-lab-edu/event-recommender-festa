@@ -135,4 +135,17 @@ public class EventController {
 
         return RESPONSE_ENTITY_OK;
     }
+
+    /**
+     * 주최자 이벤트 삭제 기능
+     * @param eventNo
+     * @return
+     */
+    @CheckLoginStatus(auth = UserLevel.HOST)
+    @DeleteMapping("/{eventNo}")
+    public ResponseEntity<HttpStatus> deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
+        eventService.deleteEventNo(eventNo, userNo);
+
+        return RESPONSE_ENTITY_OK;
+    }
 }

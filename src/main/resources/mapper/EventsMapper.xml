@@ -12,6 +12,7 @@
             E.registerDate,
             E.participantLimit,
             E.noOfParticipants,
+            M.userNo,
             M.userName AS writer
         FROM events E
         INNER JOIN members M
@@ -247,4 +248,16 @@
         WHERE eventNo = #{eventNo}
             AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
+
+    <delete id="deleteEvent" parameterType="long">
+        DELETE
+        FROM events
+        WHERE eventNo = #{eventNo}
+    </delete>
+
+    <delete id="deleteEventAddress" parameterType="long">
+        DELETE
+        FROM event_address
+        WHERE eventNo = #{eventNo}
+    </delete>
 </mapper>

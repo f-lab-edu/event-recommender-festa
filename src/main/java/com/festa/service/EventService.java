@@ -96,4 +96,16 @@ public class EventService {
 
         return eventDAO.getParticipantList(participants);
     }
+
+    @Transactional
+    public void deleteEventNo(long eventNo, long userNo) {
+        EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
+
+        if(eventInfo.getUserNo() != userNo) {
+            throw new IllegalStateException("해당 이벤트를 등록한 사용자가 아닙니다");
+        }
+
+        eventDAO.deleteEvent(eventNo);
+        eventDAO.deleteEventAddress(eventNo);
+    }
 }
