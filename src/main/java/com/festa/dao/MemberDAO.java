@@ -14,7 +14,7 @@ public interface MemberDAO {
 
     void insertMemberAddress(MemberDTO memberDTO);
 
-    boolean isUserIdExist(String userId);
+    boolean isUserIdExist(String userId, String password);
 
     void modifyMemberInfo(MemberInfo memberInfo);
 
@@ -28,6 +28,8 @@ public interface MemberDAO {
 
     void modifyParticipantInfo(MemberInfo memberInfo);
 
-    int getUserNoById(String userId);
+    long getUserNoById(String userId);
+
+    String getUserPassword(long userNo);
 
 }

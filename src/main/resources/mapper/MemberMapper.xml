@@ -50,6 +50,7 @@
                    (SELECT userId
                     FROM members
                     WHERE userId = #{userId}
+                    AND password = #{password}
                     AND deleted = FALSE
                    )
                    AS isIdExists
@@ -59,7 +60,8 @@
         UPDATE members
             SET userName = #{userName},
                 phoneNo  = #{phoneNo}
-        WHERE userNo = #{userNo};
+        WHERE userNo = #{userNo}
+        AND deleted is FALSE
     </update>
 
     <update id="modifyMemberAddress" parameterType="com.festa.model.MemberInfo">
@@ -124,5 +126,12 @@
         WHERE
             userId = #{userId}
         AND deleted = FALSE
+    </select>
+
+    <select id="getUserPassword" parameterType="long">
+        SELECT
+            password
+        FROM members
+        WHERE userNo = #{userNo}
     </select>
 </mapper>

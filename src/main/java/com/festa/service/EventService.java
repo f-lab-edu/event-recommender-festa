@@ -6,6 +6,7 @@ import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class EventService {
 
@@ -32,7 +34,15 @@ public class EventService {
         EventDTO eventInfo = eventDTO.toEntityForInfo();
         eventDAO.registerEvents(eventInfo);
 
-        EventDTO eventAddress = eventDTO.toEntityForEventAddress();
+        EventDTO eventAddress = EventDTO.builder()
+                .eventNo(eventInfo.getEventNo())
+                .cityName(eventDTO.getCityName())
+                .districtName(eventDTO.getDistrictName())
+                .streetCode(eventDTO.getStreetCode())
+                .streetName(eventDTO.getStreetName())
+                .detail(eventDTO.getDetail())
+                .build();
+
         eventDAO.registerEventsAddress(eventAddress);
     }
 
@@ -85,5 +95,17 @@ public class EventService {
         }
 
         return eventDAO.getParticipantList(participants);
+    }
+
+    @Transactional
+    public void deleteEventNo(long eventNo, long userNo) {
+        EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
+
+        if(eventInfo.getUserNo() != userNo) {
+            throw new IllegalStateException("해당 이벤트를 등록한 사용자가 아닙니다");
+        }
+
+        eventDAO.deleteEvent(eventNo);
+        eventDAO.deleteEventAddress(eventNo);
     }
 }

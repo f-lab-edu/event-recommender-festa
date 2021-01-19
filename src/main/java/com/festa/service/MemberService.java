@@ -31,8 +31,12 @@ public class MemberService {
         memberDAO.insertMemberAddress(memberAddress);
     }
 
-    public boolean isUserIdExist(String userId) {
-        return memberDAO.isUserIdExist(userId);
+    public void isUserIdExist(String userId, String password) {
+        boolean isUserIdExist = memberDAO.isUserIdExist(userId, password);
+
+        if(!isUserIdExist) {
+            throw new IllegalStateException("탈퇴한 아이디 입니다.");
+        }
     }
 
     @Transactional
@@ -55,14 +59,24 @@ public class MemberService {
     }
 
     public void changeUserPw(long userNo, String password) {
+
+        if(!memberDAO.getUserPassword(userNo).equals(password)) {
+            throw new IllegalArgumentException("일치하는 비밀번호가 없습니다.");
+        }
+
         memberDAO.changeUserPw(userNo, password);
     }
 
     public void memberWithdraw(long userNo) {
+
+        if(memberDAO.getUserByNo(userNo) == null) {
+            throw new IllegalStateException("일치하는 사용자정보가 없습니다.");
+        }
+
         memberDAO.modifyMemberInfoForWithdraw(userNo);
     }
 
-    public int getUserNo(String userId) {
+    public long getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
 }
