@@ -40,8 +40,6 @@ public class MemberService {
     }
 
     public boolean getChangePwDateDiff(long userNo) {
-        String overChangePwDate = memberDAO.getChangePwDateDiff(userNo);
-
-        return "1".equals(overChangePwDate) ? true : false;
+        return memberDAO.getChangePwDateDiff(userNo);
     }
 }

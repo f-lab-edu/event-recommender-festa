@@ -34,7 +34,7 @@ public class FirebaseInitializer {
         try {
             FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(project)
                     .build();

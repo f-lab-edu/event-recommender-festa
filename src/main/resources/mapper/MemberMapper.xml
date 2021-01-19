@@ -97,9 +97,9 @@
         AND deleted = FALSE
     </select>
 
-    <select id="sendChangePwNotice" resultType="String">
+    <select id="sendChangePwNotice" resultType="boolean">
         SELECT
-              DATEDIFF(NOW(), pwLastModified) > 90
+              IF(DATEDIFF(NOW(), pwLastModified) > 90, true, false)
         FROM notice
         WHERE userNo = #{userNo}
     </select>
