@@ -1,12 +1,12 @@
 package com.festa.common.firebase;
 
 import com.festa.exception.FcmTokenException;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class FirebaseTokenManager {
     @Value("${firebase.firebaseConfigPath}")
     private String firebaseConfigPath;
 
-    public final HttpSession httpSession;
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 토큰을 레디스에 저장하는 메서드
@@ -27,7 +27,7 @@ public class FirebaseTokenManager {
      * @param token
      */
     public void register(String userNo, String token) {
-        httpSession.setAttribute(userNo, token);
+        redisTemplate.opsForValue().set(userNo, token);
     }
 
     /**
@@ -36,7 +36,7 @@ public class FirebaseTokenManager {
      * @return
      */
     public String getToken(String userNo) {
-        return String.valueOf(httpSession.getAttribute(userNo));
+        return redisTemplate.opsForValue().get(userNo);
     }
 
     /**
@@ -44,23 +44,27 @@ public class FirebaseTokenManager {
      * @param userNo
      */
     public void removeToken(String userNo) {
-        httpSession.removeAttribute(userNo);
+        redisTemplate.delete(userNo);
     }
 
     /**
      * 접근을 위한 Token을 얻어온 후 Map에 저장하는 메서드
      */
     public void makeAccessToken(long userNo) {
-        GoogleCredential googleCredential = null;
+
+        GoogleCredentials googleCredentials = null;
+
         try {
-            googleCredential = GoogleCredential
+            googleCredentials = GoogleCredentials
                     .fromStream(new FileInputStream(firebaseConfigPath))
                     .createScoped(Arrays.asList("https://www.googleapis.com/auth/firebase.remoteconfig"));
-            googleCredential.refreshToken();
+
+
+            googleCredentials.refreshIfExpired();
         } catch (IOException e) {
             throw new FcmTokenException("Token 생성에 실패하였습니다.");
         }
-        String token = googleCredential.getAccessToken();
+        String token = googleCredentials.getAccessToken().getTokenValue();
 
         register(String.valueOf(userNo), token);
     }
