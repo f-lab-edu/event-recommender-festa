@@ -40,8 +40,8 @@ public class DatabaseConfig {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setVfs(SpringBootVFS.class); //스프링부트 전용 가상파일 시스템
-        factoryBean.setTypeAliasesPackage("com.festa.dto"); //domain object(VO, DTO 등) 스캔해야할 패키지 설정
-        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource("classpath:/mapper/*.xml")); //Mapper 경로 지정
+        factoryBean.setTypeAliasesPackage("com.festa.dto."); //domain object(VO, DTO 등) 스캔해야할 패키지 설정
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/*.xml")); //Mapper 경로 지정
 
         return factoryBean.getObject();
     }

@@ -6,6 +6,8 @@ import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberLogin;
+import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,12 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_MEMBER_NULL;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
@@ -57,8 +56,8 @@ public class MemberController {
      * @param memberDTO
      * @return {@literal ResponseEntity<MemberDTO>}
      */
-    @PostMapping(value = "/signUp")
-    public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
+    @PostMapping("/signUp")
+    public ResponseEntity<MemberDTO> signUp(@RequestBody MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
@@ -68,65 +67,64 @@ public class MemberController {
     /**
      * 사용자 회원정보 조회 기능
      * @param userNo
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal ResponseEntity<MemberDTO>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<HttpStatus> getUser(@CurrentLoginUserNo long userNo) {
+    @GetMapping("/{userNo}")
+    public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
-            return RESPONSE_ENTITY_BAD_REQUEST;
+            return RESPONSE_ENTITY_MEMBER_NULL;
         }
         return RESPONSE_ENTITY_OK;
     }
 
     /**
      * 사용자 회원정보 수정 기능
-     * @param memberDTO
+     * @param memberInfo
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping(value = "/{userNo}")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody @Valid MemberDTO memberDTO) {
-        memberService.modifyMemberInfo(memberDTO);
+    @PutMapping("/{userNo}")
+    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
+        boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
+
+        if(isUserModifyInfo) {
+            memberService.modifyParticipantInfo(memberInfo);
+            memberService.modifyMemberInfo(memberInfo);
+
+        } else {
+            memberService.modifyParticipantInfo(memberInfo);
+        }
 
         return RESPONSE_ENTITY_OK;
     }
 
     /**
-     * 사용자 중복 아이디 체크
+     * 탈퇴한 사용자 아이디 체크
      * @param userId
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam long userId) {
-        boolean isIdDuplicated = memberService.isUserIdExist(userId);
+    @GetMapping("/{userId}/delete")
+    public ResponseEntity<HttpStatus> isIdDeleted(@RequestParam String userId, @RequestParam String password) {
+        memberService.isUserIdExist(userId, password);
 
-        //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(isIdDuplicated) {
-            return RESPONSE_ENTITY_CONFLICT;
-        } else {
-            return RESPONSE_ENTITY_OK;
-        }
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
      * 사용자 로그인 기능
-     * @param memberDTO
+     * @param memberLogin
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody @Valid MemberDTO memberDTO) {
-        long userId = memberDTO.getUserId();
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
+        String userId = memberLogin.getUserId();
+        String password = memberLogin.getPassword();
 
-        boolean isIdExist = memberService.isUserIdExist(userId);
-
-        //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExist) {
-            return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-        }
-        loginService.setUserNo(memberDTO.getUserNo());
+        memberService.isUserIdExist(userId, password);
+        loginService.setUserNo(memberLogin.getUserNo());
 
         firebaseTokenManager.makeAccessToken(memberDTO.getUserNo());
 
@@ -139,7 +137,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PostMapping(value = "/logout")
+    @PostMapping("/logout")
     public ResponseEntity<HttpStatus> logout(@CurrentLoginUserNo String userNo) {
         loginService.removeUserNo();
 
@@ -155,21 +153,21 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody @Valid MemberDTO memberDTO) {
-        memberService.changeUserPw(userNo, memberDTO.getPassword());
+    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
+        memberService.changeUserPw(userNo, memberLogin.getPassword());
 
         return RESPONSE_ENTITY_OK;
     }
 
     /**
      * 회원 탈퇴 기능
-     * @param memberDTO
-     * @return
+     * @Param userNo
+     * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @DeleteMapping(value = "/")
-    public ResponseEntity<HttpStatus> memberWithdraw(@RequestBody @Valid MemberDTO memberDTO) {
-        memberService.memberWithdraw(memberDTO);
+    @DeleteMapping("/")
+    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
+        memberService.memberWithdraw(userNo);
         
         return RESPONSE_ENTITY_OK;
     }

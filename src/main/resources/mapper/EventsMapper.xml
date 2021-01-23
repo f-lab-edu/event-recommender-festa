@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.EventDAO">
+
     <select id="getInfoOfEvent" resultType="com.festa.dto.EventDTO">
         SELECT
-            eventNo,
-            eventTitle,
-            eventContent,
-            startDate,
-            endDate,
-            registerDate,
-            participants,
-            writer
-        FROM NULL events
-        WHERE eventNo = #{eventNo}
+            E.eventNo,
+            E.eventTitle,
+            E.eventContent,
+            E.startDate,
+            E.endDate,
+            E.registerDate,
+            E.participantLimit,
+            E.noOfParticipants,
+            M.userNo,
+            M.userName AS writer
+        FROM events E
+        INNER JOIN members M
+        WHERE E.userNo = M.userNo
+          AND E.eventNo = #{eventNo}
     </select>
 
-    <select id="getListOfEvents" resultType="com.festa.dao.EventDTO">
+    <select id="getListOfEvents" resultType="com.festa.dto.EventDTO">
         SELECT
+            A.userNo,
+            A.eventNo,
             A.eventTitle,
             A.eventContent,
             A.startDate,
             A.endDate,
-            A.registerDate,
+            A.categoryCode,
             A.participantLimit,
             A.noOfParticipants,
+            B.registerDate,
             B.cityName,
             B.districtName,
             B.streetName,
@@ -38,27 +46,33 @@
                 E.eventContent,
                 E.startDate,
                 E.endDate,
-                E.registerDate,
+                E.categoryCode,
                 E.participantLimit,
                 E.noOfParticipants,
+                E.registerDate,
                 EA.cityName,
                 EA.districtName,
+                EA.streetCode,
                 EA.streetName,
                 EA.detail,
                 M.userName AS writer
-             FROM events E
-             LEFT OUTER JOIN event_address EA
-             ON EA.eventNo = E.eventNo
-             INNER JOIN members M
-             ON E.userNo = M.userNo
-             WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
-             ORDER BY registerDate DESC
-             LIMIT #{PageInfo.size}
+            FROM events E
+            LEFT OUTER JOIN event_address EA
+            ON EA.eventNo = E.eventNo
+            LEFT OUTER JOIN category C
+            ON C.categoryCode = E.categoryCode
+            INNER JOIN members M
+            ON E.userNo = M.userNo
+            WHERE E.userNo <![CDATA[<]]> #{pageInfo.cursorUserNo}
+            <if test=" categoryCode != 0 ">
+                AND E.categoryCode = #{categoryCode}
+            </if>
+            ORDER BY registerDate DESC
+            LIMIT #{pageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
-
     </select>
-    
+
     <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
         SELECT
             noOfParticipants,
@@ -77,6 +91,38 @@
                 AS isIdExists
     </select>
 
+    <select id="isEventExists" resultType="boolean">
+        SELECT EXISTS
+                   (SELECT eventTitle,
+                           startDate
+                    FROM events
+                    WHERE eventTitle = #{eventTitle}
+                      AND startDate  = #{startDate}
+                   )
+                   AS isEventExists
+    </select>
+
+    <select id="getParticipantList" parameterType="com.festa.model.Participants">
+        SELECT
+            P.eventNo,
+            P.userNo,
+            M.userName,
+            PA.cityName,
+            PA.districtName,
+            PA.streetCode,
+            PA.streetName,
+            PA.detail,
+            P.applyDate,
+            P.cancelDate,
+            P.participateDate
+        FROM participant P
+        LEFT OUTER JOIN participant_address PA
+        on P.eventNo = PA.eventNo
+        INNER JOIN members M
+        on P.userNo = M.userNo
+        WHERE P.eventNo = #{eventNo}
+    </select>
+
     <insert id="applyForEvents" parameterType="com.festa.model.Participants">
         INSERT INTO
             participant
@@ -86,7 +132,7 @@
              cancelDate,
              participateDate
             )
-            VALUES
+        VALUES
             (
              #{eventNo},
              #{userNo},
@@ -96,24 +142,125 @@
             )
     </insert>
 
+    <insert id="insertParticipantAddress" parameterType="com.festa.model.Participants">
+        INSERT INTO
+            participant_address
+            (userNo,
+             eventNo,
+             cityName,
+             districtName,
+             streetCode,
+             streetName,
+             detail
+             )
+        VALUES
+             (
+             #{userNo},
+             #{eventNo},
+             #{cityName},
+             #{districtName},
+             #{streetCode},
+             #{streetName},
+             #{detail}
+             )
+    </insert>
+
+    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO" useGeneratedKeys="true" keyProperty="eventNo">
+        INSERT INTO
+            events
+            (eventTitle,
+             eventContent,
+             registerDate,
+             userNo,
+             categoryCode,
+             startDate,
+             endDate,
+             participantLimit,
+             noOfParticipants
+             )
+        VALUES
+             (
+              #{eventTitle},
+              #{eventContent},
+              NOW(),
+              #{userNo},
+              #{categoryCode},
+              #{startDate},
+              #{endDate},
+              #{participantLimit},
+              #{participantLimit}
+             )
+
+    </insert>
+
+    <insert id="registerEventsAddress" parameterType="com.festa.dto.EventDTO">
+        INSERT INTO
+            event_address
+            (eventNo,
+             cityName,
+             districtName,
+             streetCode,
+             detail,
+             streetName
+             )
+        VALUES
+             (
+              #{eventNo},
+              #{cityName},
+              #{districtName},
+              #{streetCode},
+              #{detail},
+              #{streetName}
+             )
+    </insert>
+
+    <update id="modifyEventsInfo" parameterType="com.festa.dto.EventDTO">
+        UPDATE events
+            SET eventTitle = #{eventTitle}
+            AND eventContent = #{eventContent}
+        WHERE eventNo = #{eventNo}
+    </update>
+
+    <update id="modifyEventsAddress" parameterType="com.festa.dto.EventDTO">
+        UPDATE event_address
+            SET cityName = #{cityName}
+            AND districtName = #{districtName}
+            AND streetCode = #{streetCode}
+            AND streetName = #{streetName}
+            AND detail = #{detail}
+        WHERE eventNo = #{eventNo}
+    </update>
+
     <update id="cancelEvent" parameterType="long">
         UPDATE participant
-        SET cancelDate = NOW()
+            SET cancelDate = NOW()
         WHERE userNo = #{userNo}
-        AND applyDate IS NOT NULL
+            AND applyDate IS NOT NULL
     </update>
 
     <update id="increaseParticipants" parameterType="int">
         UPDATE events
-        SET noOfParticipants = noOfParticipants + 1
+            SET noOfParticipants = noOfParticipants + 1
         WHERE eventNo = #{eventNo}
-          AND noOfParticipants <![CDATA[<]]> participantLimit
+            AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
 
     <update id="reduceParticipants" parameterType="int">
         UPDATE events
-        SET noOfParticipants = noOfParticipants - 1
+            SET noOfParticipants = noOfParticipants - 1
         WHERE eventNo = #{eventNo}
-        AND noOfParticipants <![CDATA[<]]> participantLimit
+            AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
+
+    <delete id="deleteEvent" parameterType="long">
+        DELETE
+        FROM events
+        WHERE eventNo = #{eventNo}
+    </delete>
+
+    <delete id="deleteEventAddress" parameterType="long">
+        DELETE
+        FROM event_address
+        WHERE eventNo = #{eventNo}
+    </delete>
 </mapper>

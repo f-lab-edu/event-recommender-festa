@@ -1,6 +1,8 @@
 package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberLogin;
+import com.festa.model.MemberInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,17 +12,25 @@ public interface MemberDAO {
 
     void insertMemberInfo(MemberDTO memberDTO);
 
-    boolean isUserIdExist(long userId);
+    void insertMemberAddress(MemberDTO memberDTO);
 
-    void modifyMemberInfo(MemberDTO memberDTO);
+    boolean isUserIdExist(String userId, String password);
+
+    void modifyMemberInfo(MemberInfo memberInfo);
+
+    void modifyMemberAddress(MemberInfo memberInfo);
 
     MemberDTO getUserByNo(long userNo);
 
     void changeUserPw(long userNo, String password);
 
-    void modifyMemberInfoForWithdraw(MemberDTO memberDTO);
+    void modifyMemberInfoForWithdraw(long userNo);
 
-    int getUserNoById(long userId);
+    void modifyParticipantInfo(MemberInfo memberInfo);
+
+    long getUserNoById(String userId);
+
+    String getUserPassword(long userNo);
 
     boolean getChangePwDateDiff(long userNo);
 
