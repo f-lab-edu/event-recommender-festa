@@ -74,6 +74,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
  - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
  - [WIKI Home](https://github.com/f-lab-edu/event-recommender-festa/wiki)
  - [이슈해결을 정리한 테크블로그](https://github.com/f-lab-edu/event-recommender-festa/wiki/%EC%9D%B4%EC%8A%88%ED%95%B4%EA%B2%B0Posts)
+ - [젠킨스 주소 바로가기](http://27.96.135.160:8081/)
  
 <br>
 <br>
