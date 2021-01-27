@@ -7,9 +7,7 @@ pipeline {
 
     stages {
         stage('Poll') {
-            steps {
-                checkout scm
-            }
+          checkout scm
         }
 
         stage('Build') {
