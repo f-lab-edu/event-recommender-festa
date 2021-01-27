@@ -1,24 +1,40 @@
 pipeline {
    agent any
+   
+   stages {
+        stage('Poll') {
+           steps {
+               checkout scm
+           }
+        }
 
+        stage('Build') {
+            steps {
+                 script {
+                     sh 'mvn clean vertify -DskipITs=true';
+                 }
+            }
+        }
 
-  stage('Poll') {
-      checkout scm
-  }
+        stage('Unit Test') {
+           steps {
+                 script {
+                     sh 'mvn surefire:test
+                     junit '**/target/surefire-reports/TEST-*.xml'
+                 }
+            }
+        }
 
-  stage('Build') {
-      sh 'mvn clean vertify -DskipITs=true';
-  }
+        stage('Integration Test') {
+           steps {
+                script {
+                     sh 'mvn clean vertify -Dsurefire.skip=true';
+                     junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
+                }
+            }
+        }
+   }
 
-  stage('Unit Test') {
-      junit '**/target/surefire-reports/TEST-*.xml'
-  }
-
-  stage('Integration Test') {
-      sh 'mvn clean vertify -Dsurefire.skip=true';
-      junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
-  }
-  
   post { 
         success { 
             echo 'Build Success!'
