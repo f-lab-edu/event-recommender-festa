@@ -7,20 +7,28 @@ pipeline {
 
     stages {
         stage('Poll') {
-          checkout scm
+           steps {
+            checkout scm
+           }
         }
 
         stage('Build') {
-          sh 'mvn clean vertify -DskipITs=true';
+           steps {
+            sh 'mvn clean vertify -DskipITs=true';
+           }
         }
         
         stage('Unit Test') {
-          junit '**/target/surefire-reports/TEST-*.xml'
+           steps {
+            junit '**/target/surefire-reports/TEST-*.xml'
+           }
         }
   
         stage('Integration Test') {
-          sh 'mvn clean vertify -Dsurefire.skip=true';
-          junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
+           steps {
+            sh 'mvn clean vertify -Dsurefire.skip=true';
+            junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
+           }
         }
    }
   
