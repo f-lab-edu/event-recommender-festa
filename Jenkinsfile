@@ -1,6 +1,4 @@
 pipeline {
-   agent any
-   
    stages {
         stage('Poll') {
            steps {
