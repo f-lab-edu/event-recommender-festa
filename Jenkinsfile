@@ -34,7 +34,7 @@ pipeline {
         }
      
         failure {
-           steps {
+           step {
                mail to: "jes7077@gmail.com", 
                subject: "Job Failed!",
                body: "<b>Error at : </b><a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]</a>"
