@@ -1,9 +1,5 @@
 pipeline {
-   agent any
-
-    tools {
-        maven 'mvn3.6.3'
-    }
+   agent none
    
    stages {
         stage('Poll') {
