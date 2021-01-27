@@ -30,8 +30,9 @@ pipeline {
         success { 
             echo 'Build Success!'
         }
+     
         failure {
-            mail to: jes7077@gmail.com
+            mail to: "jes7077@gmail.com"
           , subject: "Job Failes, Please check: '${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]'"
         }
     }
