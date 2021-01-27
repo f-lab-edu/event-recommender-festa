@@ -1,10 +1,6 @@
 pipeline {
    agent any
 
-    tools {
-        maven 'mvn3.6.3'
-    }
-
     stages {
         stage('Poll') {
            steps {
@@ -39,7 +35,8 @@ pipeline {
      
         failure {
             mail to: "jes7077@gmail.com", 
-            subject: "Job Failed!"
+            subject: "Job Failed!",
+            body: "<b>Error at : </b><a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BRANCH_NAME}] [${env.BUILD_NUMBER}]</a>"
         }
     }
 }
