@@ -36,10 +36,6 @@ pipeline {
    }
 
   post { 
-        success { 
-            echo 'Build Success!'
-        }
-     
         failure {
             mail to: "jes7077@gmail.com", 
             subject: "Job Failed!",
