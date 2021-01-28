@@ -16,7 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                  script {
-                     sh 'mvn clean verify -DskipITs=true';
+                     sh 'mvn clean package -DskipTests=true';
                  }
             }
         }
