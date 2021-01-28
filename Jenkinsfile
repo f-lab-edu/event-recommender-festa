@@ -16,7 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                  script {
-                     sh 'mvn clean vertify -DskipITs=true';
+                     sh 'mvn clean verify -DskipITs=true';
                  }
             }
         }
@@ -33,7 +33,7 @@ pipeline {
         stage('Integration Test') {
            steps {
                 script {
-                     sh 'mvn clean vertify -Dsurefire.skip=true';
+                     sh 'mvn clean verify -Dsurefire.skip=true';
                      junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
                 }
             }
