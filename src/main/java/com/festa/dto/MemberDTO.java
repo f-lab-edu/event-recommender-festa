@@ -32,7 +32,6 @@ public class MemberDTO {
     String password;
 
     @NotBlank(message = "이메일을 입력해주세요")
-    @Email
     String email;
 
     @Pattern(regexp = "(^02.{0}|^01.{1}|[0-9]{3})([0-9]{4})([0-9]{4})",
