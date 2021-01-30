@@ -67,7 +67,7 @@ public class UserSignUpValidationTests {
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
 
         ConstraintViolation<MemberDTO> violation = violations.iterator().next();
-        assertEquals("비밀번호를 입력해주세요", violation.getMessage());
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
     }
 
     @DisplayName("이름 미입력시 회원가입 불가")
@@ -111,7 +111,7 @@ public class UserSignUpValidationTests {
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
 
         ConstraintViolation<MemberDTO> violation = violations.iterator().next();
-        assertEquals("올바른 형식의 이메일 주소여야 합니다", violation.getMessage());
+        assertEquals("이메일을 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("비밀번호 특수기호 미포함 시 회원가입 불가")
