@@ -41,11 +41,7 @@ pipeline {
 
    post {
         always {
-             script {
-                  if(env.CHANGE_ID) {
-                       pullRequest.comment("Show build result: ${currentBuild.absoluteUrl}")
-                  }
-             }
+             echo 'Build Success'
         }
    }
 }
