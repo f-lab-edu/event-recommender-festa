@@ -208,5 +208,7 @@ class MemberServiceTests {
         memberService.modifyMemberInfo(modifyDeletedMemberInfoSetUp());
 
         doNothing().when(memberDAO).modifyMemberInfo(modifyDeletedMemberInfoSetUp());
+
+        then(memberDAO).should(never()).modifyMemberInfo(modifyDeletedMemberInfoSetUp());
     }
 }
