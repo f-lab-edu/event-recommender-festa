@@ -142,7 +142,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!--Unit test 실행을 위해 Build lifecycle 에서 test phrase동안 사용되어지는 플러그인-->
+            <!--Unit test 실행을 위해 Build lifecycle 에서 test phrase동안 사용되어지며 XML이나 txt 파일의 테스트 결과를 만들어주는 플러그인-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
