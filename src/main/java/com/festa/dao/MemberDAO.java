@@ -32,4 +32,6 @@ public interface MemberDAO {
 
     String getUserPassword(long userNo);
 
+    boolean getChangePwDateDiff(long userNo);
+
 }

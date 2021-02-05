@@ -79,4 +79,8 @@ public class MemberService {
     public long getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
+
+    public boolean getChangePwDateDiff(long userNo) {
+        return memberDAO.getChangePwDateDiff(userNo);
+    }
 }
