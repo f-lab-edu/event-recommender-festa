@@ -7,17 +7,21 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-@Service
+@Configuration
 public class FirebaseInitializer {
 
     @Value("${firebase.firebaseConfigPath}")
     private String firebaseConfigPath;
+
     @Value("${firebase.database.url}")
     private String project;
 
