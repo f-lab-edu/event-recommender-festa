@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
-@PropertySource("application-firebase.properties")
 public class FirebaseInitializer {
 
     @Value("${firebase.firebaseConfigPath}")

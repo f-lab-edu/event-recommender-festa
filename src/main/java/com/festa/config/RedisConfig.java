@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@PropertySource("application-default.properties")
 public class RedisConfig {
 
     @Value("${spring.redis.host}")

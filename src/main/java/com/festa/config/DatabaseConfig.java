@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@PropertySource("application-default.properties")
 @EnableTransactionManagement
 public class DatabaseConfig {
 

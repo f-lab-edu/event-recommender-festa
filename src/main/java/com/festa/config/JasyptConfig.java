@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("application-default.properties")
 public class JasyptConfig {
 
     @Bean("jasyptStringEncryptor")
