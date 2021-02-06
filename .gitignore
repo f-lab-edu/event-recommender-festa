@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### ignore files ###
-application.properties
+application-default.properties
+application-firebase.properties
