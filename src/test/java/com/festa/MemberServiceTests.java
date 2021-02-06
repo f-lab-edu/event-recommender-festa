@@ -20,9 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(SpringExtension.class)
 class MemberServiceTests {
@@ -145,10 +143,11 @@ class MemberServiceTests {
     public void memberWithdrawWithoutUserInfoTest() {
         given(memberDAO.getUserByNo(5)).willReturn(null);
 
-        memberService.memberWithdraw(5);
+        Exception exception = assertThrows(IllegalStateException.class, () -> memberService.memberWithdraw(5));
+        String exceptedMessage = "일치하는 사용자정보가 없습니다.";
+        String actualMessage = exception.getMessage();
 
-        assertThrows(IllegalStateException.class, () -> memberService.memberWithdraw(5));
-
+        assertTrue(actualMessage.contains(exceptedMessage));
     }
 
     @DisplayName("기존 비밀번호가 일치할 경우 비밀번호 변경에 성공한다")
@@ -184,9 +183,9 @@ class MemberServiceTests {
     public void getUserDeletedTest() {
         given(memberDAO.getUserByNo(1)).willReturn(null);
 
-        MemberDTO memberInfo = memberService.getUser(1);
+        memberService.getUser(1);
 
-        assertThat(memberInfo.isDeleted(), is(not(true)));
+        assertNull(memberService.getUser(1));
     }
 
     @DisplayName("회원정보 수정에 성공한다")
@@ -205,10 +204,10 @@ class MemberServiceTests {
     @DisplayName("회원정보 수정할 때 탈퇴한 회원임이 확인되면 수정을 하지 않는다")
     @Test
     public void modifyDeletedMemberInfoTest() {
-        memberService.modifyMemberInfo(modifyMemberInfoSetUp());
+        memberService.modifyMemberInfo(modifyDeletedMemberInfoSetUp());
 
         doNothing().when(memberDAO).modifyMemberInfo(modifyDeletedMemberInfoSetUp());
 
-        assertThat(modifyDeletedMemberInfoSetUp().isDeleted(), is(not(true)));
+        then(memberDAO).should(never()).modifyMemberInfo(modifyDeletedMemberInfoSetUp());
     }
 }

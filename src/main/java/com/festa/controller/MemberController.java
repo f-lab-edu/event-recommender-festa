@@ -126,9 +126,9 @@ public class MemberController {
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
-        firebaseTokenManager.makeAccessToken(memberDTO.getUserNo());
+        firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        return ResponseEntity.ok(memberService.getChangePwDateDiff(memberDTO.getUserNo()));
+        return ResponseEntity.ok(memberService.getChangePwDateDiff(memberLogin.getUserNo()));
     }
 
     /**

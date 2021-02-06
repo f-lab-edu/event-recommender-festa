@@ -67,7 +67,7 @@ public class UserSignUpValidationTests {
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
 
         ConstraintViolation<MemberDTO> violation = violations.iterator().next();
-        assertEquals("비밀번호를 입력해주세요", violation.getMessage());
+        assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
     }
 
     @DisplayName("이름 미입력시 회원가입 불가")
@@ -224,6 +224,28 @@ public class UserSignUpValidationTests {
         assertEquals("영문 대소문자와 숫자, 특수기호가 1개씩 포함되어있는 5~10자 비밀번호입니다", violation.getMessage());
     }
 
+    @DisplayName("전화번호 미입력 시 회원가입 불가")
+    @Test
+    public void signUpWithoutPhoneTest() {
+        MemberDTO memberInfo = MemberDTO.builder()
+                .userId("jes7077")
+                .password("test123#")
+                .userName("제인")
+                .email("aaa@aaa.com")
+                .phoneNo(" ")
+                .userLevel(UserLevel.valueOf("USER"))
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("종로")
+                .build();
+
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
+
+        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
+        assertEquals("01012341234 와 같은 형식으로 입력해주세요", violation.getMessage());
+    }
+
     @DisplayName("전화번호 하이픈 입력 시 회원가입 불가")
     @Test
     public void signUpInvalidPhonePatternTest() {
@@ -243,29 +265,7 @@ public class UserSignUpValidationTests {
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
 
         ConstraintViolation<MemberDTO> violation = violations.iterator().next();
-        assertEquals("하이픈 없이 입력해주세요", violation.getMessage());
-    }
-
-    @DisplayName("전화번호 미입력 시 회원가입 불가")
-    @Test
-    public void signUpWithoutPhoneTest() {
-        MemberDTO memberInfo = MemberDTO.builder()
-                .userId("jes7077")
-                .password("test123#")
-                .userName("제인")
-                .email("aaa@aaa.com")
-                .phoneNo("")
-                .userLevel(UserLevel.valueOf("USER"))
-                .cityName("서울")
-                .districtName("종로구")
-                .streetCode("1")
-                .streetName("종로")
-                .build();
-
-        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberInfo);
-
-        ConstraintViolation<MemberDTO> violation = violations.iterator().next();
-        assertEquals("전화번호를 입력해주세요", violation.getMessage());
+        assertEquals("01012341234 와 같은 형식으로 입력해주세요", violation.getMessage());
     }
 
     @DisplayName("아이디가 null일 경우 로그인 실패")
