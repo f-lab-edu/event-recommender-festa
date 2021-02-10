@@ -17,10 +17,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,9 +58,9 @@ class MemberControllerTests {
     @DisplayName("존재하는 사용자정보를 조회하는 경우 200 상태코드를 리턴한다.")
     @Test
     public void getUserTest() throws Exception {
-        when(memberService.getUser(1)).thenReturn(existedMemberInfo());
+        given(memberService.getUser(1)).willReturn(existedMemberInfo());
 
-        this.mockMvc.perform(get("/members/{userNo}", existedMemberInfo().getUserNo())
+        this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
                 .param("userNo", "1"))
                 .andExpect(status().isOk());
 
@@ -68,7 +69,7 @@ class MemberControllerTests {
     @DisplayName("삭제된 사용자정보를 조회하는 경우 200 상태코드와 함께 빈 body를 리턴한다.")
     @Test
     public void getDeletedUserTest() throws Exception {
-        when(memberService.getUser(2)).thenReturn(null);
+        given(memberService.getUser(2)).willReturn(null);
 
         this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
                 .param("userNo", "2"))
@@ -103,5 +104,107 @@ class MemberControllerTests {
                                 .andExpect(status().isOk());
 
         then(loginService).should().setUserNo(loginInfo.getUserNo());
+    }
+
+    @DisplayName("회원 식별번호인 userNo가 0이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")
+    @Test
+    public void changePasswordWithoutUserNoTest() throws Exception {
+        long userNo = 0L;
+        given(loginService.getUserNo()).willReturn(userNo);
+        MemberLogin loginInfo = new MemberLogin(userNo, "rbdl879", "test123##");
+
+        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"0\",\"userId\":\"rbdl879\",\"password\":\"test123##\"}"));
+
+        assertNotEquals(userNo, 1L);
+    }
+
+    @DisplayName("비밀번호를 입력하지 않는다면 비밀번호 변경에 실패한다.")
+    @Test
+    public void changePasswordWithoutPasswordTest() throws Exception {
+        given(loginService.getUserNo()).willReturn(1L);
+        MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "");
+
+        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\",\"userId\":\"rbdl879\",\"password\":\" \"}"));
+
+        then(memberService).should(never()).changeUserPw(1L, loginInfo.getPassword());
+    }
+
+    @DisplayName("로그인한 아이디와 비밀번호를 입력하면 비밀번호 변경에 성공한다.")
+    @Test
+    public void changePasswordWithoutUserIdTest() throws Exception {
+        given(loginService.getUserNo()).willReturn(1L);
+        MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##");
+
+        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\",\"userId\":\"rbdl879\",\"password\":\"test123##\"}"))
+                .andExpect(status().isOk());
+
+        then(memberService).should().changeUserPw(1L, loginInfo.getPassword());
+    }
+
+    @DisplayName("회원의 식별번호인 userNo가 0이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")
+    @Test
+    public void memberWithdrawWithoutUserNoTest() throws Exception {
+        long userNo = 0L;
+        given(loginService.getUserNo()).willReturn(userNo);
+
+        this.mockMvc.perform(delete("/members/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"0\""));
+
+        assertNotEquals(userNo, 1L);
+    }
+
+    @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 해당 회원의 탈퇴에 성공한다.")
+    @Test
+    public void memberWithdrawTest() throws Exception {
+        long userNo = 1L;
+        given(loginService.getUserNo()).willReturn(userNo);
+
+        this.mockMvc.perform(delete("/members/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\""))
+                .andExpect(status().isOk());
+
+        then(memberService).should().memberWithdraw(userNo);
+    }
+
+    @DisplayName("회원 식별번호인 userNo가 0이라면 로그인한 상태가 아니기 때문에 로그아웃에 실패한다.")
+    @Test
+    public void memberLogoutNotLoginStatusTest() throws Exception {
+        long userNo = 0L;
+        given(loginService.getUserNo()).willReturn(userNo);
+
+        this.mockMvc.perform(post("/members/logout")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"0\""));
+
+        assertNotEquals(userNo, 1L);
+    }
+
+    @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 로그아웃에 성공한다.")
+    @Test
+    public void memberLogoutTest() throws Exception {
+        long userNo = 1L;
+        given(loginService.getUserNo()).willReturn(userNo);
+
+        this.mockMvc.perform(post("/members/logout")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\""))
+                .andExpect(status().isOk());
+
+        then(loginService).should().removeUserNo();
     }
 }
