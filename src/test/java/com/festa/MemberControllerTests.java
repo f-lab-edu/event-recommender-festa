@@ -97,18 +97,19 @@ class MemberControllerTests {
 
     @DisplayName("존재하는 사용자정보를 조회하는 경우 200 상태코드를 리턴한다.")
     @Test
-    public void getUserTest() throws Exception {
+    public void whenUserInfoIsExistedThenResponseOKGetUserTest() throws Exception {
         given(memberService.getUser(1)).willReturn(existedMemberInfo());
 
         this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
                 .param("userNo", "1"))
                 .andExpect(status().isOk());
 
+        then(memberService).should().getUser(1);
     }
 
     @DisplayName("삭제된 사용자정보를 조회하는 경우 200 상태코드와 함께 빈 body를 리턴한다.")
     @Test
-    public void getDeletedUserTest() throws Exception {
+    public void whenUserIdIsDeletedThenResponseEmptyBodyGetUserTest() throws Exception {
         given(memberService.getUser(2)).willReturn(null);
 
         this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
@@ -120,7 +121,7 @@ class MemberControllerTests {
 
     @DisplayName("탈퇴하지 않은 사용자라면 service layer에서 예외가 발생하지 않으므로 200 상태코드를 리턴한다.")
     @Test
-    public void isDeletedIdTest() throws Exception {
+    public void whenUserIdNotDeletedThenReturnOKIsUserIdExistTest() throws Exception {
         doNothing().when(memberService).isUserIdExist("jes7077", "123##test");
 
         this.mockMvc.perform(get("/members/{userId}/delete", "{userId}")
@@ -132,7 +133,7 @@ class MemberControllerTests {
 
     @DisplayName("존재하는 회원이 로그인 요청을 하면 정상적으로 로그인한다.")
     @Test
-    public void loginTest() throws Exception {
+    public void whenExistedMemberRequestLoginThenSuccessLoginTest() throws Exception {
         MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##");
 
         doNothing().when(memberService).isUserIdExist("rbdl879", "test123##");
@@ -148,7 +149,7 @@ class MemberControllerTests {
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")
     @Test
-    public void changePasswordWithoutUserNoTest() throws Exception {
+    public void whenUserNoNullThenFailChangeUserPwTest() throws Exception {
         Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
         given(loginService.getUserNo()).willReturn(userNo);
         MemberLogin loginInfo = new MemberLogin(0, "rbdl879", "test123##");
@@ -163,7 +164,7 @@ class MemberControllerTests {
 
     @DisplayName("비밀번호를 입력하지 않는다면 비밀번호 변경에 실패한다.")
     @Test
-    public void changePasswordWithoutPasswordTest() throws Exception {
+    public void whenPasswordNullThenFailChangeUserPwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(1L);
         MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "");
 
@@ -177,7 +178,7 @@ class MemberControllerTests {
 
     @DisplayName("로그인한 아이디와 비밀번호를 입력하면 비밀번호 변경에 성공한다.")
     @Test
-    public void changePasswordWithoutUserIdTest() throws Exception {
+    public void whenUserIdAndPasswordIsNotNullThenSuccessChangePwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(1L);
         MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##");
 
@@ -192,7 +193,7 @@ class MemberControllerTests {
 
     @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")
     @Test
-    public void memberWithdrawWithoutUserNoTest() throws Exception {
+    public void whenUserNoNullThenFailMemberWithdrawTest() throws Exception {
         Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
         given(loginService.getUserNo()).willReturn(userNo);
 
@@ -206,7 +207,7 @@ class MemberControllerTests {
 
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 해당 회원의 탈퇴에 성공한다.")
     @Test
-    public void memberWithdrawTest() throws Exception {
+    public void whenUserNoIsNotNullThenSuccessMemberWithdrawTest() throws Exception {
         long userNo = 1L;
         given(loginService.getUserNo()).willReturn(userNo);
 
@@ -221,7 +222,7 @@ class MemberControllerTests {
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 상태가 아니기 때문에 로그아웃에 실패한다.")
     @Test
-    public void memberLogoutNotLoginStatusTest() throws Exception {
+    public void whenUserNoIsNullThenFailLogoutTest() throws Exception {
         Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
 
         this.mockMvc.perform(post("/members/logout")
@@ -234,7 +235,7 @@ class MemberControllerTests {
 
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 로그아웃에 성공한다.")
     @Test
-    public void memberLogoutTest() throws Exception {
+    public void whenUserNoIsNotNullThenSuccessLogoutTest() throws Exception {
         mockHttpSession.setAttribute("USER_NO", 1L);
         given(loginService.getUserNo()).willReturn(1L);
 
@@ -282,15 +283,15 @@ class MemberControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userNo\":\"1\"," +
-                        "\"userName\":\"제인\"," +
-                        "\"phoneNo\":\"01033334444\"," +
-                        "\"isDeleted\":\"false\"," +
-                        "\"cityName\":\"서울\"," +
-                        "\"districtName\":\"종로구\"," +
-                        "\"streetCode\":\"1\"," +
-                        "\"streetName\":\"세종대로\"," +
-                        "\"detail\":\"청운동 1번지\"," +
-                        "\"isUserModifyInfo\":\"false\"}"))
+                          "\"userName\":\"제인\"," +
+                          "\"phoneNo\":\"01033334444\"," +
+                          "\"isDeleted\":\"false\"," +
+                          "\"cityName\":\"서울\"," +
+                          "\"districtName\":\"종로구\"," +
+                          "\"streetCode\":\"1\"," +
+                          "\"streetName\":\"세종대로\"," +
+                          "\"detail\":\"청운동 1번지\"," +
+                          "\"isUserModifyInfo\":\"false\"}"))
                 .andExpect(status().isOk());
 
         assertFalse(isUserModifyInfo);
