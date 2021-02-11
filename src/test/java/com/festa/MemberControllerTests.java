@@ -4,6 +4,7 @@ import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.controller.MemberController;
 import com.festa.dto.MemberDTO;
+import com.festa.model.MemberInfo;
 import com.festa.model.MemberLogin;
 import com.festa.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
@@ -52,6 +53,36 @@ class MemberControllerTests {
                 .streetCode("1")
                 .streetName("종로")
                 .isDeleted(false)
+                .build();
+    }
+
+    public MemberInfo modifyMemberInfoTrue() {
+        return MemberInfo.builder()
+                .userNo(1)
+                .userName("제인")
+                .phoneNo("01033334444")
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("세종대로")
+                .detail("청운동 1번지")
+                .isDeleted(false)
+                .isUserModifyInfo(true)
+                .build();
+    }
+
+    public MemberInfo modifyMemberInfoFalse() {
+        return MemberInfo.builder()
+                .userNo(1)
+                .userName("제인")
+                .phoneNo("01033334444")
+                .cityName("서울")
+                .districtName("종로구")
+                .streetCode("1")
+                .streetName("세종대로")
+                .detail("청운동 1번지")
+                .isDeleted(false)
+                .isUserModifyInfo(false)
                 .build();
     }
 
@@ -206,5 +237,57 @@ class MemberControllerTests {
                 .andExpect(status().isOk());
 
         then(loginService).should().removeUserNo();
+    }
+
+    @DisplayName("isUserModify가 True 값이라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
+    @Test
+    public void whenIsUserModifyInfoTrueThenModifyMemberAndParticipantInfo() throws Exception {
+        boolean isUserModifyInfo = modifyMemberInfoTrue().isUserModifyInfo();
+
+        this.mockMvc.perform(put("/members/{userNo}", "{userNo}")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\"," +
+                          "\"userName\":\"제인\"," +
+                          "\"phoneNo\":\"01033334444\"," +
+                          "\"isDeleted\":\"false\"," +
+                          "\"cityName\":\"서울\"," +
+                          "\"districtName\":\"종로구\"," +
+                          "\"streetCode\":\"1\"," +
+                          "\"streetName\":\"세종대로\"," +
+                          "\"detail\":\"청운동 1번지\"," +
+                          "\"isUserModifyInfo\":\"true\"}"))
+                .andExpect(status().isOk());
+
+        assertTrue(isUserModifyInfo);
+
+        then(memberService).should().modifyParticipantInfo(modifyMemberInfoTrue());
+        then(memberService).should().modifyMemberInfo(modifyMemberInfoTrue());
+    }
+
+    @DisplayName("isUserModify가 False 값이라면 해당 회원의 이벤트 참여자 정보만 수정한다.")
+    @Test
+    public void whenIsUserModifyInfoFalseThenOnlyModifyParticipantInfo() throws Exception {
+        boolean isUserModifyInfo = modifyMemberInfoFalse().isUserModifyInfo();
+
+        this.mockMvc.perform(put("/members/{userNo}", "{userNo}")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userNo\":\"1\"," +
+                        "\"userName\":\"제인\"," +
+                        "\"phoneNo\":\"01033334444\"," +
+                        "\"isDeleted\":\"false\"," +
+                        "\"cityName\":\"서울\"," +
+                        "\"districtName\":\"종로구\"," +
+                        "\"streetCode\":\"1\"," +
+                        "\"streetName\":\"세종대로\"," +
+                        "\"detail\":\"청운동 1번지\"," +
+                        "\"isUserModifyInfo\":\"false\"}"))
+                .andExpect(status().isOk());
+
+        assertFalse(isUserModifyInfo);
+
+        then(memberService).should().modifyParticipantInfo(modifyMemberInfoFalse());
+        then(memberService).should(never()).modifyMemberInfo(modifyMemberInfoFalse());
     }
 }
