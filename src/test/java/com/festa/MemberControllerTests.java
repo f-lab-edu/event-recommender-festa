@@ -107,16 +107,14 @@ class MemberControllerTests {
         then(memberService).should().getUser(1);
     }
 
-    @DisplayName("삭제된 사용자정보를 조회하는 경우 200 상태코드와 함께 빈 body를 리턴한다.")
+    @DisplayName("삭제된 사용자정보를 조회하는 경우 404 상태코드를 리턴한다.")
     @Test
     public void whenUserIdIsDeletedThenResponseEmptyBodyGetUserTest() throws Exception {
         given(memberService.getUser(2)).willReturn(null);
 
         this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
                 .param("userNo", "2"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("")));
-
+                .andExpect(status().is4xxClientError());
     }
 
     @DisplayName("탈퇴하지 않은 사용자라면 service layer에서 예외가 발생하지 않으므로 200 상태코드를 리턴한다.")
