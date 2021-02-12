@@ -246,7 +246,7 @@ class MemberControllerTests {
         then(loginService).should().removeUserNo();
     }
 
-    @DisplayName("isUserModify가 True 값이라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
+    @DisplayName("참여자 정보 수정 시 해당 회원정보도 함께 수정할지에 대한 여부가 True 라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
     @Test
     public void whenIsUserModifyInfoTrueThenModifyMemberAndParticipantInfo() throws Exception {
         boolean isUserModifyInfo = modifyMemberInfoTrue().isUserModifyInfo();
@@ -272,7 +272,7 @@ class MemberControllerTests {
         then(memberService).should().modifyMemberInfo(modifyMemberInfoTrue());
     }
 
-    @DisplayName("isUserModify가 False 값이라면 해당 회원의 이벤트 참여자 정보만 수정한다.")
+    @DisplayName("참여자 정보 수정 시 회원정보도 함께 수정할지에 대한 여부가 False 라면 해당 회원의 이벤트 참여자 정보만 수정한다.")
     @Test
     public void whenIsUserModifyInfoFalseThenOnlyModifyParticipantInfo() throws Exception {
         boolean isUserModifyInfo = modifyMemberInfoFalse().isUserModifyInfo();
