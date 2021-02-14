@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
