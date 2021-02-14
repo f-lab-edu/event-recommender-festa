@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_MEMBER_NULL;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
@@ -75,7 +75,7 @@ public class MemberController {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
-            return RESPONSE_ENTITY_MEMBER_NULL;
+            return RESPONSE_ENTITY_NOT_FOUND;
         }
         return RESPONSE_ENTITY_OK;
     }
