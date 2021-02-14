@@ -14,6 +14,8 @@ public interface EventDAO {
 
     List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode);
 
+    List<Long> getAppliedEvent(long userNo);
+
     EventDTO getInfoOfEvent(long eventNo);
 
     void applyForEvents(Participants participants);

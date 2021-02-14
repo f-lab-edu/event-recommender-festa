@@ -102,6 +102,13 @@
                    AS isEventExists
     </select>
 
+    <select id="getAppliedEvent" resultType="long">
+        SELECT
+            eventNo
+        FROM participant
+        WHERE userNo = #{userNo}
+    </select>
+
     <select id="getParticipantList" parameterType="com.festa.model.Participants">
         SELECT
             P.eventNo,

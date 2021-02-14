@@ -1,6 +1,8 @@
 package com.festa.service;
 
+import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
+import com.festa.dto.EventDTO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +10,16 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberDAO memberDAO;
+    private final EventDAO eventDAO;
 
     @Transactional
     public void insertMemberInfo(MemberDTO memberDTO) {
@@ -65,6 +71,25 @@ public class MemberService {
         }
 
         memberDAO.changeUserPw(userNo, password);
+    }
+
+    public Map<String, Boolean> sendEventStartNotice(long userNo) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Boolean> response = new HashMap<>();
+
+        List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
+
+        for(long eventNo : appliedEvents) {
+            EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
+
+            if(dateFormat.format(new Date()).equals(eventInfo.getStartDate())) {
+                response.put(eventInfo.getEventTitle(), true);
+
+            } else {
+                response.put(eventInfo.getEventTitle(), false);
+            }
+        }
+        return response;
     }
 
     public void memberWithdraw(long userNo) {

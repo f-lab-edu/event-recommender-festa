@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
@@ -128,7 +131,12 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        return ResponseEntity.ok(memberService.getChangePwDateDiff(memberLogin.getUserNo()));
+        Map<String, Boolean> response = memberService.sendEventStartNotice(memberLogin.getUserNo());
+        boolean isUserNeedToChangePw = memberService.getChangePwDateDiff(memberLogin.getUserNo());
+
+        response.put("비밀번호 변경알림", isUserNeedToChangePw);
+
+        return ResponseEntity.ok(response);
     }
 
     /**
