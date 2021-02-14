@@ -138,10 +138,11 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@CurrentLoginUserNo String userNo) {
+    public ResponseEntity<HttpStatus> logout(@CurrentLoginUserNo long userNo) {
         loginService.removeUserNo();
 
-        firebaseTokenManager.removeToken(userNo);
+        String string_userNo = String.valueOf(userNo);
+        firebaseTokenManager.removeToken(string_userNo);
 
         return RESPONSE_ENTITY_OK;
     }

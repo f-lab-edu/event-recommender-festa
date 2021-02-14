@@ -3,21 +3,25 @@ package com.festa.common.firebase;
 import com.festa.exception.FcmTokenException;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
 @Component
-@RequiredArgsConstructor
+@Log4j2
 public class FirebaseTokenManager {
 
     @Value("${firebase.firebaseConfigPath}")
     private String firebaseConfigPath;
 
+    @Resource
     private RedisTemplate<String, String> redisTemplate;
 
     /**

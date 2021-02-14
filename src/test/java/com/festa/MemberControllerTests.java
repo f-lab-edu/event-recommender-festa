@@ -2,6 +2,7 @@ package com.festa;
 
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
+import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.controller.MemberController;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
@@ -19,7 +20,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -40,6 +40,9 @@ class MemberControllerTests {
 
     @MockBean
     private LoginService loginService;
+
+    @MockBean
+    private FirebaseTokenManager firebaseTokenManager;
 
     private MockHttpSession mockHttpSession;
 
@@ -221,14 +224,16 @@ class MemberControllerTests {
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 상태가 아니기 때문에 로그아웃에 실패한다.")
     @Test
     public void whenUserNoIsNullThenFailLogoutTest() throws Exception {
-        Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
+        String userNo = (String) mockHttpSession.getAttribute("USER_NO");
 
         this.mockMvc.perform(post("/members/logout")
+                .param("userNo", userNo)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userNo\":\" \""));
 
         assertNull(userNo);
+        then(firebaseTokenManager).should(never()).removeToken(userNo);
     }
 
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 로그아웃에 성공한다.")
@@ -244,6 +249,7 @@ class MemberControllerTests {
                 .andExpect(status().isOk());
 
         then(loginService).should().removeUserNo();
+        then(firebaseTokenManager).should().removeToken("1");
     }
 
     @DisplayName("참여자 정보 수정 시 해당 회원정보도 함께 수정할지에 대한 여부가 True 라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
