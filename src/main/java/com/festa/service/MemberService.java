@@ -1,5 +1,6 @@
 package com.festa.service;
 
+import com.festa.common.commonService.ConvertDataType;
 import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
@@ -23,6 +24,7 @@ public class MemberService {
 
     private final MemberDAO memberDAO;
     private final EventDAO eventDAO;
+    private final ConvertDataType convertDataType;
 
     @Transactional
     public void insertMemberInfo(MemberDTO memberDTO) {
@@ -77,7 +79,6 @@ public class MemberService {
     }
 
     public List<AlertResponse> sendEventStartNotice(long userNo) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<AlertResponse> response = new LinkedList<>();
 
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
@@ -85,7 +86,7 @@ public class MemberService {
         for(long eventNo : appliedEvents) {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
-            if(dateFormat.format(new Date()).equals(eventInfo.getStartDate())) {
+            if(convertDataType.dataFormat().equals(eventInfo.getStartDate())) {
                 AlertResponse sendAlert = AlertResponse.builder()
                         .eventNo(eventInfo.getEventNo())
                         .eventTitle(eventInfo.getEventTitle())
