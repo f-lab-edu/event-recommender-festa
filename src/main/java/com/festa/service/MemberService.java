@@ -4,6 +4,7 @@ import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
 import com.festa.dto.MemberDTO;
+import com.festa.model.AlertResponse;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,9 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Log4j2
@@ -76,9 +76,9 @@ public class MemberService {
         memberDAO.changeUserPw(userNo, password);
     }
 
-    public Map<String, Boolean> sendEventStartNotice(long userNo) {
+    public List<AlertResponse> sendEventStartNotice(long userNo) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String, Boolean> response = new HashMap<>();
+        List<AlertResponse> response = new LinkedList<>();
 
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
@@ -86,10 +86,22 @@ public class MemberService {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
             if(dateFormat.format(new Date()).equals(eventInfo.getStartDate())) {
-                response.put(eventInfo.getEventTitle(), true);
+                AlertResponse sendAlert = AlertResponse.builder()
+                        .eventNo(eventInfo.getEventNo())
+                        .eventTitle(eventInfo.getEventTitle())
+                        .isAlertNeed(true)
+                        .build();
+
+                response.add(sendAlert);
 
             } else {
-                response.put(eventInfo.getEventTitle(), false);
+                AlertResponse notSendAlert = AlertResponse.builder()
+                        .eventNo(eventInfo.getEventNo())
+                        .eventTitle(eventInfo.getEventTitle())
+                        .isAlertNeed(false)
+                        .build();
+
+                response.add(notSendAlert);
             }
         }
         return response;
@@ -108,7 +120,11 @@ public class MemberService {
         return memberDAO.getUserNoById(userId);
     }
 
-    public boolean getChangePwDateDiff(long userNo) {
-        return memberDAO.getChangePwDateDiff(userNo);
+    public AlertResponse getChangePwDateDiff(long userNo) {
+
+        return AlertResponse.builder()
+                .eventTitle("sendChangePwAlert")
+                .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
+                .build();
     }
 }

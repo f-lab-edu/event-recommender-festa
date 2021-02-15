@@ -6,6 +6,7 @@ import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
+import com.festa.model.AlertResponse;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
@@ -120,7 +122,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
+    public List<AlertResponse> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
 
@@ -129,12 +131,12 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        Map<String, Boolean> response = memberService.sendEventStartNotice(memberLogin.getUserNo());
-        boolean isUserNeedToChangePw = memberService.getChangePwDateDiff(memberLogin.getUserNo());
+        List<AlertResponse> alertResponse = memberService.sendEventStartNotice(memberLogin.getUserNo());
+        AlertResponse isUserNeedToChangePw = memberService.getChangePwDateDiff(memberLogin.getUserNo());
 
-        response.put("비밀번호 변경알림", isUserNeedToChangePw);
+        alertResponse.add(isUserNeedToChangePw);
 
-        return ResponseEntity.ok(response);
+        return alertResponse;
     }
 
     /**
