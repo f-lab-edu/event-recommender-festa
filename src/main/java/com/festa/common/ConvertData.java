@@ -9,10 +9,10 @@ import java.util.Date;
 @Component
 public class ConvertData implements ConvertDataType {
 
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     public String dataFormat() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
         return dateFormat.format(new Date());
     }
 
