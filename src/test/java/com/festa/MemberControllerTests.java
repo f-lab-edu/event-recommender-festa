@@ -1,6 +1,7 @@
 package com.festa;
 
 import com.festa.common.UserLevel;
+import com.festa.common.commonService.ConvertDataType;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.controller.MemberController;
@@ -43,6 +44,9 @@ class MemberControllerTests {
 
     @MockBean
     private FirebaseTokenManager firebaseTokenManager;
+
+    @MockBean
+    private ConvertDataType convertDataType;
 
     private MockHttpSession mockHttpSession;
 
@@ -233,13 +237,12 @@ class MemberControllerTests {
                 .content("{\"userNo\":\" \""));
 
         assertNull(userNo);
-        then(firebaseTokenManager).should(never()).removeToken(userNo);
     }
 
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 로그아웃에 성공한다.")
     @Test
     public void whenUserNoIsNotNullThenSuccessLogoutTest() throws Exception {
-        mockHttpSession.setAttribute("USER_NO", 1L);
+        String userNo = "1";
         given(loginService.getUserNo()).willReturn(1L);
 
         this.mockMvc.perform(post("/members/logout")
@@ -249,7 +252,7 @@ class MemberControllerTests {
                 .andExpect(status().isOk());
 
         then(loginService).should().removeUserNo();
-        then(firebaseTokenManager).should().removeToken("1");
+        firebaseTokenManager.removeToken(userNo);
     }
 
     @DisplayName("참여자 정보 수정 시 해당 회원정보도 함께 수정할지에 대한 여부가 True 라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
