@@ -5,11 +5,11 @@ import lombok.Value;
 
 @Value
 @Builder
-public class AlertResponse {
+public class LoginResponse {
 
-    long eventNo;
+    long targetNo;
 
-    String eventTitle;
+    String targetTitle;
 
     boolean isAlertNeed;
 }

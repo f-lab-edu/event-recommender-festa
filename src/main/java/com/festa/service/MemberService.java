@@ -5,7 +5,7 @@ import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
 import com.festa.dto.MemberDTO;
-import com.festa.model.AlertResponse;
+import com.festa.model.LoginResponse;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -76,8 +76,8 @@ public class MemberService {
         memberDAO.changeUserPw(userNo, password);
     }
 
-    public List<AlertResponse> sendEventStartNotice(long userNo) {
-        List<AlertResponse> response = new LinkedList<>();
+    public List<LoginResponse> sendEventStartNotice(long userNo) {
+        List<LoginResponse> response = new LinkedList<>();
 
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
@@ -85,18 +85,18 @@ public class MemberService {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
             if(convertDataType.dataFormat().equals(eventInfo.getStartDate())) {
-                AlertResponse sendAlert = AlertResponse.builder()
-                        .eventNo(eventInfo.getEventNo())
-                        .eventTitle(eventInfo.getEventTitle())
+                LoginResponse sendAlert = LoginResponse.builder()
+                        .targetNo(eventInfo.getEventNo())
+                        .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(true)
                         .build();
 
                 response.add(sendAlert);
 
             } else {
-                AlertResponse notSendAlert = AlertResponse.builder()
-                        .eventNo(eventInfo.getEventNo())
-                        .eventTitle(eventInfo.getEventTitle())
+                LoginResponse notSendAlert = LoginResponse.builder()
+                        .targetNo(eventInfo.getEventNo())
+                        .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(false)
                         .build();
 
@@ -119,10 +119,10 @@ public class MemberService {
         return memberDAO.getUserNoById(userId);
     }
 
-    public AlertResponse getChangePwDateDiff(long userNo) {
+    public LoginResponse getChangePwDateDiff(long userNo) {
 
-        return AlertResponse.builder()
-                .eventTitle("sendChangePwAlert")
+        return LoginResponse.builder()
+                .targetTitle("sendChangePwAlert")
                 .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
                 .build();
     }
