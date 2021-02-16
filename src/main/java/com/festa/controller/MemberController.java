@@ -119,8 +119,9 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
+     * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부 응답을 보냄
      * @param memberLogin
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal List<LoginResponse>}
      */
     @PostMapping("/login")
     public List<LoginResponse> login(@RequestBody MemberLogin memberLogin) {
@@ -142,6 +143,7 @@ public class MemberController {
 
     /**
      * 사용자 로그아웃 기능
+     * 로그인 시 생성 된 Firebase Token을 로그아웃과 동시에 삭제함
      * No Param
      * @return {@literal ResponseEntity<HttpStatus>}
      */
