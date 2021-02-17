@@ -1,7 +1,6 @@
 package com.festa;
 
 import com.festa.common.UserLevel;
-import com.festa.common.commonService.ConvertDataType;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.controller.MemberController;
@@ -44,9 +43,6 @@ class MemberControllerTests {
 
     @MockBean
     private FirebaseTokenManager firebaseTokenManager;
-
-    @MockBean
-    private ConvertDataType convertDataType;
 
     private MockHttpSession mockHttpSession;
 

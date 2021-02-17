@@ -1,6 +1,5 @@
 package com.festa.service;
 
-import com.festa.common.commonService.ConvertDataType;
 import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.festa.common.util.ConvertData;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +22,6 @@ public class MemberService {
 
     private final MemberDAO memberDAO;
     private final EventDAO eventDAO;
-    private final ConvertDataType convertDataType;
 
     @Transactional
     public void insertMemberInfo(MemberDTO memberDTO) {
@@ -84,7 +83,7 @@ public class MemberService {
         for(long eventNo : appliedEvents) {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
-            if(convertDataType.dataFormat().equals(eventInfo.getStartDate())) {
+            if(ConvertData.getTodayDate().equals(eventInfo.getStartDate())) {
                 LoginResponse sendAlert = LoginResponse.builder()
                         .targetNo(eventInfo.getEventNo())
                         .targetTitle(eventInfo.getEventTitle())

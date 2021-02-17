@@ -1,7 +1,6 @@
 package com.festa;
 
 import com.festa.common.UserLevel;
-import com.festa.common.commonService.ConvertDataType;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
@@ -31,9 +30,6 @@ class MemberServiceTests {
 
     @Mock
     private MemberDAO memberDAO;
-
-    @Mock
-    private ConvertDataType convertDataType;
 
     private MockHttpSession mockHttpSession;
 
