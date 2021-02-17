@@ -4,7 +4,7 @@ import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
 import com.festa.dto.MemberDTO;
-import com.festa.model.LoginResponse;
+import com.festa.model.AlertResponse;
 import com.festa.model.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -75,8 +75,8 @@ public class MemberService {
         memberDAO.changeUserPw(userNo, password);
     }
 
-    public List<LoginResponse> sendEventStartNotice(long userNo) {
-        List<LoginResponse> response = new LinkedList<>();
+    public List<AlertResponse> sendEventStartNotice(long userNo) {
+        List<AlertResponse> response = new LinkedList<>();
 
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
@@ -84,7 +84,7 @@ public class MemberService {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
             if(ConvertData.getTodayDate().equals(eventInfo.getStartDate())) {
-                LoginResponse sendAlert = LoginResponse.builder()
+                AlertResponse sendAlert = AlertResponse.builder()
                         .targetNo(eventInfo.getEventNo())
                         .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(true)
@@ -93,7 +93,7 @@ public class MemberService {
                 response.add(sendAlert);
 
             } else {
-                LoginResponse notSendAlert = LoginResponse.builder()
+                AlertResponse notSendAlert = AlertResponse.builder()
                         .targetNo(eventInfo.getEventNo())
                         .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(false)
@@ -118,9 +118,9 @@ public class MemberService {
         return memberDAO.getUserNoById(userId);
     }
 
-    public LoginResponse getChangePwDateDiff(long userNo) {
+    public AlertResponse getChangePwDateDiff(long userNo) {
 
-        return LoginResponse.builder()
+        return AlertResponse.builder()
                 .targetTitle("sendChangePwAlert")
                 .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
                 .build();

@@ -6,7 +6,7 @@ import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
-import com.festa.model.LoginResponse;
+import com.festa.model.AlertResponse;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import com.festa.service.MemberService;
@@ -118,12 +118,12 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
-     * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부 응답을 보냄
+     * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부를 응답을 보냄
      * @param memberLogin
-     * @return {@literal List<LoginResponse>}
+     * @return {@literal List<AlertResponse>}
      */
     @PostMapping("/login")
-    public List<LoginResponse> login(@RequestBody MemberLogin memberLogin) {
+    public List<AlertResponse> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
 
@@ -132,8 +132,8 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        List<LoginResponse> loginResponses = memberService.sendEventStartNotice(memberLogin.getUserNo());
-        LoginResponse isUserNeedToChangePw = memberService.getChangePwDateDiff(memberLogin.getUserNo());
+        List<AlertResponse> loginResponses = memberService.sendEventStartNotice(memberLogin.getUserNo());
+        AlertResponse isUserNeedToChangePw = memberService.getChangePwDateDiff(memberLogin.getUserNo());
 
         loginResponses.add(isUserNeedToChangePw);
 
