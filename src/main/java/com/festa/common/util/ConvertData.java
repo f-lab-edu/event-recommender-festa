@@ -4,8 +4,8 @@ import org.joda.time.LocalDate;
 
 public class ConvertData {
 
-    public static LocalDate getTodayDate() {
-        return LocalDate.now();
+    public static String getTodayDate() {
+        return String.valueOf(LocalDate.now());
     }
 
     public static String longToString(long target) {
