@@ -134,6 +134,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!--
+            SimpleDateFormat을 대신하기 위한 날짜 관련 라이브러리로,
+            Thread-Safe 하며 불변 객체이기 때문에 멀티쓰레드에서 유용하게 쓰인다
+         -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.10</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
