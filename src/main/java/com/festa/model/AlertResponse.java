@@ -7,9 +7,9 @@ import lombok.Value;
 @Builder
 public class AlertResponse {
 
-    long targetNo;
+    String alertType;
 
-    String targetTitle;
+    long targetNo;
 
     boolean isAlertNeed;
 }

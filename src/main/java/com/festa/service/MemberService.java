@@ -86,8 +86,8 @@ public class MemberService {
 
             if(ConvertDataType.dateFormatter(todayDate).equals(eventInfo.getStartDate())) {
                 AlertResponse sendAlert = AlertResponse.builder()
+                        .alertType("eventStartAlert")
                         .targetNo(eventInfo.getEventNo())
-                        .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(true)
                         .build();
 
@@ -95,8 +95,8 @@ public class MemberService {
 
             } else {
                 AlertResponse notSendAlert = AlertResponse.builder()
+                        .alertType("eventStartAlert")
                         .targetNo(eventInfo.getEventNo())
-                        .targetTitle(eventInfo.getEventTitle())
                         .isAlertNeed(false)
                         .build();
 
@@ -122,7 +122,8 @@ public class MemberService {
     public AlertResponse getChangePwDateDiff(long userNo) {
 
         return AlertResponse.builder()
-                .targetTitle("sendChangePwAlert")
+                .alertType("sendChangePwToUser")
+                .targetNo(userNo)
                 .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
                 .build();
     }
