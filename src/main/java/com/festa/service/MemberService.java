@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.festa.common.util.ConvertData;
+import com.festa.common.util.ConvertDataType;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class MemberService {
         memberDAO.changeUserPw(userNo, password);
     }
 
-    public List<AlertResponse> sendEventStartNotice(long userNo) {
+    public List<AlertResponse> sendEventStartNotice(long userNo, LocalDate todayDate) {
         List<AlertResponse> response = new LinkedList<>();
 
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
@@ -83,7 +84,7 @@ public class MemberService {
         for(long eventNo : appliedEvents) {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
-            if(ConvertData.getTodayDate().equals(eventInfo.getStartDate())) {
+            if(ConvertDataType.dateFormatter(todayDate).equals(eventInfo.getStartDate())) {
                 AlertResponse sendAlert = AlertResponse.builder()
                         .targetNo(eventInfo.getEventNo())
                         .targetTitle(eventInfo.getEventTitle())
