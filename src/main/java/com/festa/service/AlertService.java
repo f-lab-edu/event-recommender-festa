@@ -1,5 +1,10 @@
 package com.festa.service;
 
+import com.festa.common.util.ConvertDataType;
+import com.festa.dao.EventDAO;
+import com.festa.dao.MemberDAO;
+import com.festa.dto.EventDTO;
+import com.festa.model.AlertResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
@@ -7,11 +12,17 @@ import com.google.firebase.messaging.WebpushNotification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 public class AlertService {
+
+    private final MemberDAO memberDAO;
+    private final EventDAO eventDAO;
 
     /**
      * 사용자에게 알람을 전송한다.
@@ -36,4 +47,42 @@ public class AlertService {
 
     }
 
+    public List<AlertResponse> sendEventStartNotice(long userNo, LocalDate todayDate) {
+        List<AlertResponse> response = new LinkedList<>();
+
+        List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
+
+        for(long eventNo : appliedEvents) {
+            EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
+
+            if(ConvertDataType.dateFormatter(todayDate).equals(eventInfo.getStartDate())) {
+                AlertResponse sendAlert = AlertResponse.builder()
+                        .alertType("eventStartAlert")
+                        .targetNo(eventInfo.getEventNo())
+                        .isAlertNeed(true)
+                        .build();
+
+                response.add(sendAlert);
+
+            } else {
+                AlertResponse notSendAlert = AlertResponse.builder()
+                        .alertType("eventStartAlert")
+                        .targetNo(eventInfo.getEventNo())
+                        .isAlertNeed(false)
+                        .build();
+
+                response.add(notSendAlert);
+            }
+        }
+        return response;
+    }
+
+    public AlertResponse getChangePwDateDiff(long userNo) {
+
+        return AlertResponse.builder()
+                .alertType("sendChangePwToUser")
+                .targetNo(userNo)
+                .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
+                .build();
+    }
 }
