@@ -48,11 +48,11 @@ public class AlertService {
     }
 
     public List<AlertResponse> sendEventStartNotice(long userNo, LocalDate todayDate) {
-        List<AlertResponse> response = new LinkedList<>();
 
+        List<AlertResponse> response = new LinkedList<>();
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
-        for(long eventNo : appliedEvents) {
+        appliedEvents.forEach(eventNo -> {
             EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
             if(ConvertDataType.dateFormatter(todayDate).equals(eventInfo.getStartDate())) {
@@ -73,7 +73,8 @@ public class AlertService {
 
                 response.add(notSendAlert);
             }
-        }
+        });
+
         return response;
     }
 
