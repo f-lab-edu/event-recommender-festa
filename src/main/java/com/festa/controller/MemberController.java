@@ -6,8 +6,10 @@ import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
+import com.festa.model.AlertResponse;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
+import com.festa.service.AlertService;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.festa.common.util.ConvertDataType;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
@@ -48,6 +53,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 public class MemberController {
 
     private final MemberService memberService;
+    private final AlertService alertService;
     private final LoginService loginService;
     private final FirebaseTokenManager firebaseTokenManager;
 
@@ -115,11 +121,12 @@ public class MemberController {
 
     /**
      * 사용자 로그인 기능
+     * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부를 응답을 보냄
      * @param memberLogin
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal List<AlertResponse>}
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
+    public List<AlertResponse> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
 
@@ -128,11 +135,17 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        return ResponseEntity.ok(memberService.getChangePwDateDiff(memberLogin.getUserNo()));
+        List<AlertResponse> loginResponses = alertService.sendEventStartNotice(memberLogin.getUserNo(), LocalDate.now());
+        AlertResponse isUserNeedToChangePw = alertService.getChangePwDateDiff(memberLogin.getUserNo());
+
+        loginResponses.add(isUserNeedToChangePw);
+
+        return loginResponses;
     }
 
     /**
      * 사용자 로그아웃 기능
+     * 로그인 시 생성 된 Firebase Token을 로그아웃과 동시에 삭제함
      * No Param
      * @return {@literal ResponseEntity<HttpStatus>}
      */
@@ -141,7 +154,7 @@ public class MemberController {
     public ResponseEntity<HttpStatus> logout(@CurrentLoginUserNo long userNo) {
         loginService.removeUserNo();
 
-        String string_userNo = String.valueOf(userNo);
+        String string_userNo = ConvertDataType.longToString(userNo);
         firebaseTokenManager.removeToken(string_userNo);
 
         return RESPONSE_ENTITY_OK;
