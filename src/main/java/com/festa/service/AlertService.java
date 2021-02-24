@@ -5,10 +5,12 @@ import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
 import com.festa.model.AlertResponse;
+import com.festa.model.Participants;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
+import javafx.scene.control.Alert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +75,23 @@ public class AlertService {
 
                 response.add(notSendAlert);
             }
+        });
+
+        return response;
+    }
+
+    public List<AlertResponse> sendEventModifyNotice(long eventNo) {
+        List<AlertResponse> response = new LinkedList<>();
+        List<Participants> participants = eventDAO.getParticipantList(eventNo);
+
+        participants.forEach(participantsInfo -> {
+            AlertResponse sendAlert = AlertResponse.builder()
+                    .alertType("eventModifyAlertToParticipants")
+                    .targetNo(participantsInfo.getUserNo())
+                    .isAlertNeed(true)
+                    .build();
+
+            response.add(sendAlert);
         });
 
         return response;

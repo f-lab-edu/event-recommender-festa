@@ -42,7 +42,7 @@ public interface EventDAO {
 
     boolean isParticipated(long userNo);
 
-    Participants getParticipantList(Participants participants);
+    List<Participants> getParticipantList(long eventNo);
 
     void deleteEvent(long eventNo);
 

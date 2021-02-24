@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Log4j2
@@ -90,13 +91,20 @@ public class EventService {
         eventDAO.reduceParticipants(participants.getEventNo());
     }
 
-    public Participants getParticipantList(long userNo, Participants participants) {
+    public List<Participants> getParticipantList(long userNo, long eventNo) {
+        EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
 
-        if(userNo != participants.getUserNo()) {
+        if(userNo != eventInfo.getUserNo()) {
             throw new IllegalStateException("이벤트를 등록한 주최자만 조회가 가능합니다.");
         }
 
-        return eventDAO.getParticipantList(participants);
+        List<Participants> participantsList = eventDAO.getParticipantList(eventNo);
+
+        if(participantsList.size() == 0) {
+            throw new NoSuchElementException("현재 참여자가 없습니다.");
+        }
+
+        return participantsList;
     }
 
     @Transactional

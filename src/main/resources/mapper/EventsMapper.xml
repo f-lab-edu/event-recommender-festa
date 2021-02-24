@@ -109,7 +109,7 @@
         WHERE userNo = #{userNo}
     </select>
 
-    <select id="getParticipantList" parameterType="com.festa.model.Participants">
+    <select id="getParticipantList" resultType="com.festa.model.Participants">
         SELECT
             P.eventNo,
             P.userNo,
@@ -223,18 +223,18 @@
 
     <update id="modifyEventsInfo" parameterType="com.festa.dto.EventDTO">
         UPDATE events
-            SET eventTitle = #{eventTitle}
-            AND eventContent = #{eventContent}
+            SET eventTitle = #{eventTitle},
+                eventContent = #{eventContent}
         WHERE eventNo = #{eventNo}
     </update>
 
     <update id="modifyEventsAddress" parameterType="com.festa.dto.EventDTO">
         UPDATE event_address
-            SET cityName = #{cityName}
-            AND districtName = #{districtName}
-            AND streetCode = #{streetCode}
-            AND streetName = #{streetName}
-            AND detail = #{detail}
+            SET cityName = #{cityName},
+                districtName = #{districtName},
+                streetCode = #{streetCode},
+                streetName = #{streetName},
+                detail = #{detail}
         WHERE eventNo = #{eventNo}
     </update>
 
