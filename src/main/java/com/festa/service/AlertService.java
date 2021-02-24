@@ -10,7 +10,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
-import javafx.scene.control.Alert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
