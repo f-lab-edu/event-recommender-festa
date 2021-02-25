@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -83,10 +84,12 @@ public class AlertService {
         List<AlertResponse> response = new LinkedList<>();
         List<Participants> participants = eventDAO.getParticipantList(eventNo);
 
-        participants.forEach(participantsInfo -> {
+        Stream<Long> userNo = participants.stream().map(Participants::getUserNo);
+
+        userNo.forEach(participantsUserNo -> {
             AlertResponse sendAlert = AlertResponse.builder()
                     .alertType("eventModifyAlertToParticipants")
-                    .targetNo(participantsInfo.getUserNo())
+                    .targetNo(participantsUserNo)
                     .isAlertNeed(true)
                     .build();
 
