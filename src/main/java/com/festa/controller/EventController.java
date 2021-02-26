@@ -141,7 +141,7 @@ public class EventController {
     public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
         eventService.modifyEventsInfo(eventDTO);
 
-        List<AlertResponse> sendModifyAlert = alertService.sendEventModifyNotice(eventDTO.getEventNo());
+        List<AlertResponse> sendModifyAlert = alertService.eventModifyNotice(eventDTO.getEventNo());
 
         return sendModifyAlert;
     }

@@ -49,7 +49,7 @@ public class AlertService {
 
     }
 
-    public List<AlertResponse> sendEventStartNotice(long userNo, LocalDate todayDate) {
+    public List<AlertResponse> eventStartNotice(long userNo, LocalDate todayDate) {
 
         List<AlertResponse> response = new LinkedList<>();
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
@@ -80,7 +80,7 @@ public class AlertService {
         return response;
     }
 
-    public List<AlertResponse> sendEventModifyNotice(long eventNo) {
+    public List<AlertResponse> eventModifyNotice(long eventNo) {
         List<AlertResponse> response = new LinkedList<>();
         List<Participants> participants = eventDAO.getParticipantList(eventNo);
 
@@ -99,7 +99,7 @@ public class AlertService {
         return response;
     }
 
-    public AlertResponse getChangePwDateDiff(long userNo) {
+    public AlertResponse changePasswordNotice(long userNo) {
 
         return AlertResponse.builder()
                 .alertType("sendChangePwToUser")
