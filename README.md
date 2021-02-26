@@ -99,14 +99,14 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 ##  :rocket: 화면 구성도
 
-![사용자화면구성도 (1)](https://user-images.githubusercontent.com/58355531/93668916-f5a83200-faca-11ea-87ac-e72e55daffa5.png)
+![image](https://user-images.githubusercontent.com/58355531/109332890-15c1f580-78a2-11eb-9596-eadf94a1ac10.png)
 
 <br>
 
 ___
 
 
-![주최자화면구성도](https://user-images.githubusercontent.com/58355531/93669060-2472d800-facc-11ea-977d-fc679c0519f0.png)
+![image](https://user-images.githubusercontent.com/58355531/109332798-f6c36380-78a1-11eb-9283-92796a76ade2.png)
 
 <br>
 <br>
