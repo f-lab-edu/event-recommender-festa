@@ -80,7 +80,7 @@ public class AlertService {
         return response;
     }
 
-    public List<AlertResponse> eventModifyNotice(long eventNo) {
+    public List<AlertResponse> getParticipantsNeedAlert(long eventNo) {
         List<AlertResponse> response = new LinkedList<>();
         List<Participants> participants = eventDAO.getParticipantList(eventNo);
 
