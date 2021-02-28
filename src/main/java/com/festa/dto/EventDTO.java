@@ -54,6 +54,7 @@ public class EventDTO {
 
         return EventDTO.builder()
                 .userNo(this.userNo)
+                .eventNo(this.eventNo)
                 .eventTitle(this.eventTitle)
                 .eventContent(this.eventContent)
                 .startDate(this.startDate)

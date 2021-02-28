@@ -135,8 +135,8 @@ public class MemberController {
 
         firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
-        List<AlertResponse> loginResponses = alertService.sendEventStartNotice(memberLogin.getUserNo(), LocalDate.now());
-        AlertResponse isUserNeedToChangePw = alertService.getChangePwDateDiff(memberLogin.getUserNo());
+        List<AlertResponse> loginResponses = alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
+        AlertResponse isUserNeedToChangePw = alertService.changePasswordNotice(memberLogin.getUserNo());
 
         loginResponses.add(isUserNeedToChangePw);
 

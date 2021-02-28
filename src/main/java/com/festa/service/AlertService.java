@@ -5,6 +5,7 @@ import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.EventDTO;
 import com.festa.model.AlertResponse;
+import com.festa.model.Participants;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class AlertService {
 
     }
 
-    public List<AlertResponse> sendEventStartNotice(long userNo, LocalDate todayDate) {
+    public List<AlertResponse> eventStartNotice(long userNo, LocalDate todayDate) {
 
         List<AlertResponse> response = new LinkedList<>();
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
@@ -78,7 +80,26 @@ public class AlertService {
         return response;
     }
 
-    public AlertResponse getChangePwDateDiff(long userNo) {
+    public List<AlertResponse> getParticipantsNeedAlert(long eventNo) {
+        List<AlertResponse> response = new LinkedList<>();
+        List<Participants> participants = eventDAO.getParticipantList(eventNo);
+
+        Stream<Long> userNo = participants.stream().map(Participants::getUserNo);
+
+        userNo.forEach(participantsUserNo -> {
+            AlertResponse sendAlert = AlertResponse.builder()
+                    .alertType("eventModifyAlertToParticipants")
+                    .targetNo(participantsUserNo)
+                    .isAlertNeed(true)
+                    .build();
+
+            response.add(sendAlert);
+        });
+
+        return response;
+    }
+
+    public AlertResponse changePasswordNotice(long userNo) {
 
         return AlertResponse.builder()
                 .alertType("sendChangePwToUser")
