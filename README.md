@@ -74,6 +74,7 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
  - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
  - [WIKI Home](https://github.com/f-lab-edu/event-recommender-festa/wiki)
  - [이슈해결을 정리한 테크블로그](https://github.com/f-lab-edu/event-recommender-festa/wiki/%EC%9D%B4%EC%8A%88%ED%95%B4%EA%B2%B0Posts)
+ - [젠킨스 주소 바로가기](http://27.96.135.160:8081/)
  
 <br>
 <br>
@@ -93,6 +94,8 @@ ___
 <br>
 
 ## DB ERD 구조
+
+![event-recommender-festa-erd](https://user-images.githubusercontent.com/53729311/104211019-e896c080-5476-11eb-8dbc-183656873e5e.jpg)
 
 [DB 테이블 설계:  ](https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing)<https://docs.google.com/spreadsheets/d/19-vpLojODE6La68Jk_XspwSI7-4wW4TMxH7wVmMMXQU/edit?usp=sharing>
 

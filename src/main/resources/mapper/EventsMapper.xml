@@ -12,6 +12,7 @@
             E.registerDate,
             E.participantLimit,
             E.noOfParticipants,
+            M.userNo,
             M.userName AS writer
         FROM events E
         INNER JOIN members M
@@ -21,14 +22,16 @@
 
     <select id="getListOfEvents" resultType="com.festa.dto.EventDTO">
         SELECT
+            A.userNo,
+            A.eventNo,
             A.eventTitle,
             A.eventContent,
             A.startDate,
             A.endDate,
-            A.registerDate,
+            A.categoryCode,
             A.participantLimit,
             A.noOfParticipants,
-            B.categoryName,
+            B.registerDate,
             B.cityName,
             B.districtName,
             B.streetName,
@@ -43,28 +46,29 @@
                 E.eventContent,
                 E.startDate,
                 E.endDate,
-                E.registerDate,
+                E.categoryCode,
                 E.participantLimit,
                 E.noOfParticipants,
-                C.categoryName,
+                E.registerDate,
                 EA.cityName,
                 EA.districtName,
+                EA.streetCode,
                 EA.streetName,
                 EA.detail,
                 M.userName AS writer
-             FROM events E
-              LEFT OUTER JOIN event_address EA
-              ON EA.eventNo = E.eventNo
-              LEFT OUTER JOIN category C
-              ON C.categoryCode = E.categoryCode
-              INNER JOIN members M
-              ON E.userNo = M.userNo
-             WHERE E.userNo <![CDATA[<]]> #{PageInfo.cursorUserNo}
-             <if test=" categoryCode != null and categoryCode != '' ">
-                 AND E.categoryCode = #{categotyCode}
-             </if>
-             ORDER BY registerDate DESC
-             LIMIT #{PageInfo.size}
+            FROM events E
+            LEFT OUTER JOIN event_address EA
+            ON EA.eventNo = E.eventNo
+            LEFT OUTER JOIN category C
+            ON C.categoryCode = E.categoryCode
+            INNER JOIN members M
+            ON E.userNo = M.userNo
+            WHERE E.userNo <![CDATA[<]]> #{pageInfo.cursorUserNo}
+            <if test=" categoryCode != 0 ">
+                AND E.categoryCode = #{categoryCode}
+            </if>
+            ORDER BY registerDate DESC
+            LIMIT #{pageInfo.size}
             ) AS B
         WHERE A.eventNo = B.eventNo
     </select>
@@ -96,6 +100,13 @@
                       AND startDate  = #{startDate}
                    )
                    AS isEventExists
+    </select>
+
+    <select id="getAppliedEvent" resultType="long">
+        SELECT
+            eventNo
+        FROM participant
+        WHERE userNo = #{userNo}
     </select>
 
     <select id="getParticipantList" parameterType="com.festa.model.Participants">
@@ -161,7 +172,7 @@
              )
     </insert>
 
-    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO">
+    <insert id="registerEvents" parameterType="com.festa.dto.EventDTO" useGeneratedKeys="true" keyProperty="eventNo">
         INSERT INTO
             events
             (eventTitle,
@@ -247,4 +258,16 @@
         WHERE eventNo = #{eventNo}
             AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
+
+    <delete id="deleteEvent" parameterType="long">
+        DELETE
+        FROM events
+        WHERE eventNo = #{eventNo}
+    </delete>
+
+    <delete id="deleteEventAddress" parameterType="long">
+        DELETE
+        FROM event_address
+        WHERE eventNo = #{eventNo}
+    </delete>
 </mapper>

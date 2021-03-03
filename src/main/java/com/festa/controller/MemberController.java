@@ -23,12 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.net.URI;
 
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_CONFLICT;
-import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_MEMBER_NULL;
+import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 
 /*
@@ -58,7 +55,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<MemberDTO>}
      */
     @PostMapping("/signUp")
-    public ResponseEntity<MemberDTO> signUp(@RequestBody @Valid MemberDTO memberDTO) {
+    public ResponseEntity<MemberDTO> signUp(@RequestBody MemberDTO memberDTO) {
         memberService.insertMemberInfo(memberDTO);
 
         URI uri = WebMvcLinkBuilder.linkTo(MemberController.class).toUri();
@@ -76,7 +73,7 @@ public class MemberController {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
         if(memberInfo == null) {
-            return RESPONSE_ENTITY_MEMBER_NULL;
+            return RESPONSE_ENTITY_NOT_FOUND;
         }
         return RESPONSE_ENTITY_OK;
     }
@@ -103,37 +100,29 @@ public class MemberController {
     }
 
     /**
-     * 사용자 중복 아이디 체크
+     * 탈퇴한 사용자 아이디 체크
      * @param userId
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @GetMapping("/{userId}/duplicate")
-    public ResponseEntity<HttpStatus> idIsDuplicated(@RequestParam String userId) {
-        boolean isIdDuplicated = memberService.isUserIdExist(userId);
+    @GetMapping("/{userId}/delete")
+    public ResponseEntity<HttpStatus> isIdDeleted(@RequestParam String userId, @RequestParam String password) {
+        memberService.isUserIdExist(userId, password);
 
-        //1을 리턴 받았다면 true이므로 id가 존재한다.
-        if(isIdDuplicated) {
-            return RESPONSE_ENTITY_CONFLICT;
-        } else {
-            return RESPONSE_ENTITY_OK;
-        }
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
      * 사용자 로그인 기능
+     * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부 응답을 보냄
      * @param memberLogin
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal List<LoginResponse>}
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
+        String password = memberLogin.getPassword();
 
-        boolean isIdExist = memberService.isUserIdExist(userId);
-
-        //잘못된 요청, 또는 존재하지 않는 값으로 로그인에 실패했을 때 httpSession에 저장하지 않고 400 status code를 return한다.
-        if(!isIdExist) {
-            return RESPONSE_ENTITY_BAD_REQUEST_NO_USER;
-        }
+        memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
         return RESPONSE_ENTITY_OK;
@@ -141,6 +130,7 @@ public class MemberController {
 
     /**
      * 사용자 로그아웃 기능
+     * 로그인 시 생성 된 Firebase Token을 로그아웃과 동시에 삭제함
      * No Param
      * @return {@literal ResponseEntity<HttpStatus>}
      */
@@ -172,9 +162,9 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @DeleteMapping("/")
-    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo) {
+    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
         memberService.memberWithdraw(userNo);
-        
+
         return RESPONSE_ENTITY_OK;
     }
 }

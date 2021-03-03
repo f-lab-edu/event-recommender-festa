@@ -14,7 +14,15 @@ import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,7 +43,7 @@ public class EventController {
     @GetMapping
     public Optional<List<EventDTO>> getListOfEvents(long cursorUserNo, int size, int categoryCode) {
 
-        return Optional.ofNullable(eventService.getListOfEvents(PageInfo.paging(cursorUserNo, size), categoryCode));
+        return Optional.ofNullable(eventService.getListOfEvents(new PageInfo(cursorUserNo, size), categoryCode));
     }
 
     /**
@@ -133,6 +141,19 @@ public class EventController {
     @PutMapping("/{eventNo}")
     public ResponseEntity<HttpStatus> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
         eventService.modifyEventsInfo(eventDTO);
+
+        return RESPONSE_ENTITY_OK;
+    }
+
+    /**
+     * 주최자 이벤트 삭제 기능
+     * @param eventNo
+     * @return
+     */
+    @CheckLoginStatus(auth = UserLevel.HOST)
+    @DeleteMapping("/{eventNo}")
+    public ResponseEntity<HttpStatus> deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
+        eventService.deleteEventNo(eventNo, userNo);
 
         return RESPONSE_ENTITY_OK;
     }

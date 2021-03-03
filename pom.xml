@@ -134,12 +134,36 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!--
+            SimpleDateFormat을 대신하기 위한 날짜 관련 라이브러리로,
+            Thread-Safe 하며 불변 객체이기 때문에 멀티쓰레드에서 유용하게 쓰인다
+         -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.10</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--Unit test 실행을 위해 Build lifecycle 에서 test phrase동안 사용되어지며 XML이나 txt 파일의 테스트 결과를 만들어주는 플러그인-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+
+            <!--Integration test를 위한 플러그인, Integration test의 성공여부를 확인한다.-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
             </plugin>
         </plugins>
     </build>
