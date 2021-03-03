@@ -8,8 +8,10 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.EventDTO;
+import com.festa.model.AlertResponse;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
+import com.festa.service.AlertService;
 import com.festa.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,7 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
+    private final AlertService alertService;
 
     /**
      * 리스트형 이벤트 목록 조회 기능
@@ -116,20 +119,16 @@ public class EventController {
 
     /**
      * 주최자 이벤트 참여자 목록 조회 기능
-     * @param participants
+     * @param userNo, eventNo
      * @return {@literal ResponseEntity<HttpStatus>}
      * @throws NoSuchElementException (조회된 데이터가 없을 경우)
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @GetMapping("/{eventNo}/participants")
-    public ResponseEntity<HttpStatus> getParticipantList(@CurrentLoginUserNo long userNo, @RequestBody Participants participants) {
-        Participants participantsList = eventService.getParticipantList(userNo, participants);
+    public List<Participants> getParticipantList(@CurrentLoginUserNo long userNo, long eventNo) {
+        List<Participants> participantsList = eventService.getParticipantList(userNo, eventNo);
 
-        if(participantsList == null) {
-            throw new NoSuchElementException("현재 참여자가 없습니다.");
-        }
-
-        return RESPONSE_ENTITY_OK;
+        return participantsList;
     }
 
     /**
@@ -139,8 +138,23 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @PutMapping("/{eventNo}")
-    public ResponseEntity<HttpStatus> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
+    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
         eventService.modifyEventsInfo(eventDTO);
+
+        List<AlertResponse> sendModifyAlert = alertService.getParticipantsNeedAlert(eventDTO.getEventNo());
+
+        return sendModifyAlert;
+    }
+
+    /**
+     * 주최자 이벤트 삭제 기능
+     * @param eventNo
+     * @return
+     */
+    @CheckLoginStatus(auth = UserLevel.HOST)
+    @DeleteMapping("/{eventNo}")
+    public ResponseEntity<HttpStatus> deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
+        eventService.deleteEventNo(eventNo, userNo);
 
         return RESPONSE_ENTITY_OK;
     }

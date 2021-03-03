@@ -12,7 +12,8 @@
               phoneNo,
               userLevel,
               deleted,
-              deletedDate
+              deletedDate,
+              updatePwDate
             )
         VALUES
             ( #{userId},
@@ -22,7 +23,8 @@
               #{phoneNo},
               #{userLevel},
               FALSE,
-              null
+              null,
+              NOW()
             )
     </insert>
 
@@ -127,6 +129,13 @@
         WHERE
             userId = #{userId}
         AND deleted = FALSE
+    </select>
+
+    <select id="getChangePwDateDiff" resultType="boolean">
+        SELECT
+              IF(DATEDIFF(NOW(), updatePwDate) > 90, true, false)
+        FROM members
+        where userNo = #{userNo}
     </select>
 
     <select id="getUserPassword" parameterType="long">
