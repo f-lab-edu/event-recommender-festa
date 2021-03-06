@@ -23,6 +23,7 @@ public class EventService {
     private final EventDAO eventDAO;
 
     @Cacheable(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
+    @Transactional(readOnly = true)
     public List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode) {
         return eventDAO.getListOfEvents(pageInfo, categoryCode);
     }
