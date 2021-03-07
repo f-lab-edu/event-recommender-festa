@@ -1,35 +1,62 @@
 package com.festa.config;
 
-import com.zaxxer.hikari.HikariConfig;
+import com.festa.common.RoutingDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
-    public HikariConfig hikariConfig() {
-        return new HikariConfig();
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.master")
+    public DataSource masterDataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
     @Bean
-    public DataSource dataSource() {
-        return new HikariDataSource(hikariConfig());
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.slave")
+    public DataSource slaveDataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+
+    @Bean
+    public DataSource routingDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
+                                        @Qualifier("slaveDataSource") DataSource slaveDataSource) {
+
+        RoutingDataSource routingDataSource = new RoutingDataSource();
+
+        Map<Object, Object> dataSourceMap = new HashMap<>();
+        dataSourceMap.put("master", masterDataSource);
+        dataSourceMap.put("slave", slaveDataSource);
+        routingDataSource.setTargetDataSources(dataSourceMap);
+        routingDataSource.setDefaultTargetDataSource(masterDataSource);
+
+        return routingDataSource;
+    }
+
+    @Primary
+    @Bean
+    public DataSource dataSource(@Qualifier("routingDataSource") DataSource routingDataSource) {
+        return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 
     /*
@@ -39,7 +66,7 @@ public class DatabaseConfig {
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSource());
+        factoryBean.setDataSource(routingDataSource(masterDataSource(), slaveDataSource()));
         factoryBean.setVfs(SpringBootVFS.class); //스프링부트 전용 가상파일 시스템
         factoryBean.setTypeAliasesPackage("com.festa.dto."); //domain object(VO, DTO 등) 스캔해야할 패키지 설정
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/*.xml")); //Mapper 경로 지정
@@ -54,6 +81,6 @@ public class DatabaseConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+        return new DataSourceTransactionManager(routingDataSource(masterDataSource(), slaveDataSource()));
     }
 }
