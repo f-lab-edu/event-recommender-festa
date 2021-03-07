@@ -66,7 +66,7 @@ public class DatabaseConfig {
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(routingDataSource(masterDataSource(), slaveDataSource()));
+        factoryBean.setDataSource(dataSource(routingDataSource(masterDataSource(), slaveDataSource())));
         factoryBean.setVfs(SpringBootVFS.class); //스프링부트 전용 가상파일 시스템
         factoryBean.setTypeAliasesPackage("com.festa.dto."); //domain object(VO, DTO 등) 스캔해야할 패키지 설정
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/*.xml")); //Mapper 경로 지정
@@ -81,6 +81,6 @@ public class DatabaseConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(routingDataSource(masterDataSource(), slaveDataSource()));
+        return new DataSourceTransactionManager(dataSource(routingDataSource(masterDataSource(), slaveDataSource())));
     }
 }
