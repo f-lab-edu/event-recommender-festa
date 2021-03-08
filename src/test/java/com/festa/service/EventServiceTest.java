@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -46,6 +47,18 @@ class EventServiceTest {
                 .streetCode("57204")
                 .streetName("가로수길")
                 .detail("feata빌딩 5층")
+                .build();
+    }
+
+    public Participants generateParticipants(int userNo) {
+        return Participants.builder()
+                .userNo(userNo)
+                .eventNo(555)
+                .cityName("서울")
+                .districtName("강남구")
+                .streetCode("45321")
+                .streetName("신사동")
+                .detail("32-12")
                 .build();
     }
 
@@ -89,7 +102,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("정상적인 이벤트 등록")
+    @DisplayName("주최자의 이벤트 등록 성공")
     void registerEventsTest() {
         // given
         EventDTO event = generateEvent(555);
@@ -178,15 +191,7 @@ class EventServiceTest {
                 .participantLimit(200)
                 .build();
 
-        Participants participants = Participants.builder()
-                .userNo(35)
-                .eventNo(555)
-                .cityName("서울")
-                .districtName("강남구")
-                .streetCode("45321")
-                .streetName("신사동")
-                .detail("32-12")
-                .build();
+        Participants participants = generateParticipants(35);
 
         when(eventDAO.checkNoOfParticipants(participants.getEventNo())).thenReturn(participantsInfo);
 
@@ -282,6 +287,54 @@ class EventServiceTest {
         assertThrows(IllegalStateException.class, () -> {
             eventService.cancelEvent(participants);
             verify(eventDAO).cancelEvent(participants.getUserNo());
+        });
+    }
+
+    @Test
+    @DisplayName("이벤트 주최자의 신청자 목록 조회 - 신청자가 존재하여 조회 성공")
+    void getParticipantListTest() {
+        // given
+        EventDTO eventInfo = generateEvent(555);
+
+        List<Participants> participantsList = new ArrayList<>();
+        participantsList.add(generateParticipants(20));
+        participantsList.add(generateParticipants(40));
+        participantsList.add(generateParticipants(50));
+
+        when(eventDAO.getInfoOfEvent(555)).thenReturn(eventInfo);
+        when(eventDAO.getParticipantList(555)).thenReturn(participantsList);
+
+        // when
+        List<Participants> resultParticipantsList = eventService.getParticipantList(30, 555);
+
+        // then
+        assertEquals(participantsList, resultParticipantsList);
+    }
+
+    @Test
+    @DisplayName("이벤트 신청자 목록 조회 - 주최자가 아니기 때문에 조회 실패")
+    void getParticipantListFromNotHostTest() {
+        EventDTO eventInfo = generateEvent(555);
+
+        when(eventDAO.getInfoOfEvent(555)).thenReturn(eventInfo);
+
+        assertThrows(IllegalStateException.class, () -> {
+            eventService.getParticipantList(20, 555);
+        });
+    }
+    
+    @Test
+    @DisplayName("이벤트 주최자의 신청자 목록 조회 - 신청자가 존재하지 않아 조회 실패")
+    void participantListNotExistTest() {
+        EventDTO eventInfo = generateEvent(555);
+
+        List<Participants> participantsList = new ArrayList<>();
+
+        when(eventDAO.getInfoOfEvent(555)).thenReturn(eventInfo);
+        when(eventDAO.getParticipantList(555)).thenReturn(participantsList);
+
+        assertThrows(NoSuchElementException.class, () -> {
+            eventService.getParticipantList(30, 555);
         });
     }
 
