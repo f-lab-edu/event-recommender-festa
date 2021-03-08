@@ -116,7 +116,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("이벤트 수정 성공")
+    @DisplayName("이벤트를 등록한 주최자가 맞다면 이벤트 수정 성공")
     void modifyEventsInfoTest() {
         // given
         EventDTO event = generateEvent(555);
@@ -134,7 +134,7 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("이벤트를 등록한 사용자가 아니라면 수정 실패")
+    @DisplayName("이벤트를 등록한 주최자가 아니라면 이벤트 수정 실패")
     public void modifyEventsInfoFalseTest() {
         EventDTO event = generateEvent(555);
 
