@@ -50,8 +50,13 @@ public class EventService {
     }
 
     @Transactional
-    public void modifyEventsInfo(EventDTO eventDTO) {
+    public void modifyEventsInfo(EventDTO eventDTO, long userNo) {
         EventDTO eventInfo = eventDTO.toEntityForInfo();
+
+        if(eventInfo.getUserNo() != userNo) {
+            throw new IllegalStateException("이벤트를 등록한 주최자만 수정이 가능합니다.");
+        }
+
         eventDAO.modifyEventsInfo(eventInfo);
 
         EventDTO eventAddress = eventDTO.toEntityForEventAddress();

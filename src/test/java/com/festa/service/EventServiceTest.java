@@ -31,6 +31,7 @@ class EventServiceTest {
 
     public EventDTO generateEvent(long eventNo) {
         return EventDTO.builder()
+                .userNo(30)
                 .eventNo(eventNo)
                 .eventTitle("세계여행 박람회")
                 .eventContent("박람회에 어서오세요!")
@@ -110,28 +111,36 @@ class EventServiceTest {
         eventService.registerEvents(event, 5);
 
         // then
-        verify(eventDAO).registerEvents(eventInfo);
-        verify(eventDAO).registerEventsAddress(eventAddress);
+        verify(eventDAO).registerEvents(any(EventDTO.class));
+        verify(eventDAO).registerEventsAddress(any(EventDTO.class));
     }
 
     @Test
-    @DisplayName("정상적인 이벤트 수정")
+    @DisplayName("이벤트를 등록한 주최자가 맞다면 이벤트 수정 성공")
     void modifyEventsInfoTest() {
         // given
         EventDTO event = generateEvent(555);
-        EventDTO eventInfo = event.toEntityForInfo();
 
-        doNothing().when(eventDAO).modifyEventsInfo(eventInfo);
+        doNothing().when(eventDAO).modifyEventsInfo(event.toEntityForInfo());
 
         doNothing().when(eventDAO).modifyEventsAddress(event.toEntityForEventAddress());
 
         // when
-        eventService.modifyEventsInfo(event);
+       eventService.modifyEventsInfo(event,30);
 
         // then
-        verify(eventDAO).modifyEventsInfo(eventInfo);
-        verify(eventDAO).modifyEventsAddress(event.toEntityForEventAddress());
+        verify(eventDAO).modifyEventsInfo(any(EventDTO.class));
+        verify(eventDAO).modifyEventsAddress(any(EventDTO.class));
+    }
 
+    @Test
+    @DisplayName("이벤트를 등록한 주최자가 아니라면 이벤트 수정 실패")
+    public void modifyEventsInfoFalseTest() {
+        EventDTO event = generateEvent(555);
+
+        assertThrows(IllegalStateException.class, () -> {
+            eventService.modifyEventsInfo(event, 50);
+        });
     }
 
     @Test

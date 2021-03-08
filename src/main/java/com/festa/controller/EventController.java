@@ -138,8 +138,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @PutMapping("/{eventNo}")
-    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
-        eventService.modifyEventsInfo(eventDTO);
+    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO, @CurrentLoginUserNo long userNo) {
+        eventService.modifyEventsInfo(eventDTO, userNo);
 
         List<AlertResponse> sendModifyAlert = alertService.getParticipantsNeedAlert(eventDTO.getEventNo());
 
@@ -159,16 +159,4 @@ public class EventController {
         return RESPONSE_ENTITY_OK;
     }
 
-    /**
-     * 주최자 이벤트 삭제 기능
-     * @param eventNo
-     * @return
-     */
-    @CheckLoginStatus(auth = UserLevel.HOST)
-    @DeleteMapping("/{eventNo}")
-    public ResponseEntity<HttpStatus> deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
-        eventService.deleteEventNo(eventNo, userNo);
-
-        return RESPONSE_ENTITY_OK;
-    }
 }
