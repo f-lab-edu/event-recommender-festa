@@ -22,6 +22,9 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.festa.common.ReplicationRoutingConstants.MASTER;
+import static com.festa.common.ReplicationRoutingConstants.SLAVE;
+
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
@@ -45,8 +48,8 @@ public class DatabaseConfig {
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
         Map<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put("master", masterDataSource);
-        dataSourceMap.put("slave", slaveDataSource);
+        dataSourceMap.put(MASTER, masterDataSource);
+        dataSourceMap.put(SLAVE, slaveDataSource);
         routingDataSource.setTargetDataSources(dataSourceMap);
         routingDataSource.setDefaultTargetDataSource(masterDataSource);
 
