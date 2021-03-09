@@ -153,9 +153,7 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @DeleteMapping("/{eventNo}")
-    public ResponseEntity<HttpStatus> deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
+    public void deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
         eventService.deleteEventNo(eventNo, userNo);
-
-        return RESPONSE_ENTITY_OK;
     }
 }
