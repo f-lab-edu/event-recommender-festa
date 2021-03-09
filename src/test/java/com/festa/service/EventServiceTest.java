@@ -338,4 +338,35 @@ class EventServiceTest {
         });
     }
 
+    @Test
+    @DisplayName("이벤트 주최자의 이벤트 삭제 - 주최자이며, 이벤트가 존재하기 때문에 삭제 성공")
+    void deleteEventNoTest() {
+        // given
+        EventDTO event = generateEvent(555);
+
+        when(eventDAO.getInfoOfEvent(555)).thenReturn(event);
+
+        doNothing().when(eventDAO).deleteEvent(555);
+        doNothing().when(eventDAO).deleteEventAddress(555);
+
+        // when
+        eventService.deleteEventNo(555, 30);
+
+        // then
+        verify(eventDAO).deleteEvent(555);
+        verify(eventDAO).deleteEventAddress(555);
+    }
+
+    @Test
+    @DisplayName("이벤트 삭제 - 주최자가 아니어서 삭제 실패")
+    void deleteEventNotHostFailTest() {
+        EventDTO event = generateEvent(555);
+
+        when(eventDAO.getInfoOfEvent(555)).thenReturn(event);
+
+        assertThrows(IllegalStateException.class, () -> {
+            eventService.deleteEventNo(555, 60);
+        });
+    }
+
 }
