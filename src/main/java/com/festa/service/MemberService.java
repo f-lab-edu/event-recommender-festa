@@ -54,6 +54,7 @@ public class MemberService {
         memberDAO.modifyParticipantInfo(participantAddress);
     }
 
+    @Transactional(readOnly = true)
     public MemberDTO getUser(long userNo) {
         return memberDAO.getUserByNo(userNo);
     }
@@ -76,6 +77,7 @@ public class MemberService {
         memberDAO.modifyMemberInfoForWithdraw(userNo);
     }
 
+    @Transactional(readOnly = true)
     public long getUserNo(String userId) {
         return memberDAO.getUserNoById(userId);
     }
