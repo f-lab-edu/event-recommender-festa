@@ -93,7 +93,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PutMapping("/{userNo}")
-    public ResponseEntity<HttpStatus> modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
+    public void modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
         boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
 
         if(isUserModifyInfo) {
@@ -103,8 +103,6 @@ public class MemberController {
         } else {
             memberService.modifyParticipantInfo(memberInfo);
         }
-
-        return RESPONSE_ENTITY_OK;
     }
 
     /**
@@ -113,10 +111,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @GetMapping("/{userId}/delete")
-    public ResponseEntity<HttpStatus> isIdDeleted(@RequestParam String userId, @RequestParam String password) {
+    public void isIdDeleted(@RequestParam String userId, @RequestParam String password) {
         memberService.isUserIdExist(userId, password);
-
-        return RESPONSE_ENTITY_OK;
     }
 
     /**
@@ -151,13 +147,11 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@CurrentLoginUserNo long userNo) {
+    public void logout(@CurrentLoginUserNo long userNo) {
         loginService.removeUserNo();
 
         String string_userNo = ConvertDataType.longToString(userNo);
         firebaseTokenManager.removeToken(string_userNo);
-
-        return RESPONSE_ENTITY_OK;
     }
 
     /**
@@ -167,10 +161,8 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<HttpStatus> changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
+    public void changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
         memberService.changeUserPw(userNo, memberLogin.getPassword());
-
-        return RESPONSE_ENTITY_OK;
     }
 
     /**
@@ -180,9 +172,7 @@ public class MemberController {
      */
     @CheckLoginStatus(auth = UserLevel.USER)
     @DeleteMapping("/")
-    public ResponseEntity<HttpStatus> memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
+    public void memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
         memberService.memberWithdraw(userNo);
-        
-        return RESPONSE_ENTITY_OK;
     }
 }
