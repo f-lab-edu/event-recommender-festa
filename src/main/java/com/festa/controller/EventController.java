@@ -138,8 +138,8 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @PutMapping("/{eventNo}")
-    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO) {
-        eventService.modifyEventsInfo(eventDTO);
+    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO, @CurrentLoginUserNo long userNo) {
+        eventService.modifyEventsInfo(eventDTO, userNo);
 
         List<AlertResponse> sendModifyAlert = alertService.getParticipantsNeedAlert(eventDTO.getEventNo());
 
@@ -158,4 +158,5 @@ public class EventController {
 
         return RESPONSE_ENTITY_OK;
     }
+
 }
