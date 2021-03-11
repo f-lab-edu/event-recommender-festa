@@ -1,5 +1,6 @@
 package com.festa.service;
 
+import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.common.util.ConvertDataType;
 import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
@@ -25,15 +26,15 @@ public class AlertService {
 
     private final MemberDAO memberDAO;
     private final EventDAO eventDAO;
+    private final FirebaseTokenManager firebaseTokenManager;
 
     /**
      * 사용자에게 알람을 전송한다.
-     * @param userNo
      * @param token
      * @param title
      * @param contents
      */
-    public void send(long userNo, String token, String title, String contents) {
+    public void sendMessage(String token, String title, String contents) {
         // setToken 혹은 setTopic을 이용해 메세지의 타겟을 정한다.
         Message message = Message.builder()
                 .setToken(token)
@@ -46,7 +47,6 @@ public class AlertService {
         } catch (ExecutionException | InterruptedException e) {
             throw new IllegalStateException("알림 전송에 실패하였습니다.");
         }
-
     }
 
     public List<AlertResponse> eventStartNotice(long userNo, LocalDate todayDate) {
@@ -64,6 +64,9 @@ public class AlertService {
                         .isAlertNeed(true)
                         .build();
 
+                String userToken = firebaseTokenManager.getToken(ConvertDataType.longToString(userNo));
+                sendMessage(userToken, "이벤트 시작 알림이 있습니다!", "이벤트가 곧 시작됩니다! 잊지말고 참여해주세요");
+
                 response.add(sendAlert);
 
             } else {
@@ -76,6 +79,8 @@ public class AlertService {
                 response.add(notSendAlert);
             }
         });
+
+
 
         return response;
     }
@@ -94,17 +99,28 @@ public class AlertService {
                     .build();
 
             response.add(sendAlert);
+
+            String userToken = firebaseTokenManager.getToken(ConvertDataType.longToString(participantsUserNo));
+            sendMessage(userToken, "이벤트 변경알림이 있습니다!", "참여하신 이벤트의 정보가 변경되었습니다");
         });
 
         return response;
     }
 
     public AlertResponse changePasswordNotice(long userNo) {
+        boolean isUserNeedToModify = memberDAO.getChangePwDateDiff(userNo);
 
-        return AlertResponse.builder()
+        AlertResponse response= AlertResponse.builder()
                 .alertType("sendChangePwToUser")
                 .targetNo(userNo)
-                .isAlertNeed(memberDAO.getChangePwDateDiff(userNo))
+                .isAlertNeed(isUserNeedToModify)
                 .build();
+
+        if(isUserNeedToModify) {
+            String userToken = firebaseTokenManager.getToken(ConvertDataType.longToString(userNo));
+            sendMessage(userToken, "비밀번호 변경 알림이 있습니다!", "비밀번호를 변경한지 3개월이 지났습니다, 보안을 위해 비밀번호를 변경해주세요");
+        }
+
+        return response;
     }
 }
