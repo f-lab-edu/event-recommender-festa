@@ -80,8 +80,6 @@ public class AlertService {
             }
         });
 
-
-
         return response;
     }
 
