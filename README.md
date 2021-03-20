@@ -84,15 +84,27 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 <br>
 <br>
 
+### :diamond_shape_with_a_dot_inside: PR 규칙
+
+- 신규개발 건은 `develop` 을 base로 `feature/#이슈번호` 의 브랜치명으로 생성 후 작업한 다음 PR을 날립니다.
+- 아직 개발 진행 중이라면 `In Progress` 라벨을 달고, 코드리뷰가 필요한 경우 `Asking for Review` 라벨을 답니다. 리뷰 후 리팩토링이 필요하다면 추가로 `refactoring` 라벨을 달아 진행합니다.
+- 모든 PR은 반드시 지정한 리뷰어에게 코드리뷰를 받아야만 합니다. 
+- 리뷰어 중 1명 이상의 `Approve` 를 받아야 `Merge pull request` 를 할 수 있습니다.
+- `commit` 을 할 때마다 Jenkins CI가 자동으로 실행되며 단위테스트, 통합테스트에 모두 통과되어야 Merge pull request가 가능합니다.
+
+<br>
+<br>
+
 ##  :rocket: WIKI
 
 화면설계에 대한 **kakao oven** 프로토타입 디자인과 Usecase를 보실 수 있습니다.
 API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪혀 해결한 이야기에 대한 개인 테크블로그의 주소도 포함되어있습니다.
 
- - [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
- - [WIKI Home](https://github.com/f-lab-edu/event-recommender-festa/wiki)
- - [이슈해결을 정리한 테크블로그](https://github.com/f-lab-edu/event-recommender-festa/wiki/%EC%9D%B4%EC%8A%88%ED%95%B4%EA%B2%B0Posts)
- - [API 상세스펙](https://github.com/f-lab-edu/event-recommender-festa/wiki#%EC%83%81%EC%84%B8-api-%EC%8A%A4%ED%8E%99-%EB%B0%94%EB%A1%9C%EA%B0%80%EA%B8%B0)
+ - click! :arrow_forward: [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
+ - click! :arrow_forward: [WIKI Home](https://github.com/f-lab-edu/event-recommender-festa/wiki)
+ - click! :arrow_forward: [이슈해결을 정리한 테크블로그](https://github.com/f-lab-edu/event-recommender-festa/wiki/%EC%9D%B4%EC%8A%88%ED%95%B4%EA%B2%B0Posts)
+ - click! :arrow_forward: [API 상세스펙](https://github.com/f-lab-edu/event-recommender-festa/wiki#%EC%83%81%EC%84%B8-api-%EC%8A%A4%ED%8E%99-%EB%B0%94%EB%A1%9C%EA%B0%80%EA%B8%B0)
+ - click! :arrow_forward: [PR규칙](https://github.com/f-lab-edu/event-recommender-festa/wiki#pr-%EA%B7%9C%EC%B9%99)
  
 <br>
 <br>
