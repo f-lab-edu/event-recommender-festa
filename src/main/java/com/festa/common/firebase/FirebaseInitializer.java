@@ -33,21 +33,21 @@ public class FirebaseInitializer {
      * setCredentials()에서 키를 이용해 인증한다.
      * GoogleCredentials : OAuth2를 이용해 GoogleApi 호출을 승인하기 위한 객체
      */
-    @PostConstruct
-    public void firebaseInit() {
-        try {
-            FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
-
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl(project)
-                    .build();
-
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
-        } catch(IOException e) {
-            throw new FcmInitException("FCM 서버를 초기화시키지 못했습니다.");
-        }
-    }
+//    @PostConstruct
+//    public void firebaseInit() {
+//        try {
+//            FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
+//
+//            FirebaseOptions options = FirebaseOptions.builder()
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .setDatabaseUrl(project)
+//                    .build();
+//
+//            if (FirebaseApp.getApps().isEmpty()) {
+//                FirebaseApp.initializeApp(options);
+//            }
+//        } catch(IOException e) {
+//            throw new FcmInitException("FCM 서버를 초기화시키지 못했습니다.");
+//        }
+//    }
 }
