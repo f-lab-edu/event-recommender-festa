@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -36,10 +37,10 @@ public class FirebaseInitializer {
     @PostConstruct
     public void firebaseInit() {
         try {
-            FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
+            ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                     .setDatabaseUrl(project)
                     .build();
 
