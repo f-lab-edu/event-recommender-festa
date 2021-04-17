@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -60,7 +61,7 @@ public class FirebaseTokenManager {
 
         try {
             googleCredentials = GoogleCredentials
-                    .fromStream(new FileInputStream(firebaseConfigPath))
+                    .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
                     .createScoped(Arrays.asList("https://www.googleapis.com/auth/firebase.remoteconfig"));
 
 
