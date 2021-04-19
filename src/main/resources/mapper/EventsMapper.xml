@@ -22,55 +22,33 @@
 
     <select id="getListOfEvents" resultType="com.festa.dto.EventDTO">
         SELECT
-            A.userNo,
-            A.eventNo,
-            A.eventTitle,
-            A.eventContent,
-            A.startDate,
-            A.endDate,
-            A.categoryCode,
-            A.participantLimit,
-            A.noOfParticipants,
-            B.registerDate,
-            B.cityName,
-            B.districtName,
-            B.streetName,
-            B.detail,
-            B.writer
-        FROM events AS A
-        JOIN
-            (SELECT
-                E.userNo,
-                E.eventNo,
-                E.eventTitle,
-                E.eventContent,
-                E.startDate,
-                E.endDate,
-                E.categoryCode,
-                E.participantLimit,
-                E.noOfParticipants,
-                E.registerDate,
-                EA.cityName,
-                EA.districtName,
-                EA.streetCode,
-                EA.streetName,
-                EA.detail,
-                M.userName AS writer
-            FROM events E
-            LEFT OUTER JOIN event_address EA
+            E.userNo,
+            E.eventNo,
+            E.eventTitle,
+            E.eventContent,
+            E.startDate,
+            E.endDate,
+            E.categoryCode,
+            E.participantLimit,
+            E.noOfParticipants,
+            E.registerDate,
+            EA.cityName,
+            EA.districtName,
+            EA.streetCode,
+            EA.streetName,
+            EA.detail,
+            M.userName AS writer
+        FROM events E
+        INNER JOIN event_address EA
             ON EA.eventNo = E.eventNo
-            LEFT OUTER JOIN category C
-            ON C.categoryCode = E.categoryCode
-            INNER JOIN members M
+        <if test=" categoryCode != 0 ">
+            AND E.categoryCode = #{categoryCode}
+        </if>
+        INNER JOIN members M
             ON E.userNo = M.userNo
-            WHERE E.userNo <![CDATA[<]]> #{pageInfo.cursorUserNo}
-            <if test=" categoryCode != 0 ">
-                AND E.categoryCode = #{categoryCode}
-            </if>
-            ORDER BY registerDate DESC
-            LIMIT #{pageInfo.size}
-            ) AS B
-        WHERE A.eventNo = B.eventNo
+        WHERE E.userNo <![CDATA[<]]> #{pageInfo.cursorUserNo}
+        ORDER BY EA.eventNo DESC
+        LIMIT #{pageInfo.size}
     </select>
 
     <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
