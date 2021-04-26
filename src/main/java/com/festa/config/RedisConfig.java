@@ -1,9 +1,11 @@
 package com.festa.config;
 
 import com.festa.common.RedisCacheKey;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,8 +26,11 @@ public class RedisConfig {
     @Value("${spring.redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.port}")
-    private int redisPort;
+    @Value("${spring.redis.session.port}")
+    private int redisSessionPort;
+
+    @Value("${spring.redis.cache.port}")
+    private int redisCachePort;
 
 
     /*
@@ -39,8 +44,14 @@ public class RedisConfig {
                  늘어난다면 시간이 상당히 소요될 수 있다.
      */
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisPort));
+    @Primary
+    public RedisConnectionFactory redisSessionConnectionFactory() {
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisSessionPort));
+    }
+
+    @Bean(name = "redisCacheConnectionFactory")
+    public RedisConnectionFactory redisCacheConnectionFactory() {
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisCachePort));
     }
 
 
@@ -56,7 +67,7 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisSessionConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
@@ -67,14 +78,14 @@ public class RedisConfig {
         Redis Cache 적용을 위한 RedisCacheManager 설정
      */
     @Bean
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager redisCacheManager(@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext
-                                    .SerializationPair
-                                    .fromSerializer(new StringRedisSerializer()))
+                        .SerializationPair
+                        .fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext
-                                    .SerializationPair
-                                    .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                        .SerializationPair
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
         cacheConfiguration.put(RedisCacheKey.CATEGORY_LIST, redisCacheConfiguration.entryTtl(Duration.ofSeconds(180L)));
