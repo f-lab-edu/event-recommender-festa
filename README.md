@@ -67,8 +67,6 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 <img src="https://user-images.githubusercontent.com/58355531/116788139-01d58280-aae3-11eb-9c97-337003b95fea.png" height="330px" width="750px">
 
-> 출처: https://nvie.com/posts/a-successful-git-branching-model/
-
 <br>
 
 :white_check_mark: master : 제품으로 출시될 수 있는 브랜치를 의미합니다.     
