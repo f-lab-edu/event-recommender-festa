@@ -3,11 +3,8 @@
 사용자가 설정한 지역의 이벤트와 행사를 추천해주는 서비스 입니다.    
 백엔드 로직에 집중하기 위해서 화면은 프로토타입으로 설계하였으며 
 REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. 
-화면 디자인이나 Usecase는 [WIKI](https://github.com/f-lab-edu/event-recommender-festa/wiki) 에서 확인이 가능합니다.
+보다 더 자세한 사항은 [WIKI](https://github.com/f-lab-edu/event-recommender-festa/wiki) 에서 확인이 가능합니다.
 
-
-
-<br>
 <br>
 
 ##  :rocket: 프로젝트 사용기술 
@@ -18,9 +15,11 @@ REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개
 - [Maven](http://maven.apache.org/guides/index.html)
 - [Redis](https://redis.io/documentation)
 - [Naver cloud platform](https://docs.ncloud.com/ko/)
+- [Google cloud platform](https://cloud.google.com/docs/?_ga=2.222206936.-1398242313.1619252670)
 - [AWS S3](https://docs.aws.amazon.com/index.html?nc2=h_ql_doc_do_v)
 - [Firebase](https://firebase.google.com/docs)
 - [Docker](https://www.docker.com/)
+- [nGrinder](http://naver.github.io/ngrinder/)
 - intellij IDEA
 
 <br>
@@ -58,8 +57,6 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 :heavy_check_mark: 반복적인 작업은 자동화하여 개발의 효율을 높이기 위해 노력하였습니다.      
 
 <br>
-<br>
-
 
 ### :diamond_shape_with_a_dot_inside: Git-Flow 브랜치 전략
 
@@ -68,10 +65,10 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 <br>
 
-![gitflow](https://user-images.githubusercontent.com/58355531/94992578-f14d4000-05c5-11eb-9ab1-527abc06d8b2.PNG)
+![image](https://user-images.githubusercontent.com/58355531/116788139-01d58280-aae3-11eb-9c97-337003b95fea.png){: width="300" height="200"}
+
 > 출처: https://nvie.com/posts/a-successful-git-branching-model/
 
-<br>
 <br>
 
 :white_check_mark: master : 제품으로 출시될 수 있는 브랜치를 의미합니다.     
@@ -87,6 +84,15 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 <https://woowabros.github.io/experience/2017/10/30/baemin-mobile-git-branch-strategy.html>
 
 <br>
+
+### :diamond_shape_with_a_dot_inside: PR 규칙
+
+- 신규개발 건은 `develop` 을 base로 `feature/#이슈번호` 의 브랜치명으로 생성 후 작업한 다음 PR을 날립니다.
+- 아직 개발 진행 중이라면 `In Progress` 라벨을 달고, 코드리뷰가 필요한 경우 `Asking for Review` 라벨을 답니다. 리뷰 후 리팩토링이 필요하다면 추가로 `refactoring` 라벨을 달아 진행합니다.
+- 모든 PR은 반드시 지정한 리뷰어에게 코드리뷰를 받아야만 합니다. 
+- 리뷰어 중 1명 이상의 `Approve` 를 받아야 `Merge pull request` 를 할 수 있습니다.
+- `commit` 을 할 때마다 Jenkins CI가 자동으로 실행되며 단위테스트, 통합테스트에 모두 통과되어야 `Merge pull request`가 가능합니다.
+
 <br>
 
 ### :diamond_shape_with_a_dot_inside: Jenkins CI/CD
@@ -96,17 +102,11 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 :heavy_check_mark: 젠킨스 주소 바로가기 : <http://34.64.219.27:8081/>
 
-
-<br>
 <br>
 
-### :diamond_shape_with_a_dot_inside: PR 규칙
+### :diamond_shape_with_a_dot_inside: nGrinder 성능테스트
 
-- 신규개발 건은 `develop` 을 base로 `feature/#이슈번호` 의 브랜치명으로 생성 후 작업한 다음 PR을 날립니다.
-- 아직 개발 진행 중이라면 `In Progress` 라벨을 달고, 코드리뷰가 필요한 경우 `Asking for Review` 라벨을 답니다. 리뷰 후 리팩토링이 필요하다면 추가로 `refactoring` 라벨을 달아 진행합니다.
-- 모든 PR은 반드시 지정한 리뷰어에게 코드리뷰를 받아야만 합니다. 
-- 리뷰어 중 1명 이상의 `Approve` 를 받아야 `Merge pull request` 를 할 수 있습니다.
-- `commit` 을 할 때마다 Jenkins CI가 자동으로 실행되며 단위테스트, 통합테스트에 모두 통과되어야 Merge pull request가 가능합니다.
+:white_check_mark: 네이버에서 개발한 오픈소스 플랫폼인 **nGrinder**를 이용해 성능테스트를 진행 중입니다.
 
 <br>
 <br>
