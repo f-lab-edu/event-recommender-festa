@@ -123,13 +123,14 @@ public class MemberController {
      */
     @PostMapping("/login")
     public List<AlertResponse> login(@RequestBody MemberLogin memberLogin) {
+        String userNo = String.valueOf(memberLogin.getUserNo());
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
 
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
-        //firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
+        firebaseTokenManager.register(userNo, memberLogin.getToken());
 
         List<AlertResponse> loginResponses = alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
         AlertResponse isUserNeedToChangePw = alertService.changePasswordNotice(memberLogin.getUserNo());
