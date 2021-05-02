@@ -129,7 +129,7 @@ public class MemberController {
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
-        firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
+        //firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
 
         List<AlertResponse> loginResponses = alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
         AlertResponse isUserNeedToChangePw = alertService.changePasswordNotice(memberLogin.getUserNo());
