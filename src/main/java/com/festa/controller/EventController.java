@@ -8,7 +8,6 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.EventDTO;
-import com.festa.model.AlertResponse;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import com.festa.service.AlertService;
@@ -138,12 +137,10 @@ public class EventController {
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
     @PutMapping("/{eventNo}")
-    public List<AlertResponse> modifyEventsInfo(@RequestBody EventDTO eventDTO, @CurrentLoginUserNo long userNo) {
+    public void modifyEventsInfo(@RequestBody EventDTO eventDTO, @CurrentLoginUserNo long userNo) {
         eventService.modifyEventsInfo(eventDTO, userNo);
 
-        List<AlertResponse> sendModifyAlert = alertService.getParticipantsNeedAlert(eventDTO.getEventNo());
-
-        return sendModifyAlert;
+        alertService.getParticipantsNeedAlert(eventDTO.getEventNo());
     }
 
     /**
@@ -156,5 +153,4 @@ public class EventController {
     public void deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
         eventService.deleteEventNo(eventNo, userNo);
     }
-
 }
