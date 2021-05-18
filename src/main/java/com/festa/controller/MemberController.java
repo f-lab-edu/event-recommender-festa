@@ -4,7 +4,6 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
-import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
@@ -23,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.festa.common.util.ConvertDataType;
 
 import java.net.URI;
-import java.time.LocalDate;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
@@ -51,7 +48,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final LoginService loginService;
-    private final FirebaseTokenManager firebaseTokenManager;
 
     /**
      * 사용자 회원가입 기능
@@ -141,9 +137,7 @@ public class MemberController {
     @PostMapping("/logout")
     public void logout(@CurrentLoginUserNo long userNo) {
         loginService.removeUserNo();
-
-        String string_userNo = ConvertDataType.longToString(userNo);
-        firebaseTokenManager.removeToken(string_userNo);
+        loginService.removeToken(userNo);
     }
 
     /**

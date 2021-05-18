@@ -20,4 +20,6 @@ public interface LoginService {
     Long getUserNo();
 
     void afterLogin(long userNo, String token);
+
+    void removeToken(long userNo);
 }

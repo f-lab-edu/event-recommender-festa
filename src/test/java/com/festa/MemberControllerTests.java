@@ -7,7 +7,6 @@ import com.festa.controller.MemberController;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
 import com.festa.model.MemberLogin;
-import com.festa.service.AlertService;
 import com.festa.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

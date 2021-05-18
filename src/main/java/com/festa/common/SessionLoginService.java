@@ -2,6 +2,7 @@ package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
 import com.festa.common.firebase.FirebaseTokenManager;
+import com.festa.common.util.ConvertDataType;
 import com.festa.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -83,5 +84,15 @@ public class SessionLoginService implements LoginService {
         firebaseTokenManager.register(String.valueOf(userNo), token);
         alertService.eventStartNotice(userNo, LocalDate.now());
         alertService.changePasswordNotice(userNo);
+    }
+
+    /**
+     * 로그아웃 시 firebase Token 삭제
+     * @param userNo
+     */
+    @Override
+    public void removeToken(long userNo) {
+        String string_userNo = ConvertDataType.longToString(userNo);
+        firebaseTokenManager.removeToken(string_userNo);
     }
 }
