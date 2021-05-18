@@ -271,7 +271,7 @@ public class UserSignUpValidationTests {
     @DisplayName("아이디가 null일 경우 로그인 실패")
     @Test
     public void loginUserIdNullTest() {
-        MemberLogin memberLogin = new MemberLogin(5, null, "test123#", "abc123");
+        MemberLogin memberLogin = new MemberLogin(null, "test123#", "abc123");
 
         Set<ConstraintViolation<MemberLogin>> violations = validator.validate(memberLogin);
 
@@ -282,7 +282,7 @@ public class UserSignUpValidationTests {
     @DisplayName("아이디가 공백일 경우 로그인 실패")
     @Test
     public void loginUserIdBlankTest() {
-        MemberLogin memberLogin = new MemberLogin(5, " ", "test123#", "abc123");
+        MemberLogin memberLogin = new MemberLogin(" ", "test123#", "abc123");
 
         Set<ConstraintViolation<MemberLogin>> violations = validator.validate(memberLogin);
 

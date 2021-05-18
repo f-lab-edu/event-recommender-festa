@@ -139,7 +139,7 @@ class MemberControllerTests {
     @DisplayName("존재하는 회원이 로그인 요청을 하면 정상적으로 로그인한다.")
     @Test
     public void whenExistedMemberRequestLoginThenSuccessLoginTest() throws Exception {
-        MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##", "abc123");
+        MemberLogin loginInfo = new MemberLogin("rbdl879", "test123##", "abc123");
         long userNo = memberService.getUserNo(loginInfo.getUserId());
 
         doNothing().when(memberService).isUserIdExist("rbdl879", "test123##");
@@ -147,8 +147,7 @@ class MemberControllerTests {
         this.mockMvc.perform(post("/members/login")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"userNo\":\"1\"," +
-                                          "\"userId\":\"rbdl879\"," +
+                                .content( "\"userId\":\"rbdl879\"," +
                                           "\"password\":\"test123##\"," +
                                           "\"token\":\"abc123\"}"))
                                 .andExpect(status().isOk());
@@ -162,13 +161,11 @@ class MemberControllerTests {
     public void whenUserNoNullThenFailChangeUserPwTest() throws Exception {
         Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
         given(loginService.getUserNo()).willReturn(userNo);
-        MemberLogin loginInfo = new MemberLogin(0, "rbdl879", "test123##", "abc123");
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}/password")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"userNo\":\" \"," +
-                          "\"userId\":\"rbdl879\"," +
+                .content( "\"userId\":\"rbdl879\"," +
                           "\"password\":\"test123##\"," +
                           "\"token\":\"abc123\"}"));
 
@@ -179,13 +176,12 @@ class MemberControllerTests {
     @Test
     public void whenPasswordNullThenFailChangeUserPwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(1L);
-        MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "", "abc123");
+        MemberLogin loginInfo = new MemberLogin("rbdl879", "", "abc123");
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"userNo\":\"1\"," +
-                          "\"userId\":\"rbdl879\"," +
+                .content( "\"userId\":\"rbdl879\"," +
                           "\"password\":\" \"," +
                           "\"token\":\"abc123\"}"));
 
@@ -196,13 +192,12 @@ class MemberControllerTests {
     @Test
     public void whenUserIdAndPasswordIsNotNullThenSuccessChangePwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(1L);
-        MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##", "abc123");
+        MemberLogin loginInfo = new MemberLogin("rbdl879", "test123##", "abc123");
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"userNo\":\"1\"," +
-                          "\"userId\":\"rbdl879\"," +
+                .content( "\"userId\":\"rbdl879\"," +
                           "\"password\":\"test123##\"," +
                           "\"token\":\"abc123\"}"))
                 .andExpect(status().isOk());

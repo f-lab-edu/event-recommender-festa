@@ -8,7 +8,6 @@ import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
-import com.festa.service.AlertService;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -51,7 +50,6 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AlertService alertService;
     private final LoginService loginService;
     private final FirebaseTokenManager firebaseTokenManager;
 
