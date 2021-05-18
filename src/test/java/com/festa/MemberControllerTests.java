@@ -140,6 +140,7 @@ class MemberControllerTests {
     @Test
     public void whenExistedMemberRequestLoginThenSuccessLoginTest() throws Exception {
         MemberLogin loginInfo = new MemberLogin(1L, "rbdl879", "test123##", "abc123");
+        long userNo = memberService.getUserNo(loginInfo.getUserId());
 
         doNothing().when(memberService).isUserIdExist("rbdl879", "test123##");
 
@@ -152,7 +153,8 @@ class MemberControllerTests {
                                           "\"token\":\"abc123\"}"))
                                 .andExpect(status().isOk());
 
-        then(loginService).should().setUserNo(loginInfo.getUserNo());
+        then(loginService).should().setUserNo(userNo);
+        then(loginService).should().afterLogin(userNo, loginInfo.getToken());
     }
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")

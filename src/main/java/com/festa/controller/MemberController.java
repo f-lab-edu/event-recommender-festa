@@ -121,17 +121,14 @@ public class MemberController {
      */
     @PostMapping("/login")
     public ResponseEntity<HttpStatus> login(@RequestBody MemberLogin memberLogin) {
-        String userNo = String.valueOf(memberLogin.getUserNo());
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
+        String token = memberLogin.getToken();
+        long userNo = memberService.getUserNo(userId);
 
         memberService.isUserIdExist(userId, password);
-        loginService.setUserNo(memberLogin.getUserNo());
-
-        firebaseTokenManager.register(userNo, memberLogin.getToken());
-
-        alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
-        alertService.changePasswordNotice(memberLogin.getUserNo());
+        loginService.setUserNo(userNo);
+        loginService.afterLogin(userNo, token);
 
         return RESPONSE_ENTITY_OK;
     }

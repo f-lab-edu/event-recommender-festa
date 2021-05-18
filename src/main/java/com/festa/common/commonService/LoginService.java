@@ -18,4 +18,6 @@ public interface LoginService {
     boolean isLoginUser();
 
     Long getUserNo();
+
+    void afterLogin(long userNo, String token);
 }
