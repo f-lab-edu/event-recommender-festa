@@ -17,7 +17,7 @@ import java.util.Optional;
 @Log4j2
 @Component
 @RequiredArgsConstructor
-public class SessionLogin implements LoginService {
+public class SessionLoginService implements LoginService {
 
     public static final String USER_NO = "userNo";
     public final HttpSession httpSession;
