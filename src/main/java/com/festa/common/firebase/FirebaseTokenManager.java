@@ -51,26 +51,4 @@ public class FirebaseTokenManager {
     public void removeToken(String userNo) {
         redisTemplate.delete(userNo);
     }
-
-    /**
-     * 접근을 위한 Token을 얻어온 후 Map에 저장하는 메서드
-     */
-    public void makeAccessToken(long userNo) {
-
-        GoogleCredentials googleCredentials = null;
-
-        try {
-            googleCredentials = GoogleCredentials
-                    .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                    .createScoped(Arrays.asList("https://www.googleapis.com/auth/firebase.remoteconfig"));
-
-
-            googleCredentials.refreshIfExpired();
-        } catch (IOException e) {
-            throw new FcmTokenException("Token 생성에 실패하였습니다.");
-        }
-        String token = googleCredentials.getAccessToken().getTokenValue();
-
-        register(String.valueOf(userNo), token);
-    }
 }

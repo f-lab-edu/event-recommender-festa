@@ -6,7 +6,6 @@ import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
-import com.festa.model.AlertResponse;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import com.festa.service.AlertService;
@@ -29,7 +28,6 @@ import com.festa.common.util.ConvertDataType;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
@@ -119,24 +117,23 @@ public class MemberController {
      * 사용자 로그인 기능
      * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부를 응답을 보냄
      * @param memberLogin
-     * @return {@literal List<AlertResponse>}
+     * @return {@literal CompletableFuture<List<AlertResponse>>}
      */
     @PostMapping("/login")
-    public List<AlertResponse> login(@RequestBody MemberLogin memberLogin) {
+    public ResponseEntity<HttpStatus> login(@RequestBody MemberLogin memberLogin) {
+        String userNo = String.valueOf(memberLogin.getUserNo());
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
 
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(memberLogin.getUserNo());
 
-        firebaseTokenManager.makeAccessToken(memberLogin.getUserNo());
+        firebaseTokenManager.register(userNo, memberLogin.getToken());
 
-        List<AlertResponse> loginResponses = alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
-        AlertResponse isUserNeedToChangePw = alertService.changePasswordNotice(memberLogin.getUserNo());
+        alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
+        alertService.changePasswordNotice(memberLogin.getUserNo());
 
-        loginResponses.add(isUserNeedToChangePw);
-
-        return loginResponses;
+        return RESPONSE_ENTITY_OK;
     }
 
     /**
