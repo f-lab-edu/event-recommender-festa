@@ -58,6 +58,8 @@ class MemberControllerTests {
         mockHttpSession = new MockHttpSession();
     }
 
+    private static final long USER_NO = 1;
+
     public MemberDTO existedMemberInfo() {
         return MemberDTO.builder()
                 .userNo(1)
@@ -108,7 +110,7 @@ class MemberControllerTests {
     @DisplayName("존재하는 사용자정보를 조회하는 경우 200 상태코드를 리턴한다.")
     @Test
     public void whenUserInfoIsExistedThenResponseOKGetUserTest() throws Exception {
-        given(memberService.getUser(1)).willReturn(existedMemberInfo());
+        given(memberService.getUser(USER_NO)).willReturn(existedMemberInfo());
 
         this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
                 .param("userNo", "1"))
@@ -178,7 +180,7 @@ class MemberControllerTests {
     @DisplayName("비밀번호를 입력하지 않는다면 비밀번호 변경에 실패한다.")
     @Test
     public void whenPasswordNullThenFailChangeUserPwTest() throws Exception {
-        given(loginService.getUserNo()).willReturn(1L);
+        given(loginService.getUserNo()).willReturn(USER_NO);
         MemberLogin loginInfo = new MemberLogin("rbdl879", "", "abc123");
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
@@ -194,8 +196,7 @@ class MemberControllerTests {
     @DisplayName("로그인한 아이디와 비밀번호를 입력하면 비밀번호 변경에 성공한다.")
     @Test
     public void whenUserIdAndPasswordIsNotNullThenSuccessChangePwTest() throws Exception {
-        long userNo = 1;
-        given(loginService.getUserNo()).willReturn(userNo);
+        given(loginService.getUserNo()).willReturn(USER_NO);
         MemberLogin loginInfo = new MemberLogin("rbdl879", "test123##", "abc123");
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
@@ -206,7 +207,7 @@ class MemberControllerTests {
                           "\"token\":\"abc123\"}"))
                 .andExpect(status().isOk());
 
-        then(memberService).should().changeUserPw(userNo, loginInfo.getPassword());
+        then(memberService).should().changeUserPw(USER_NO, loginInfo.getPassword());
     }
 
     @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")
@@ -226,8 +227,7 @@ class MemberControllerTests {
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 해당 회원의 탈퇴에 성공한다.")
     @Test
     public void whenUserNoIsNotNullThenSuccessMemberWithdrawTest() throws Exception {
-        long userNo = 1L;
-        given(loginService.getUserNo()).willReturn(userNo);
+        given(loginService.getUserNo()).willReturn(USER_NO);
 
         this.mockMvc.perform(delete("/members/")
                 .accept(MediaType.APPLICATION_JSON)
@@ -235,7 +235,7 @@ class MemberControllerTests {
                 .content("{\"userNo\":\"1\"}"))
                 .andExpect(status().isOk());
 
-        then(memberService).should().memberWithdraw(userNo);
+        then(memberService).should().memberWithdraw(USER_NO);
     }
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 상태가 아니기 때문에 로그아웃에 실패한다.")
@@ -255,8 +255,7 @@ class MemberControllerTests {
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 로그아웃에 성공한다.")
     @Test
     public void whenUserNoIsNotNullThenSuccessLogoutTest() throws Exception {
-        String userNo = "1";
-        given(loginService.getUserNo()).willReturn(1L);
+        given(loginService.getUserNo()).willReturn(USER_NO);
 
         this.mockMvc.perform(post("/members/logout")
                 .accept(MediaType.APPLICATION_JSON)
@@ -264,8 +263,8 @@ class MemberControllerTests {
                 .content("{\"userNo\":\"1\"}"))
                 .andExpect(status().isOk());
 
-        then(loginService).should().removeUserNo();
-        firebaseTokenManager.removeToken(userNo);
+        then(loginService).should().logout(USER_NO);
+        firebaseTokenManager.removeToken(String.valueOf(USER_NO));
     }
 
     @DisplayName("참여자 정보 수정 시 해당 회원정보도 함께 수정할지에 대한 여부가 True 라면 해당 회원의 회원정보와 이벤트 참여자 정보 모두 수정한다.")
