@@ -151,7 +151,6 @@ class MemberControllerTests {
                                 .content( "{\"userId\":\"rbdl879\"," +
                                           "\"password\":\"test123##\"," +
                                           "\"token\":\"abc123\"}"))
-
                                 .andExpect(status().isOk());
 
         long userNo = memberService.getUserNo(loginInfo.getUserId());

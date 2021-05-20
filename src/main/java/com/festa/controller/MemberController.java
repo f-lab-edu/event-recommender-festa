@@ -111,10 +111,9 @@ public class MemberController {
      * 사용자 로그인 기능
      * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부를 응답을 보냄
      * @param memberLogin
-     * @return {@literal CompletableFuture<List<AlertResponse>>}
      */
     @PostMapping("/login")
-    public ResponseEntity<HttpStatus> login(@RequestBody MemberLogin memberLogin) {
+    public void login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
         String token = memberLogin.getToken();
@@ -123,8 +122,6 @@ public class MemberController {
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(userNo);
         loginService.successLogin(userNo, token);
-
-        return RESPONSE_ENTITY_OK;
     }
 
     /**
