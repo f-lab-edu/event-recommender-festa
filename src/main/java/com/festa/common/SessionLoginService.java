@@ -83,7 +83,7 @@ public class SessionLoginService implements LoginService {
      * @param token
      */
     @Override
-    public void afterLogin(long userNo, String token) {
+    public void successLogin(long userNo, String token) {
         firebaseTokenManager.register(String.valueOf(userNo), token);
         alertService.eventStartNotice(userNo, LocalDate.now());
         alertService.changePasswordNotice(userNo);

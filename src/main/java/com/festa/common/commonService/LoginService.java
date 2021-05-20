@@ -19,6 +19,6 @@ public interface LoginService {
 
     Long getUserNo();
 
-    void afterLogin(long userNo, String token);
+    void successLogin(long userNo, String token);
 
 }

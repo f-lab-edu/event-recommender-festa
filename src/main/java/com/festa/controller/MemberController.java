@@ -122,7 +122,7 @@ public class MemberController {
 
         memberService.isUserIdExist(userId, password);
         loginService.setUserNo(userNo);
-        loginService.afterLogin(userNo, token);
+        loginService.successLogin(userNo, token);
 
         return RESPONSE_ENTITY_OK;
     }
