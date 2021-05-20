@@ -38,13 +38,16 @@ public class SessionLoginService implements LoginService {
     }
 
     /**
-     * 세션에 userNo를 제거하는 메서드
+     * 로그아웃 시 세션의 userNo 제거, firebase Token 삭제
      * No Param
      * No return
      */
     @Override
-    public void removeUserNo() {
+    public void logout(long userNo) {
         httpSession.removeAttribute(USER_NO);
+
+        String string_userNo = ConvertDataType.longToString(userNo);
+        firebaseTokenManager.removeToken(string_userNo);
     }
 
     /**
@@ -84,15 +87,5 @@ public class SessionLoginService implements LoginService {
         firebaseTokenManager.register(String.valueOf(userNo), token);
         alertService.eventStartNotice(userNo, LocalDate.now());
         alertService.changePasswordNotice(userNo);
-    }
-
-    /**
-     * 로그아웃 시 firebase Token 삭제
-     * @param userNo
-     */
-    @Override
-    public void removeToken(long userNo) {
-        String string_userNo = ConvertDataType.longToString(userNo);
-        firebaseTokenManager.removeToken(string_userNo);
     }
 }

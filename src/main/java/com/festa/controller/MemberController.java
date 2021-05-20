@@ -136,8 +136,7 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping("/logout")
     public void logout(@CurrentLoginUserNo long userNo) {
-        loginService.removeUserNo();
-        loginService.removeToken(userNo);
+        loginService.logout(userNo);
     }
 
     /**

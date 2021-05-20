@@ -13,7 +13,7 @@ public interface LoginService {
 
     void setUserNo(Long userNo);
 
-    void removeUserNo();
+    void logout(long userNo);
 
     boolean isLoginUser();
 
@@ -21,5 +21,4 @@ public interface LoginService {
 
     void afterLogin(long userNo, String token);
 
-    void removeToken(long userNo);
 }
