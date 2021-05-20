@@ -116,7 +116,7 @@ class MemberControllerTests {
                 .param("userNo", "1"))
                 .andExpect(status().isOk());
 
-        then(memberService).should().getUser(1);
+        then(memberService).should().getUser(USER_NO);
     }
 
     @DisplayName("삭제된 사용자정보를 조회하는 경우 404 상태코드를 리턴한다.")
@@ -190,7 +190,7 @@ class MemberControllerTests {
                           "\"password\":\" \"," +
                           "\"token\":\"abc123\"}"));
 
-        then(memberService).should(never()).changeUserPw(1L, loginInfo.getPassword());
+        then(memberService).should(never()).changeUserPw(USER_NO, loginInfo.getPassword());
     }
 
     @DisplayName("로그인한 아이디와 비밀번호를 입력하면 비밀번호 변경에 성공한다.")
