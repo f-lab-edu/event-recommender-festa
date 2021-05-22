@@ -82,9 +82,12 @@
 
     <select id="getAppliedEvent" resultType="long">
         SELECT
-            eventNo
-        FROM participant
-        WHERE userNo = #{userNo}
+            E.eventNo
+        FROM events E
+        INNER JOIN participant P
+        ON E.eventNo = P.eventNo
+        AND P.userNo = #{userNo}
+        WHERE E.startDate = DATE(NOW());
     </select>
 
     <select id="getParticipantList" resultType="com.festa.model.Participants">
