@@ -29,12 +29,13 @@ public class SessionLoginService implements LoginService {
     private final AlertService alertService;
 
     /**
-     * 세션에 userNo 저장하는 메서드
+     * 세션에 userNo 저장하고 Firebase 알림여부 전송 메서드 호출
      * @param userNo
      */
     @Override
-    public void setUserNo(Long userNo) {
+    public void login(Long userNo, String token) {
         httpSession.setAttribute(USER_NO, userNo);
+        firebaseLoginAlert(userNo, token);
     }
 
     /**
@@ -82,8 +83,7 @@ public class SessionLoginService implements LoginService {
      * @param userNo
      * @param token
      */
-    @Override
-    public void successLogin(long userNo, String token) {
+    private void firebaseLoginAlert(long userNo, String token) {
         firebaseTokenManager.register(String.valueOf(userNo), token);
         alertService.eventStartNotice(userNo, LocalDate.now());
         alertService.changePasswordNotice(userNo);

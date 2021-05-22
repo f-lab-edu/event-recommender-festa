@@ -156,8 +156,7 @@ class MemberControllerTests {
         long userNo = memberService.getUserNo(loginInfo.getUserId());
         doNothing().when(memberService).isUserIdExist(loginInfo.getUserId(), loginInfo.getPassword());
 
-        then(loginService).should().setUserNo(userNo);
-        then(loginService).should().successLogin(userNo, loginInfo.getToken());
+        then(loginService).should().login(userNo, loginInfo.getToken());
     }
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")

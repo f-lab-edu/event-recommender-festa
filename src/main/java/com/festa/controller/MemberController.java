@@ -120,8 +120,7 @@ public class MemberController {
         long userNo = memberService.getUserNo(userId);
 
         memberService.isUserIdExist(userId, password);
-        loginService.setUserNo(userNo);
-        loginService.successLogin(userNo, token);
+        loginService.login(userNo, token);
     }
 
     /**
