@@ -21,7 +21,7 @@ public class AsyncConfig implements AsyncConfigurer {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setThreadNamePrefix("festa-async-");
         executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(10);
+        executor.setMaxPoolSize(50);
         executor.setQueueCapacity(100);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
