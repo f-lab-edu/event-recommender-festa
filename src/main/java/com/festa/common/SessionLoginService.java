@@ -2,7 +2,6 @@ package com.festa.common;
 
 import com.festa.common.commonService.LoginService;
 import com.festa.common.firebase.FirebaseTokenManager;
-import com.festa.common.util.ConvertDataType;
 import com.festa.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,9 +45,7 @@ public class SessionLoginService implements LoginService {
     @Override
     public void logout(long userNo) {
         httpSession.removeAttribute(USER_NO);
-
-        String string_userNo = ConvertDataType.longToString(userNo);
-        firebaseTokenManager.removeToken(string_userNo);
+        firebaseTokenManager.removeToken(String.valueOf(userNo));
     }
 
     /**
