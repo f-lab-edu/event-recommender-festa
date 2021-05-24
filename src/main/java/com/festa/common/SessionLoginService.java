@@ -3,6 +3,7 @@ package com.festa.common;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.service.AlertService;
+import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class SessionLoginService implements LoginService {
     public static final String USER_NO = "userNo";
     public final HttpSession httpSession;
     private final FirebaseTokenManager firebaseTokenManager;
+    private final MemberService memberService;
     private final AlertService alertService;
 
     /**
@@ -32,7 +34,8 @@ public class SessionLoginService implements LoginService {
      * @param userNo
      */
     @Override
-    public void login(Long userNo, String token) {
+    public void login(Long userNo, String userId, String password, String token) {
+        memberService.isUserIdExist(userId, password);
         httpSession.setAttribute(USER_NO, userNo);
         firebaseLoginAlert(userNo, token);
     }

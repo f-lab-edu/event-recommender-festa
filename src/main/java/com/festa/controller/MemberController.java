@@ -119,8 +119,7 @@ public class MemberController {
         String token = memberLogin.getToken();
         long userNo = memberService.getUserNo(userId);
 
-        memberService.isUserIdExist(userId, password);
-        loginService.login(userNo, token);
+        loginService.login(userNo, userId, password, token);
     }
 
     /**
