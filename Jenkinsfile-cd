@@ -15,7 +15,6 @@ pipeline {
         stage('Build') {
             steps {
                  script {
-                     git 'https://github.com/f-lab-edu/event-recommender-festa.git'
                      sh 'mvn clean package -DskipTests=true';
                  }
             }
