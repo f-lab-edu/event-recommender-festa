@@ -31,13 +31,6 @@ class MemberServiceTests {
     @Mock
     private MemberDAO memberDAO;
 
-    private MockHttpSession mockHttpSession;
-
-    @BeforeEach
-    public void setUp() {
-        mockHttpSession = new MockHttpSession();
-    }
-
     public MemberDTO memberInfoSetUp() {
         return MemberDTO.builder()
                 .userId("rbdl879")
@@ -100,18 +93,17 @@ class MemberServiceTests {
     @DisplayName("회원 로그인 성공")
     @Test
     public void loginTest() {
-        MemberLogin memberLogin = new MemberLogin(5, "rbdl879", "test123#", "abc123");
+        MemberLogin memberLogin = new MemberLogin("rbdl879", "test123#", "abc123");
 
-        when(memberDAO.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword())).thenReturn(false);
-        mockHttpSession.setAttribute("USER_NO", memberLogin.getUserNo());
+        when(memberDAO.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword())).thenReturn(true);
 
-        assertEquals(memberLogin.getUserNo(), mockHttpSession.getAttribute("USER_NO"));
+        assertEquals(memberLogin.getUserId(), "rbdl879");
     }
 
     @DisplayName("탈퇴한 아이디가 로그인 요청이 오면 IllegalStateException이 발생한다")
     @Test
     public void deletedIdLoginTest() {
-        MemberLogin memberLogin = new MemberLogin(1, "jes7077", "test123#", "abc123");
+        MemberLogin memberLogin = new MemberLogin("jes7077", "test123#", "abc123");
 
         when(memberDAO.isUserIdExist(memberLogin.getUserId(), memberLogin.getPassword())).thenReturn(false);
 
@@ -121,11 +113,11 @@ class MemberServiceTests {
     @DisplayName("아이디가 불일치할 경우 로그인에 실패한다")
     @Test
     public void loginUserIdMismatchTest() {
-        MemberLogin memberLogin = new MemberLogin(5, "jeje12", "test123#", "abc123");
+        MemberLogin memberLogin = new MemberLogin("jeje12", "test123#", "abc123");
 
         when(memberDAO.getUserNoById(memberLogin.getUserId())).thenReturn(7L);
 
-        assertNotEquals(memberLogin.getUserNo(),7);
+        assertNotEquals(memberLogin.getUserId(),"jeje123");
     }
 
     @DisplayName("사용자 탈퇴 시 회원정보 일치하면 회원탈퇴에 성공한다")

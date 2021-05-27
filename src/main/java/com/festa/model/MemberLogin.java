@@ -7,8 +7,6 @@ import javax.validation.constraints.NotBlank;
 @Value
 public class MemberLogin {
 
-    long userNo;
-
     @NotBlank(message = "아이디를 입력해주세요")
     String userId;
 

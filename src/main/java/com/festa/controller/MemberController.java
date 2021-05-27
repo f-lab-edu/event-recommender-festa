@@ -4,11 +4,9 @@ import com.festa.aop.CheckLoginStatus;
 import com.festa.common.UserLevel;
 import com.festa.common.commonService.LoginService;
 import com.festa.common.commonService.CurrentLoginUserNo;
-import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
-import com.festa.service.AlertService;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.festa.common.util.ConvertDataType;
 
 import java.net.URI;
-import java.time.LocalDate;
 
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_NOT_FOUND;
 import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
@@ -51,9 +47,7 @@ import static com.festa.common.ResponseEntityConstants.RESPONSE_ENTITY_OK;
 public class MemberController {
 
     private final MemberService memberService;
-    private final AlertService alertService;
     private final LoginService loginService;
-    private final FirebaseTokenManager firebaseTokenManager;
 
     /**
      * 사용자 회원가입 기능
@@ -117,23 +111,15 @@ public class MemberController {
      * 사용자 로그인 기능
      * Firebase Token 생성 후 로그인한 회원에게 보내야 할 알림여부를 응답을 보냄
      * @param memberLogin
-     * @return {@literal CompletableFuture<List<AlertResponse>>}
      */
     @PostMapping("/login")
-    public ResponseEntity<HttpStatus> login(@RequestBody MemberLogin memberLogin) {
-        String userNo = String.valueOf(memberLogin.getUserNo());
+    public void login(@RequestBody MemberLogin memberLogin) {
         String userId = memberLogin.getUserId();
         String password = memberLogin.getPassword();
+        String token = memberLogin.getToken();
+        long userNo = memberService.getUserNo(userId);
 
-        memberService.isUserIdExist(userId, password);
-        loginService.setUserNo(memberLogin.getUserNo());
-
-        firebaseTokenManager.register(userNo, memberLogin.getToken());
-
-        alertService.eventStartNotice(memberLogin.getUserNo(), LocalDate.now());
-        alertService.changePasswordNotice(memberLogin.getUserNo());
-
-        return RESPONSE_ENTITY_OK;
+        loginService.login(userNo, userId, password, token);
     }
 
     /**
@@ -145,10 +131,7 @@ public class MemberController {
     @CheckLoginStatus(auth = UserLevel.USER)
     @PostMapping("/logout")
     public void logout(@CurrentLoginUserNo long userNo) {
-        loginService.removeUserNo();
-
-        String string_userNo = ConvertDataType.longToString(userNo);
-        firebaseTokenManager.removeToken(string_userNo);
+        loginService.logout(userNo);
     }
 
     /**
