@@ -100,7 +100,7 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 #### 젠킨스 주소 바로가기    
 :heavy_check_mark: Jane096's Jenkins : <http://34.64.107.105:8081/>    
-:heavy_check_mark: Yo0oN's Jenkins : <http://34.64.123.150:8082/>
+:heavy_check_mark: Yo0oN's Jenkins : <http://34.64.243.124:8082/>
 
 <br>
 
