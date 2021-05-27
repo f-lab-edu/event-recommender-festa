@@ -65,7 +65,7 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/58355531/116788139-01d58280-aae3-11eb-9c97-337003b95fea.png" height="330px" width="750px">
+![image](https://user-images.githubusercontent.com/58355531/116788139-01d58280-aae3-11eb-9c97-337003b95fea.png)
 
 <br>
 

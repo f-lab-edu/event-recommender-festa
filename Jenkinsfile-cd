@@ -1,0 +1,60 @@
+pipeline {
+   agent any
+
+   tools {
+        maven 'maven'
+    }
+
+   stages {
+        stage('Poll') {
+           steps {
+               checkout scm
+           }
+        }
+
+        stage('Build') {
+            steps {
+                 script {
+                     sh 'mvn clean package -DskipTests=true';
+                 }
+            }
+        }
+
+        stage('Unit Test') {
+           steps {
+                 script {
+                     sh 'mvn surefire:test'
+                     junit '**/target/surefire-reports/TEST-*.xml'
+                 }
+            }
+        }
+
+   stage('Deploy') {
+              steps([$class: 'BapSshPromotionPublisherPlugin']) {
+                  sshPublisher(
+                      continueOnError: false, failOnError: true,
+                      publishers: [
+                          sshPublisherDesc(
+                          configName: "festa-deploy",
+                              verbose: true,
+                              transfers: [
+                                  sshTransfer(
+                                      sourceFiles: "target/*.jar",
+                                      removePrefix: "target",
+                                      remoteDirectory: "/",
+                                      execCommand: "sh /root/scripts/festa-deploy.sh"
+                                  )
+                              ]
+                          )
+                      ]
+                  )
+              }
+          }
+   }
+
+   post {
+        success {
+             echo 'Deploy Success'
+        }
+   }
+}
