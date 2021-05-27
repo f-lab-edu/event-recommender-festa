@@ -34,7 +34,7 @@ public class SessionLoginService implements LoginService {
     @Override
     public void login(Long userNo, String token) {
         httpSession.setAttribute(USER_NO, userNo);
-        //firebaseLoginAlert(userNo, token);
+        firebaseLoginAlert(userNo, token);
     }
 
     /**

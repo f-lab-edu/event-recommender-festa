@@ -45,7 +45,8 @@ public class AlertService {
             throw new IllegalStateException("알림 전송에 실패하였습니다.");
         }
     }
-    
+
+    @Async
     public void eventStartNotice(long userNo) {
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
