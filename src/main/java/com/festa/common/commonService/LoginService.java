@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LoginService {
 
-    void login(Long userNo, String token);
+    void login(Long userNo, String userId, String password, String token);
 
     void logout(long userNo);
 

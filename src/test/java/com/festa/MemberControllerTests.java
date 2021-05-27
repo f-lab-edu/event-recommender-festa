@@ -59,6 +59,9 @@ class MemberControllerTests {
     }
 
     private static final long USER_NO = 1;
+    private static final String USER_ID = "rbdl879";
+    private static final String PASSWORD = "test123##";
+    private static final String TOKEN = "abc123";
 
     public MemberDTO existedMemberInfo() {
         return MemberDTO.builder()
@@ -144,7 +147,7 @@ class MemberControllerTests {
     @DisplayName("존재하는 회원이 로그인 요청을 하면 정상적으로 로그인한다.")
     @Test
     public void whenExistedMemberRequestLoginThenSuccessLoginTest() throws Exception {
-        MemberLogin loginInfo = new MemberLogin("rbdl879", "test123##", "abc123");
+        MemberLogin loginInfo = new MemberLogin(USER_ID, PASSWORD, TOKEN);
 
         this.mockMvc.perform(post("/members/login")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -153,10 +156,10 @@ class MemberControllerTests {
                                           "\"token\":\"abc123\"}"))
                                 .andExpect(status().isOk());
 
-        long userNo = memberService.getUserNo(loginInfo.getUserId());
-        doNothing().when(memberService).isUserIdExist(loginInfo.getUserId(), loginInfo.getPassword());
+        long userNo = memberService.getUserNo(USER_ID);
+        doNothing().when(memberService).isUserIdExist(USER_ID, PASSWORD);
 
-        then(loginService).should().login(userNo, loginInfo.getToken());
+        then(loginService).should().login(userNo, USER_ID, PASSWORD, TOKEN);
     }
 
     @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")
@@ -179,7 +182,7 @@ class MemberControllerTests {
     @Test
     public void whenPasswordNullThenFailChangeUserPwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(USER_NO);
-        MemberLogin loginInfo = new MemberLogin("rbdl879", "", "abc123");
+        MemberLogin loginInfo = new MemberLogin(USER_ID, "", TOKEN);
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
                 .accept(MediaType.APPLICATION_JSON)
@@ -195,7 +198,7 @@ class MemberControllerTests {
     @Test
     public void whenUserIdAndPasswordIsNotNullThenSuccessChangePwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(USER_NO);
-        MemberLogin loginInfo = new MemberLogin("rbdl879", "test123##", "abc123");
+        MemberLogin loginInfo = new MemberLogin(USER_ID, PASSWORD, TOKEN);
 
         this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
                 .accept(MediaType.APPLICATION_JSON)
@@ -205,7 +208,7 @@ class MemberControllerTests {
                           "\"token\":\"abc123\"}"))
                 .andExpect(status().isOk());
 
-        then(memberService).should().changeUserPw(USER_NO, loginInfo.getPassword());
+        then(memberService).should().changeUserPw(USER_NO, PASSWORD);
     }
 
     @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")
