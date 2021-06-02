@@ -101,8 +101,9 @@
             P.cancelDate,
             P.participateDate
         FROM participant P
-        LEFT OUTER JOIN participant_address PA
+        INNER JOIN participant_address PA
         on P.eventNo = PA.eventNo
+        and P.userNo = PA.userNo
         INNER JOIN members M
         on P.userNo = M.userNo
         WHERE P.eventNo = #{eventNo}
