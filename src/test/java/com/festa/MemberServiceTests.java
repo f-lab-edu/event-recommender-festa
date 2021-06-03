@@ -5,6 +5,7 @@ import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
 import com.festa.model.MemberLogin;
+import com.festa.model.MemberNewPw;
 import com.festa.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -145,9 +146,10 @@ class MemberServiceTests {
     @DisplayName("기존 비밀번호가 일치할 경우 비밀번호 변경에 성공한다")
     @Test
     public void memberChangePwTest() {
-        given(memberDAO.isUserPasswordExist(5, "tt1234##")).willReturn(true);
+        MemberNewPw memberNewPw = new MemberNewPw("tt1234##", "tt*23#");
+        given(memberDAO.isUserPasswordExist(5, memberNewPw.getPassword())).willReturn(true);
 
-        memberService.changeUserPw(5, "tt1234##");
+        memberService.changeUserPw(5, memberNewPw);
 
         assertEquals(true, memberDAO.isUserPasswordExist(5, "tt1234##"));
     }
@@ -155,9 +157,10 @@ class MemberServiceTests {
     @DisplayName("기존 비밀번호가 불일치할 경우 IllegalArgumentException이 발생한다")
     @Test
     public void memberChangePwMismatchTest() {
+        MemberNewPw memberNewPw = new MemberNewPw("tt1234##", "tt*23#");
         when(memberDAO.isUserPasswordExist(any(Long.class), any(String.class))).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> memberService.changeUserPw(5, "tt1234##"));
+        assertThrows(IllegalArgumentException.class, () -> memberService.changeUserPw(5, memberNewPw));
     }
 
     @DisplayName("사용자의 정보를 조회한다")

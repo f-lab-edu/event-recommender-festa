@@ -7,6 +7,7 @@ import com.festa.controller.MemberController;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
 import com.festa.model.MemberLogin;
+import com.festa.model.MemberNewPw;
 import com.festa.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,6 +62,7 @@ class MemberControllerTests {
     private static final long USER_NO = 1;
     private static final String USER_ID = "rbdl879";
     private static final String PASSWORD = "test123##";
+    private static final String NEWPASSWORD = "test*23#";
     private static final String TOKEN = "abc123";
 
     public MemberDTO existedMemberInfo() {
@@ -182,33 +184,31 @@ class MemberControllerTests {
     @Test
     public void whenPasswordNullThenFailChangeUserPwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(USER_NO);
-        MemberLogin loginInfo = new MemberLogin(USER_ID, "", TOKEN);
+        MemberNewPw memberNewPw = new MemberNewPw("", NEWPASSWORD);
 
-        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
+        this.mockMvc.perform(patch("/members/password")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content( "{\"userId\":\"rbdl879\"," +
-                          "\"password\":\" \"," +
-                          "\"token\":\"abc123\"}"));
+                .content( "{\"password\":\" \"," +
+                          "\"newPassword\":\"test*23#\"}"));
 
-        then(memberService).should(never()).changeUserPw(USER_NO, loginInfo.getPassword());
+        then(memberService).should(never()).changeUserPw(USER_NO, memberNewPw);
     }
 
     @DisplayName("로그인한 아이디와 비밀번호를 입력하면 비밀번호 변경에 성공한다.")
     @Test
     public void whenUserIdAndPasswordIsNotNullThenSuccessChangePwTest() throws Exception {
         given(loginService.getUserNo()).willReturn(USER_NO);
-        MemberLogin loginInfo = new MemberLogin(USER_ID, PASSWORD, TOKEN);
+        MemberNewPw memberNewPw = new MemberNewPw(PASSWORD, NEWPASSWORD);
 
-        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}")
+        this.mockMvc.perform(patch("/members/password")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content( "{\"userId\":\"rbdl879\"," +
-                          "\"password\":\"test123##\"," +
-                          "\"token\":\"abc123\"}"))
+                .content( "{\"password\":\"test123##\"," +
+                          "\"newPassword\":\"test*23#\"}"))
                 .andExpect(status().isOk());
 
-        then(memberService).should().changeUserPw(USER_NO, PASSWORD);
+        then(memberService).should().changeUserPw(USER_NO, memberNewPw);
     }
 
     @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")

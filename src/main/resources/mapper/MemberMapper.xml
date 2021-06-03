@@ -86,9 +86,9 @@
             AND eventNo = #{eventNo}
     </update>
 
-    <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
+    <update id="changeUserPw">
         UPDATE members
-            SET password = #{password},
+            SET password = #{newPassword},
                 updatePwDate = NOW()
         WHERE userNo = #{userNo}
     </update>

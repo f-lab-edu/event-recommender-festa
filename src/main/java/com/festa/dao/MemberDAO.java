@@ -22,7 +22,7 @@ public interface MemberDAO {
 
     MemberDTO getUserByNo(long userNo);
 
-    void changeUserPw(long userNo, String password);
+    void changeUserPw(@Param("userNo") long userNo, @Param("newPassword") String newPassword);
 
     void modifyMemberInfoForWithdraw(long userNo);
 
