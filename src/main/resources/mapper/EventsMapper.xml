@@ -60,11 +60,13 @@
 
     </select>
 
-    <select id="isParticipated" resultType="boolean">
+    <select id="isParticipated" parameterType="com.festa.model.Participants" resultType="boolean">
         SELECT EXISTS
                 (SELECT applyDate
                  FROM participant
                  WHERE userNo = #{userNo}
+                 AND eventNo = #{eventNo}
+                 AND cancelDate IS NULL
                 )
                 AS isIdExists
     </select>
@@ -232,7 +234,7 @@
             AND noOfParticipants <![CDATA[<]]> participantLimit
     </update>
 
-    <update id="reduceParticipants" parameterType="int">
+    <update id="reduceParticipants" parameterType="long">
         UPDATE events
             SET noOfParticipants = noOfParticipants - 1
         WHERE eventNo = #{eventNo}

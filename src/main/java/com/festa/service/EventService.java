@@ -87,15 +87,13 @@ public class EventService {
 
     @Transactional
     public void cancelEvent(Participants participants) throws IllegalStateException {
-        eventDAO.cancelEvent(participants.getUserNo());
-
-        boolean isParticipated = eventDAO.isParticipated(participants.getUserNo());
-
-        if(!isParticipated) {
+        if(!eventDAO.isParticipated(participants)) {
             throw new IllegalStateException("접수한 이벤트가 아닙니다");
         }
 
-        eventDAO.reduceParticipants(participants);
+        eventDAO.cancelEvent(participants);
+
+        eventDAO.reduceParticipants(participants.getEventNo());
     }
 
     @Transactional(readOnly = true)

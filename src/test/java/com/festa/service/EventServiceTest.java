@@ -260,22 +260,22 @@ class EventServiceTest {
                 .detail("32-12")
                 .build();
 
-        doNothing().when(eventDAO).cancelEvent(participants.getUserNo());
+        doNothing().when(eventDAO).cancelEvent(participants);
 
-        when(eventDAO.isParticipated(participants.getUserNo())).thenReturn(true);
+        when(eventDAO.isParticipated(participants)).thenReturn(true);
 
-        doNothing().when(eventDAO).reduceParticipants(participants);
+        doNothing().when(eventDAO).reduceParticipants(participants.getEventNo());
 
         // when
         eventService.cancelEvent(participants);
 
         // then
-        verify(eventDAO).cancelEvent(participants.getUserNo());
-        verify(eventDAO).reduceParticipants(participants);
+        verify(eventDAO).cancelEvent(participants);
+        verify(eventDAO).reduceParticipants(participants.getEventNo());
     }
 
     @Test
-    @DisplayName("이벤트 신청 취소 실페 - 접수한 이벤트가 아님")
+    @DisplayName("이벤트 신청 취소 실패 - 접수한 이벤트가 아님")
     void cancelNoAppliedEventTest() {
         // given
         Participants participants = Participants.builder()
@@ -288,14 +288,14 @@ class EventServiceTest {
                 .detail("32-12")
                 .build();
 
-        doNothing().when(eventDAO).cancelEvent(participants.getUserNo());
+        doNothing().when(eventDAO).cancelEvent(participants);
 
-        when(eventDAO.isParticipated(participants.getUserNo())).thenReturn(false);
+        when(eventDAO.isParticipated(participants)).thenReturn(false);
 
         // when
         assertThrows(IllegalStateException.class, () -> {
             eventService.cancelEvent(participants);
-            verify(eventDAO).cancelEvent(participants.getUserNo());
+            verify(eventDAO).cancelEvent(participants);
         });
     }
 

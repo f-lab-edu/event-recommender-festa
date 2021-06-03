@@ -4,6 +4,7 @@ import com.festa.dto.EventDTO;
 import com.festa.model.PageInfo;
 import com.festa.model.Participants;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,15 +33,15 @@ public interface EventDAO {
 
     boolean isEventExists(String eventTitle, String startDate);
 
-    void cancelEvent(long userNo);
+    void cancelEvent(Participants participants);
 
     void increaseParticipants(long eventNo);
 
-    void reduceParticipants(Participants participants);
+    void reduceParticipants(@Param("eventNo") long eventNo);
 
     EventDTO checkNoOfParticipants(long eventNo);
 
-    boolean isParticipated(long userNo);
+    boolean isParticipated(Participants participants);
 
     List<Participants> getParticipantList(long eventNo);
 
