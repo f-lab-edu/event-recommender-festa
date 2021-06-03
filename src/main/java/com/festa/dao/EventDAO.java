@@ -13,11 +13,11 @@ import java.util.List;
 @Repository
 public interface EventDAO {
 
-    List<EventDTO> getListOfEvents(PageInfo pageInfo, int categoryCode);
+    List<EventDTO> getListOfEvents(@Param("pageInfo") PageInfo pageInfo, @Param("categoryCode") int categoryCode);
 
-    List<Long> getAppliedEvent(long userNo);
+    List<Long> getAppliedEvent(@Param("userNo") long userNo);
 
-    EventDTO getInfoOfEvent(long eventNo);
+    EventDTO getInfoOfEvent(@Param("eventNo") long eventNo);
 
     void applyForEvents(Participants participants);
 
@@ -31,21 +31,21 @@ public interface EventDAO {
 
     void modifyEventsAddress(EventDTO eventDTO);
 
-    boolean isEventExists(String eventTitle, String startDate);
+    boolean isEventExists(@Param("eventTitle") String eventTitle, @Param("startDate") String startDate);
 
     void cancelEvent(Participants participants);
 
-    void increaseParticipants(long eventNo);
+    void increaseParticipants(@Param("eventNo") long eventNo);
 
     void reduceParticipants(@Param("eventNo") long eventNo);
 
-    EventDTO checkNoOfParticipants(long eventNo);
+    EventDTO checkNoOfParticipants(@Param("eventNo") long eventNo);
 
     boolean isParticipated(Participants participants);
 
-    List<Participants> getParticipantList(long eventNo);
+    List<Participants> getParticipantList(@Param("eventNo") long eventNo);
 
-    void deleteEvent(long eventNo);
+    void deleteEvent(@Param("eventNo") long eventNo);
 
-    void deleteEventAddress(long eventNo);
+    void deleteEventAddress(@Param("eventNo") long eventNo);
 }

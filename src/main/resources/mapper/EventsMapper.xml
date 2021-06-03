@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.festa.dao.EventDAO">
 
-    <select id="getInfoOfEvent" resultType="com.festa.dto.EventDTO">
+    <select id="getInfoOfEvent" parameterType="long" resultType="com.festa.dto.EventDTO">
         SELECT
             E.eventNo,
             E.eventTitle,
@@ -51,7 +51,7 @@
         LIMIT #{pageInfo.size}
     </select>
 
-    <select id="checkNoOfParticipants" resultType="com.festa.dto.EventDTO">
+    <select id="checkNoOfParticipants" parameterType="long" resultType="com.festa.dto.EventDTO">
         SELECT
             noOfParticipants,
             participantLimit
@@ -82,14 +82,14 @@
                    AS isEventExists
     </select>
 
-    <select id="getAppliedEvent" resultType="long">
+    <select id="getAppliedEvent" parameterType="long" resultType="long">
         SELECT
             eventNo
         FROM participant
         WHERE userNo = #{userNo}
     </select>
 
-    <select id="getParticipantList" resultType="com.festa.model.Participants">
+    <select id="getParticipantList" parameterType="long" resultType="com.festa.model.Participants">
         SELECT
             P.eventNo,
             P.userNo,
@@ -227,7 +227,7 @@
             AND applyDate IS NOT NULL
     </update>
 
-    <update id="increaseParticipants" parameterType="int">
+    <update id="increaseParticipants" parameterType="long">
         UPDATE events
             SET noOfParticipants = noOfParticipants + 1
         WHERE eventNo = #{eventNo}
