@@ -61,8 +61,8 @@ public class MemberService {
 
     public void changeUserPw(long userNo, String password) {
 
-        if(!memberDAO.getUserPassword(userNo).equals(password)) {
-            throw new IllegalArgumentException("일치하는 비밀번호가 없습니다.");
+        if(!memberDAO.isUserPasswordExist(userNo, password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
         memberDAO.changeUserPw(userNo, password);

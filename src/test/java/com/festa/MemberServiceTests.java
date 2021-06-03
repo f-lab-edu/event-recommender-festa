@@ -145,17 +145,17 @@ class MemberServiceTests {
     @DisplayName("기존 비밀번호가 일치할 경우 비밀번호 변경에 성공한다")
     @Test
     public void memberChangePwTest() {
-        given(memberDAO.getUserPassword(5)).willReturn("tt1234##");
+        given(memberDAO.isUserPasswordExist(5, "tt1234##")).willReturn(true);
 
         memberService.changeUserPw(5, "tt1234##");
 
-        assertEquals("tt1234##", memberDAO.getUserPassword(5));
+        assertEquals(true, memberDAO.isUserPasswordExist(5, "tt1234##"));
     }
 
     @DisplayName("기존 비밀번호가 불일치할 경우 IllegalArgumentException이 발생한다")
     @Test
     public void memberChangePwMismatchTest() {
-        when(memberDAO.getUserPassword(any(Long.class))).thenReturn("");
+        when(memberDAO.isUserPasswordExist(any(Long.class), any(String.class))).thenReturn(false);
 
         assertThrows(IllegalArgumentException.class, () -> memberService.changeUserPw(5, "tt1234##"));
     }

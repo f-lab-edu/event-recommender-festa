@@ -1,9 +1,9 @@
 package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
-import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
@@ -30,7 +30,7 @@ public interface MemberDAO {
 
     long getUserNoById(String userId);
 
-    String getUserPassword(long userNo);
+    boolean isUserPasswordExist(@Param("userNo") long userNo, @Param("password")String password);
 
     boolean getChangePwDateDiff(long userNo);
 

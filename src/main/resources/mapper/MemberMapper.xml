@@ -138,10 +138,13 @@
         where userNo = #{userNo}
     </select>
 
-    <select id="getUserPassword" parameterType="long">
-        SELECT
-            password
-        FROM members
-        WHERE userNo = #{userNo}
+    <select id="isUserPasswordExist">
+        SELECT EXISTS
+            (SELECT password
+            FROM members
+            WHERE userNo = #{userNo}
+            AND password = #{password}
+            )
+        AS isPasswordExists
     </select>
 </mapper>
