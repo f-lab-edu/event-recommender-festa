@@ -217,10 +217,11 @@
         WHERE eventNo = #{eventNo}
     </update>
 
-    <update id="cancelEvent" parameterType="long">
+    <update id="cancelEvent" parameterType="com.festa.model.Participants">
         UPDATE participant
             SET cancelDate = NOW()
         WHERE userNo = #{userNo}
+            AND eventNo = #{eventNo}
             AND applyDate IS NOT NULL
     </update>
 

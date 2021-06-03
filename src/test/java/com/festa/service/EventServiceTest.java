@@ -264,14 +264,14 @@ class EventServiceTest {
 
         when(eventDAO.isParticipated(participants.getUserNo())).thenReturn(true);
 
-        doNothing().when(eventDAO).reduceParticipants(participants.getEventNo());
+        doNothing().when(eventDAO).reduceParticipants(participants);
 
         // when
         eventService.cancelEvent(participants);
 
         // then
         verify(eventDAO).cancelEvent(participants.getUserNo());
-        verify(eventDAO).reduceParticipants(participants.getEventNo());
+        verify(eventDAO).reduceParticipants(participants);
     }
 
     @Test

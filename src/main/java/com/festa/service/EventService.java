@@ -95,7 +95,7 @@ public class EventService {
             throw new IllegalStateException("접수한 이벤트가 아닙니다");
         }
 
-        eventDAO.reduceParticipants(participants.getEventNo());
+        eventDAO.reduceParticipants(participants);
     }
 
     @Transactional(readOnly = true)
