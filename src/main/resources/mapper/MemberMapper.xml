@@ -86,14 +86,14 @@
             AND eventNo = #{eventNo}
     </update>
 
-    <update id="changeUserPw" parameterType="com.festa.dto.MemberDTO">
+    <update id="changeUserPw">
         UPDATE members
             SET password = #{password},
                 updatePwDate = NOW()
         WHERE userNo = #{userNo}
     </update>
 
-    <select id="getUserByNo" resultType="com.festa.dto.MemberDTO">
+    <select id="getUserByNo" parameterType="long" resultType="com.festa.dto.MemberDTO">
         SELECT
             M.userNo,
             M.userId,
@@ -115,14 +115,14 @@
           AND M.deleted = FALSE
     </select>
 
-    <update id="modifyMemberInfoForWithdraw" parameterType="com.festa.dto.MemberDTO">
+    <update id="modifyMemberInfoForWithdraw" parameterType="long">
         UPDATE members
             SET deleted = TRUE,
                 deletedDate = NOW()
         WHERE userNo = #{userNo};
     </update>
 
-    <select id="getUserNoById" resultType="long">
+    <select id="getUserNoById" parameterType="string" resultType="long">
         SELECT
             userNo
         FROM members
@@ -131,7 +131,7 @@
         AND deleted = FALSE
     </select>
 
-    <select id="getChangePwDateDiff" resultType="boolean">
+    <select id="getChangePwDateDiff" parameterType="long" resultType="boolean">
         SELECT
               IF(DATEDIFF(NOW(), updatePwDate) > 90, true, false)
         FROM members
