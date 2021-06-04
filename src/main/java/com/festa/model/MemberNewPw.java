@@ -1,12 +1,10 @@
 package com.festa.model;
 
-import lombok.Getter;
 import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 
 @Value
-@Getter
 public class MemberNewPw {
 
     @NotBlank(message = "비밀번호를 입력해주세요")
