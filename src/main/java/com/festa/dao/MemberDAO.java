@@ -1,7 +1,6 @@
 package com.festa.dao;
 
 import com.festa.dto.MemberDTO;
-import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,24 +14,24 @@ public interface MemberDAO {
 
     void insertMemberAddress(MemberDTO memberDTO);
 
-    boolean isUserIdExist(@Param("userId") String userId, @Param("password") String password);
+    boolean isUserIdExist(String userId, String password);
 
     void modifyMemberInfo(MemberInfo memberInfo);
 
     void modifyMemberAddress(MemberInfo memberInfo);
 
-    MemberDTO getUserByNo(@Param("userNo") long userNo);
+    MemberDTO getUserByNo(long userNo);
 
-    void changeUserPw(@Param("userNo") long userNo, @Param("password") String password);
+    void changeUserPw(@Param("userNo") long userNo, @Param("newPassword") String newPassword);
 
-    void modifyMemberInfoForWithdraw(@Param("userNo") long userNo);
+    void modifyMemberInfoForWithdraw(long userNo);
 
     void modifyParticipantInfo(MemberInfo memberInfo);
 
-    long getUserNoById(@Param("userId") String userId);
+    long getUserNoById(String userId);
 
-    String getUserPassword(long userNo);
+    boolean isUserPasswordExist(@Param("userNo") long userNo, @Param("password")String password);
 
-    boolean getChangePwDateDiff(@Param("userNo") long userNo);
+    boolean getChangePwDateDiff(long userNo);
 
 }

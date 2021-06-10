@@ -7,6 +7,7 @@ import com.festa.common.commonService.CurrentLoginUserNo;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberLogin;
 import com.festa.model.MemberInfo;
+import com.festa.model.MemberNewPw;
 import com.festa.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -140,9 +141,9 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PatchMapping("/{userId}/password")
-    public void changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberLogin memberLogin) {
-        memberService.changeUserPw(userNo, memberLogin.getPassword());
+    @PatchMapping("/password")
+    public void changePassword(@CurrentLoginUserNo long userNo, @RequestBody MemberNewPw memberNewPw) {
+        memberService.changeUserPw(userNo, memberNewPw);
     }
 
     /**

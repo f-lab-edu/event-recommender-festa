@@ -3,6 +3,7 @@ package com.festa.service;
 import com.festa.dao.MemberDAO;
 import com.festa.dto.MemberDTO;
 import com.festa.model.MemberInfo;
+import com.festa.model.MemberNewPw;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -59,13 +60,13 @@ public class MemberService {
         return memberDAO.getUserByNo(userNo);
     }
 
-    public void changeUserPw(long userNo, String password) {
+    public void changeUserPw(long userNo, MemberNewPw memberNewPw) {
 
-        if(!memberDAO.getUserPassword(userNo).equals(password)) {
-            throw new IllegalArgumentException("일치하는 비밀번호가 없습니다.");
+        if(!memberDAO.isUserPasswordExist(userNo, memberNewPw.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        memberDAO.changeUserPw(userNo, password);
+        memberDAO.changeUserPw(userNo, memberNewPw.getNewPassword());
     }
 
     public void memberWithdraw(long userNo) {
