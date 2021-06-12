@@ -115,7 +115,7 @@ class EventServiceTest {
     void registerEventsTest() {
         // given
         EventDTO event = generateEvent(555);
-        EventDTO eventInfo = event.toEntityForInfo();
+        EventDTO eventInfo = event.toEntityForInfo("fileName");
         EventDTO eventAddress =  EventDTO.builder()
                 .eventNo(eventInfo.getEventNo())
                 .cityName(event.getCityName())
@@ -130,7 +130,7 @@ class EventServiceTest {
         doNothing().when(eventDAO).registerEventsAddress(eventAddress);
 
         // when
-        eventService.registerEvents(event, 5);
+        eventService.registerEvents(event, 5, "fileName");
 
         // then
         verify(eventDAO).registerEvents(any(EventDTO.class));
@@ -143,12 +143,12 @@ class EventServiceTest {
         // given
         EventDTO event = generateEvent(555);
 
-        doNothing().when(eventDAO).modifyEventsInfo(event.toEntityForInfo());
+        doNothing().when(eventDAO).modifyEventsInfo(event.toEntityForInfo("fileName"));
 
         doNothing().when(eventDAO).modifyEventsAddress(event.toEntityForEventAddress());
 
         // when
-       eventService.modifyEventsInfo(event,30);
+       eventService.modifyEventsInfo(event,30, "fileName");
 
         // then
         verify(eventDAO).modifyEventsInfo(any(EventDTO.class));
@@ -161,7 +161,7 @@ class EventServiceTest {
         EventDTO event = generateEvent(555);
 
         assertThrows(IllegalStateException.class, () -> {
-            eventService.modifyEventsInfo(event, 50);
+            eventService.modifyEventsInfo(event, 50, "fileName");
         });
     }
 

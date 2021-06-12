@@ -50,7 +50,9 @@ public class EventDTO {
 
     private String detail;
 
-    public EventDTO toEntityForInfo() {
+    private String fileName;
+
+    public EventDTO toEntityForInfo(String fileName) {
 
         return EventDTO.builder()
                 .userNo(this.userNo)
@@ -61,6 +63,7 @@ public class EventDTO {
                 .endDate(this.endDate)
                 .participantLimit(this.participantLimit)
                 .categoryCode(this.categoryCode)
+                .fileName(fileName)
                 .build();
     }
 

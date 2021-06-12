@@ -164,7 +164,8 @@
              startDate,
              endDate,
              participantLimit,
-             noOfParticipants
+             noOfParticipants,
+             fileName
              )
         VALUES
              (
@@ -176,7 +177,8 @@
               #{startDate},
               #{endDate},
               #{participantLimit},
-              #{participantLimit}
+              #{participantLimit},
+              #{fileName}
              )
 
     </insert>
@@ -206,6 +208,10 @@
         UPDATE events
             SET eventTitle = #{eventTitle},
                 eventContent = #{eventContent}
+            <if test=" fileName != null ">
+                ,fileName = #{fileName}
+            </if>
+
         WHERE eventNo = #{eventNo}
     </update>
 

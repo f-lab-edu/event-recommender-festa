@@ -35,8 +35,8 @@ public class EventService {
 
     @Transactional
     @CacheEvict(key = "#categoryCode", value = CATEGORY_LIST, cacheManager = "redisCacheManager")
-    public void registerEvents(EventDTO eventDTO, int categoryCode) {
-        EventDTO eventInfo = eventDTO.toEntityForInfo();
+    public void registerEvents(EventDTO eventDTO, int categoryCode, String fileName) {
+        EventDTO eventInfo = eventDTO.toEntityForInfo(fileName);
         eventDAO.registerEvents(eventInfo);
 
         EventDTO eventAddress = EventDTO.builder()
@@ -52,8 +52,8 @@ public class EventService {
     }
 
     @Transactional
-    public void modifyEventsInfo(EventDTO eventDTO, long userNo) {
-        EventDTO eventInfo = eventDTO.toEntityForInfo();
+    public void modifyEventsInfo(EventDTO eventDTO, long userNo, String fileName) {
+        EventDTO eventInfo = eventDTO.toEntityForInfo(fileName);
 
         if(eventInfo.getUserNo() != userNo) {
             throw new IllegalStateException("이벤트를 등록한 주최자만 수정이 가능합니다.");
