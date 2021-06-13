@@ -48,6 +48,7 @@ public class S3ImageUploader implements ImageUploader {
         AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
         amazonS3 = AmazonS3ClientBuilder.standard()
+                .withRegion("ap-northeast-2")
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
