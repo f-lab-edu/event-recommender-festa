@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 @Log4j2
-@Service
+@Component
 @RequiredArgsConstructor
 public class S3ImageUploader implements ImageUploader {
 
