@@ -30,14 +30,17 @@ public class S3ImageUploader implements ImageUploader {
 
     private AmazonS3 amazonS3;
 
-    @Value("aws.s3.bucket")
+    @Value("${aws.s3.bucket}")
     private String bucket;
 
-    @Value("aws.s3.accessKey")
+    @Value("${aws.s3.accessKey}")
     private String accessKey;
 
-    @Value("aws.s3.secretKey")
+    @Value("${aws.s3.secretKey}")
     private String secretKey;
+
+    @Value("${aws.s3.region}")
+    private String region;
 
     /**
      * AmazonS3 초기화
@@ -48,7 +51,7 @@ public class S3ImageUploader implements ImageUploader {
         AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
         amazonS3 = AmazonS3ClientBuilder.standard()
-                .withRegion("ap-northeast-2")
+                .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
