@@ -69,7 +69,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<MemberDTO>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping("/{userNo}")
+    @GetMapping
     public ResponseEntity<HttpStatus> getUser(@RequestParam long userNo) {
         MemberDTO memberInfo = memberService.getUser(userNo);
 
@@ -85,7 +85,7 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @PutMapping("/{userNo}")
+    @PutMapping
     public void modifyMemberInfo(@RequestBody MemberInfo memberInfo) {
         boolean isUserModifyInfo = memberInfo.isUserModifyInfo();
 
@@ -103,7 +103,7 @@ public class MemberController {
      * @param userId
      * @return {@literal ResponseEntity<HttpStatus>}
      */
-    @GetMapping("/{userId}/delete")
+    @GetMapping("/delete")
     public void isIdDeleted(@RequestParam String userId, @RequestParam String password) {
         memberService.isUserIdExist(userId, password);
     }
@@ -152,8 +152,8 @@ public class MemberController {
      * @return {@literal ResponseEntity<HttpStatus>}
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @DeleteMapping("/")
-    public void memberWithdraw(@CurrentLoginUserNo long userNo, String password) {
+    @DeleteMapping
+    public void memberWithdraw(@CurrentLoginUserNo long userNo) {
         memberService.memberWithdraw(userNo);
     }
 }

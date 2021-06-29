@@ -18,11 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -90,8 +90,8 @@ public class EventController {
      * @return EventDTO
      */
     @CheckLoginStatus(auth = UserLevel.USER)
-    @GetMapping("/{eventNo}")
-    public ResponseEntity<EventDTO> getInfoOfEvent(@PathVariable long eventNo) {
+    @GetMapping("/detail")
+    public ResponseEntity<EventDTO> getInfoOfEvent(@RequestParam long eventNo) {
         EventDTO infoOfEvent = eventService.getInfoOfEvent(eventNo);
 
         return ResponseEntity.ok(infoOfEvent);
@@ -119,11 +119,11 @@ public class EventController {
     /**
      * 주최자 이벤트 참여자 목록 조회 기능
      * @param userNo, eventNo
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return {@literal List<Participants>}
      * @throws NoSuchElementException (조회된 데이터가 없을 경우)
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
-    @GetMapping("/{eventNo}/participants")
+    @GetMapping("/participants")
     public List<Participants> getParticipantList(@CurrentLoginUserNo long userNo, long eventNo) {
         List<Participants> participantsList = eventService.getParticipantList(userNo, eventNo);
 
@@ -133,10 +133,10 @@ public class EventController {
     /**
      * 주최자 이벤트 수정 기능
      * @param eventDTO
-     * @return {@literal ResponseEntity<HttpStatus>}
+     * @return void
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
-    @PutMapping("/{eventNo}")
+    @PutMapping
     public void modifyEventsInfo(@RequestBody EventDTO eventDTO, @CurrentLoginUserNo long userNo) {
         eventService.modifyEventsInfo(eventDTO, userNo);
 
@@ -146,10 +146,10 @@ public class EventController {
     /**
      * 주최자 이벤트 삭제 기능
      * @param eventNo
-     * @return
+     * @return void
      */
     @CheckLoginStatus(auth = UserLevel.HOST)
-    @DeleteMapping("/{eventNo}")
+    @DeleteMapping
     public void deleteEvent(long eventNo, @CurrentLoginUserNo long userNo) {
         eventService.deleteEventNo(eventNo, userNo);
     }

@@ -20,9 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.NestedServletException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -117,7 +119,7 @@ class MemberControllerTests {
     public void whenUserInfoIsExistedThenResponseOKGetUserTest() throws Exception {
         given(memberService.getUser(USER_NO)).willReturn(existedMemberInfo());
 
-        this.mockMvc.perform(get("/members/{userNo}", "{userNo}")
+        this.mockMvc.perform(get("/members")
                 .param("userNo", "1"))
                 .andExpect(status().isOk());
 
@@ -139,7 +141,7 @@ class MemberControllerTests {
     public void whenUserIdNotDeletedThenReturnOKIsUserIdExistTest() throws Exception {
         doNothing().when(memberService).isUserIdExist("jes7077", "123##test");
 
-        this.mockMvc.perform(get("/members/{userId}/delete", "{userId}")
+        this.mockMvc.perform(get("/members/delete")
                 .param("userId", "jes7077")
                 .param("password", "123##test"))
                 .andDo(print())
@@ -164,20 +166,18 @@ class MemberControllerTests {
         then(loginService).should().login(userNo, USER_ID, PASSWORD, TOKEN);
     }
 
-    @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 비밀번호 변경에 실패한다.")
+    @DisplayName("회원 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 500 응답코드를 보낸다.")
     @Test
-    public void whenUserNoNullThenFailChangeUserPwTest() throws Exception {
-        Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
-        given(loginService.getUserNo()).willReturn(userNo);
+    public void whenUserNoNullThenFailChangeUserPwTest() {
+        given(loginService.getUserNo()).willReturn(null);
 
-        this.mockMvc.perform(patch("/members/{userId}/password", "{userId}/password")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content( "{\"userId\":\"rbdl879\"," +
-                          "\"password\":\"test123##\"," +
-                          "\"token\":\"abc123\"}"));
-
-        assertNull(userNo);
+        assertThrows(NestedServletException.class, () ->
+                this.mockMvc.perform(patch("/members/password")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content( "{\"password\":\"test123##\"," +
+                                      "\"newPassword\":\"abc123##\"}"))
+                            .andExpect(status().is5xxServerError()));
     }
 
     @DisplayName("비밀번호를 입력하지 않는다면 비밀번호 변경에 실패한다.")
@@ -211,18 +211,17 @@ class MemberControllerTests {
         then(memberService).should().changeUserPw(USER_NO, memberNewPw);
     }
 
-    @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 회원탈퇴에 실패한다.")
+    @DisplayName("회원의 식별번호인 userNo가 null이라면 로그인한 회원이 아니기 때문에 500 응답코드를 보낸다.")
     @Test
-    public void whenUserNoNullThenFailMemberWithdrawTest() throws Exception {
-        Long userNo = (Long) mockHttpSession.getAttribute("USER_NO");
-        given(loginService.getUserNo()).willReturn(userNo);
+    public void whenUserNoNullThenFailMemberWithdrawTest() {
+        given(loginService.getUserNo()).willReturn(null);
 
-        this.mockMvc.perform(delete("/members", "/")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"userNo\":\" \"}"));
-
-        assertNull(userNo);
+        assertThrows(NestedServletException.class, () ->
+                this.mockMvc.perform(delete("/members")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"userNo\":\" \"}"))
+                            .andExpect(status().is5xxServerError()));
     }
 
     @DisplayName("로그인한 상태라면 세션에서 회원번호를 읽어와 해당 회원의 탈퇴에 성공한다.")
@@ -230,7 +229,7 @@ class MemberControllerTests {
     public void whenUserNoIsNotNullThenSuccessMemberWithdrawTest() throws Exception {
         given(loginService.getUserNo()).willReturn(USER_NO);
 
-        this.mockMvc.perform(delete("/members/")
+        this.mockMvc.perform(delete("/members")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userNo\":\"1\"}"))
@@ -273,7 +272,7 @@ class MemberControllerTests {
     public void whenIsUserModifyInfoTrueThenModifyMemberAndParticipantInfo() throws Exception {
         boolean isUserModifyInfo = modifyMemberInfoTrue().isUserModifyInfo();
 
-        this.mockMvc.perform(put("/members/{userNo}", "{userNo}")
+        this.mockMvc.perform(put("/members")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userNo\":\"1\"," +
@@ -299,7 +298,7 @@ class MemberControllerTests {
     public void whenIsUserModifyInfoFalseThenOnlyModifyParticipantInfo() throws Exception {
         boolean isUserModifyInfo = modifyMemberInfoFalse().isUserModifyInfo();
 
-        this.mockMvc.perform(put("/members/{userNo}", "{userNo}")
+        this.mockMvc.perform(put("/members")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"userNo\":\"1\"," +
