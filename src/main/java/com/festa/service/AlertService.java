@@ -4,7 +4,6 @@ import com.festa.common.firebase.FirebaseTokenManager;
 import com.festa.common.util.ConvertDataType;
 import com.festa.dao.EventDAO;
 import com.festa.dao.MemberDAO;
-import com.festa.dto.EventDTO;
 import com.festa.model.Participants;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -49,17 +47,13 @@ public class AlertService {
     }
 
     @Async
-    public void eventStartNotice(long userNo, LocalDate todayDate) {
+    public void eventStartNotice(long userNo) {
         List<Long> appliedEvents = eventDAO.getAppliedEvent(userNo);
 
-        appliedEvents.forEach(eventNo -> {
-            EventDTO eventInfo = eventDAO.getInfoOfEvent(eventNo);
-
-            if(ConvertDataType.dateFormatter(todayDate).equals(eventInfo.getStartDate())) {
-                String userToken = firebaseTokenManager.getToken(ConvertDataType.longToString(userNo));
-                sendMessage(userToken, "이벤트 시작 알림이 있습니다!", "이벤트가 곧 시작됩니다! 잊지말고 참여해주세요");
-            }
-        });
+        if(!appliedEvents.isEmpty()) {
+            String userToken = firebaseTokenManager.getToken(ConvertDataType.longToString(userNo));
+            sendMessage(userToken, "이벤트 시작 알림이 있습니다!", "오늘 시작하는 이벤트가 있습니다! 잊지말고 참여해주세요");
+        }
     }
 
     @Async

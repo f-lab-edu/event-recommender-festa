@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -85,7 +84,7 @@ public class SessionLoginService implements LoginService {
      */
     private void firebaseLoginAlert(long userNo, String token) {
         firebaseTokenManager.register(String.valueOf(userNo), token);
-        alertService.eventStartNotice(userNo, LocalDate.now());
+        alertService.eventStartNotice(userNo);
         alertService.changePasswordNotice(userNo);
     }
 }
